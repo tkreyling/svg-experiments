@@ -6,8 +6,10 @@ type RectProps = {
   y: number
 }
 
-export function someFunction() {
-  return "Some Text";
+export function width(elements: any[]) {
+  const n = elements.length;
+  if (n == 0) return 0;
+  return n*100 + (n - 1)*10;
 }
 
 const Rect: React.FC<RectProps> = (props) => {
