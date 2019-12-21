@@ -8,7 +8,7 @@ type RectProps = {
 
 const Rect: React.FC<RectProps> = (props) => {
   return (
-    <rect x={props.x} y={props.y} width="300" height="100" fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)" />
+    <rect data-testid="rect" x={props.x} y={props.y} width="300" height="100" fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)" />
   );
 };
 
