@@ -16,7 +16,7 @@ export function width(elements: any[]) {
   return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
-const Rect: React.FC<RectProps> = (props) => {
+export const Rect: React.FC<RectProps> = (props) => {
   return (
     <rect data-testid="rect"
           x={props.x} y={props.y}
