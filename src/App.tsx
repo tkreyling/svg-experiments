@@ -7,6 +7,7 @@ type RectProps = {
 }
 
 export const ELEMENT_WIDTH = 100;
+export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
 
 export function width(elements: any[]) {
@@ -17,7 +18,10 @@ export function width(elements: any[]) {
 
 const Rect: React.FC<RectProps> = (props) => {
   return (
-    <rect data-testid="rect" x={props.x} y={props.y} width="300" height="100" fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)" />
+    <rect data-testid="rect"
+          x={props.x} y={props.y}
+          width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
+          fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)" />
   );
 };
 
