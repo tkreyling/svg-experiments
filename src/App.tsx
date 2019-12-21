@@ -16,6 +16,12 @@ export function width(elements: any[]) {
   return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
+export function layoutHorizontally(elements: any[]): RectProps[] {
+  return elements.map((element, index) => {
+    return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0}
+  });
+}
+
 export const Rect: React.FC<RectProps> = (props) => {
   return (
     <rect data-testid="rect"
