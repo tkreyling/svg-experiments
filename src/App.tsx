@@ -6,10 +6,13 @@ type RectProps = {
   y: number
 }
 
+export const ELEMENT_WIDTH = 100;
+export const HORIZONTAL_SPACING = 10;
+
 export function width(elements: any[]) {
   const n = elements.length;
   if (n == 0) return 0;
-  return n*100 + (n - 1)*10;
+  return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
 const Rect: React.FC<RectProps> = (props) => {
