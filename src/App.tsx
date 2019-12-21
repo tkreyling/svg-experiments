@@ -35,8 +35,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <svg viewBox="0 0 850 600">
-        <Rect x={150} y={150}/>
-        <Rect x={250} y={260}/>
+        {layoutHorizontally(["element", "element"]).map(Rect)}
       </svg>
     </div>
   );
