@@ -9,8 +9,8 @@ const data = [
   [18, 5]
 ];
 
-const widht = 800
-const height = 600
+const widht = 800;
+const height = 600;
 
 type RectProps = {
   x: number
@@ -21,7 +21,7 @@ const Rect: React.FC<RectProps> = (props) => {
   return (
     <rect x={props.x} y={props.y} width="300" height="100" fill="rgb(0,0,255)" stroke-width={3} stroke="rgb(0,0,0)" />
   );
-}
+};
 
 const App: React.FC = () => {
   return (
@@ -42,6 +42,6 @@ const App: React.FC = () => {
       </svg>
     </div>
   );
-}
+};
 
 export default App;
