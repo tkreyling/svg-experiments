@@ -6,11 +6,11 @@ test('no element results in no layouted elements', () => {
 });
 
 test('one element is layouted to the origin', () => {
-  expect(layoutHorizontally(["service"]))
+  expect(layoutHorizontally(["element"]))
       .toStrictEqual([{x: 0, y: 0}])
 });
 
 test('two elements are layouted right beside each other', () => {
-  expect(layoutHorizontally(["service", "service"]))
+  expect(layoutHorizontally(["element", "element"]))
       .toStrictEqual([{x: 0, y: 0}, {x: ELEMENT_WIDTH + HORIZONTAL_SPACING, y: 0}])
 });
