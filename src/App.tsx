@@ -24,7 +24,6 @@ const App: React.FC = () => {
         />
         <Rect x={150} y={150}/>
         <Rect x={250} y={260}/>
-        <text x="0" y="15" fill="red"><a href="https://heise.de">I'm a div inside a SVG.</a></text>
       </svg>
     </div>
   );
