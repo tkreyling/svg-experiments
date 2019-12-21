@@ -31,11 +31,13 @@ export const Rect: React.FC<RectProps> = (props) => {
   );
 };
 
+const elements = ["element", "element"];
+
 const App: React.FC = () => {
   return (
     <div className="App">
-      <svg viewBox="0 0 850 600">
-        {layoutHorizontally(["element", "element"]).map(Rect)}
+      <svg viewBox={"0 0 " + width(elements) + " 100"}>
+        {layoutHorizontally(elements).map(Rect)}
       </svg>
     </div>
   );
