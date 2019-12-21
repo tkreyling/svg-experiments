@@ -1,17 +1,6 @@
 import React from 'react';
 import './App.css';
 
-const data = [
-  [1, 3],
-  [2, 5],
-  [3, 2],
-  [4, 16],
-  [18, 5]
-];
-
-const widht = 800;
-const height = 600;
-
 type RectProps = {
   x: number
   y: number
