@@ -12,7 +12,7 @@ export const HORIZONTAL_SPACING = 10;
 
 export function width(elements: any[]) {
   const n = elements.length;
-  if (n == 0) return 0;
+  if (n === 0) return 0;
   return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
