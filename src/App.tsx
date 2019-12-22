@@ -27,15 +27,17 @@ export function widthOfElements(elements: any[]) {
 }
 
 export function layout(layers: string[][]): RectProps[][] {
+    let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
-        return layoutHorizontally(elements, layerIndex)
+        return layoutHorizontally(elements, layerIndex, fullWidth)
     });
 }
 
-export function layoutHorizontally(elements: string[], layerIndex: number): RectProps[] {
+export function layoutHorizontally(elements: string[], layerIndex: number, fullWidth: number): RectProps[] {
+    let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map((element, index) => {
         return {
-            x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE,
+            x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
             y: layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP,
             element: element,
             key: layerIndex + "_" + index
