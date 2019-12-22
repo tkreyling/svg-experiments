@@ -17,7 +17,7 @@ export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 100;
 export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
-export const VERTICAL_SPACING = 10;
+export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
 
 export function widthOfLayers(layers: any[][]) {
@@ -55,22 +55,47 @@ export function layoutHorizontally(elements: Node[], layerIndex: number, fullWid
 }
 
 export const Rect: React.FC<RectProps> = (props) => {
-  return (
-      <g key={props.key}>
-          <rect data-testid="rect"
-                x={props.x} y={props.y}
-                width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
-                fill="lightgrey" strokeWidth={1} stroke="black"/>
+    return (
+        <g key={props.key}>
+            <rect data-testid="rect"
+                  x={props.x} y={props.y}
+                  width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
+                  fill="lightgrey" strokeWidth={1} stroke="black"/>
 
-          <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
-                clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element.name}
-          </text>
+            <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
+                  clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element.name}
+            </text>
 
-          <clipPath id={"clip-element-text-" + props.key}>
-              <rect x={props.x + TEXT_PADDING} y={props.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
-          </clipPath>
-      </g>
-  );
+            <clipPath id={"clip-element-text-" + props.key}>
+                <rect x={props.x + TEXT_PADDING} y={props.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
+            </clipPath>
+        </g>
+    );
+};
+
+type PathProps = {
+    from: RectProps
+    to: RectProps
+}
+
+export const Path: React.FC<PathProps> = (props) => {
+    let fromNodeX = props.from.x + ELEMENT_WIDTH / 2;
+    let fromNodeY = props.from.y + ELEMENT_HEIGHT;
+    let fromEdgesY = props.from.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2;
+    let toNodeX = props.to.x + ELEMENT_WIDTH / 2;
+    let toNodeY = props.to.y;
+    return (
+        <path d={
+            "M " + fromNodeX + " " + fromNodeY + " " +
+            "L " + fromNodeX + " " + fromEdgesY + " " +
+            "L " + toNodeX + " " + fromEdgesY + " " +
+            "L " + toNodeX + " " + toNodeY
+        }
+              stroke="black"
+              strokeWidth={1}
+              fill="none"
+        />
+    );
 };
 
 const layers: Node[][] = [
@@ -88,11 +113,13 @@ type DiagramProps = {
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
+    let nodes = layout(props.layers);
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
         (height(props.layers) + 2 * MARGIN_TOP)}>
-            {layout(props.layers).flat().map(Rect)}
+            {nodes.flat().map(Rect)}
+            <Path from={nodes[0][1]} to={nodes[1][0]} />
         </svg>
     );
 };
