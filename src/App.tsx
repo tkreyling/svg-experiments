@@ -2,8 +2,9 @@ import React from 'react';
 import './App.css';
 
 type RectProps = {
-  x: number
-  y: number
+    x: number
+    y: number
+    element: string
 }
 
 export const ELEMENT_WIDTH = 100;
@@ -17,9 +18,9 @@ export function width(elements: any[]) {
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 
 }
-export function layoutHorizontally(elements: any[]): RectProps[] {
+export function layoutHorizontally(elements: string[]): RectProps[] {
     return elements.map((element, index) => {
-    return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0}
+    return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0, element: element}
   });
 
 }
@@ -32,7 +33,7 @@ export const Rect: React.FC<RectProps> = (props) => {
                 fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)"/>
 
           <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="red"
-                clipPath={"url(#clip-element-text-" + props.x + ")"}>I'm a div inside a SVG.
+                clipPath={"url(#clip-element-text-" + props.x + ")"}>{props.element}
           </text>
 
           <clipPath id={"clip-element-text-" + props.x}>
@@ -42,7 +43,7 @@ export const Rect: React.FC<RectProps> = (props) => {
   );
 };
 
-const elements = ["element", "element", "element", "element"];
+const elements = ["element 1", "element 2", "an element with long text", "element 4"];
 
 const App: React.FC = () => {
   return (
