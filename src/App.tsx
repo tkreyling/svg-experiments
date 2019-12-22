@@ -24,10 +24,20 @@ export function layoutHorizontally(elements: any[]): RectProps[] {
 
 export const Rect: React.FC<RectProps> = (props) => {
   return (
-    <rect data-testid="rect"
-          x={props.x} y={props.y}
-          width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
-          fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)" />
+      <g>
+          <rect data-testid="rect"
+                x={props.x} y={props.y}
+                width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
+                fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)"/>
+
+          <text x={props.x} y={props.y + ELEMENT_HEIGHT / 2} fill="red"
+                clipPath={"url(#clip-element-text-" + props.x + ")"}>I'm a div inside a SVG.
+          </text>
+
+          <clipPath id={"clip-element-text-" + props.x}>
+              <rect x={props.x + 5} y={props.y} width={ELEMENT_WIDTH - 10} height={ELEMENT_HEIGHT}/>
+          </clipPath>
+      </g>
   );
 };
 
