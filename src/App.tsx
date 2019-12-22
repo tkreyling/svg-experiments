@@ -122,7 +122,8 @@ const layers: Node[][] = [
 const edges = [
     {from: layers[0][1], to: layers[1][0]},
     {from: layers[0][2], to: layers[1][2]},
-    {from: layers[1][2], to: layers[2][1]}
+    {from: layers[1][2], to: layers[2][2]},
+    {from: layers[2][0], to: layers[1][0]}
 ];
 
 type DiagramProps = {
