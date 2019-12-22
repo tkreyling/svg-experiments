@@ -12,6 +12,11 @@ type Node = {
     name: string
 }
 
+type Edge = {
+    from: Node
+    to: Node
+}
+
 export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 100;
@@ -108,22 +113,38 @@ const layers: Node[][] = [
     })
 });
 
+const edges = [
+    {from: layers[0][1], to: layers[1][0]},
+    {from: layers[0][2], to: layers[1][2]},
+    {from: layers[1][2], to: layers[2][1]}
+];
+
 type DiagramProps = {
     layers: Node[][]
+    edges: Edge[]
+}
+
+function findRectProp(rects: RectProps[], node: Node) {
+    return rects.find(rect => {
+        return rect.element === node;
+    });
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(props.layers);
-    let edges = [
-        {from: nodes[0][1], to: nodes[1][0]},
-        {from: nodes[0][2], to: nodes[1][2]}
-    ];
+    let flattenedNodes = nodes.flat();
+    let paths: PathProps[] = props.edges.map(edge => {
+        return {
+            from: findRectProp(flattenedNodes, edge.from)!,
+            to: findRectProp(flattenedNodes, edge.to)!
+        };
+    });
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
         (height(props.layers) + 2 * MARGIN_TOP)}>
-            {nodes.flat().map(Rect)}
-            {edges.map(Path)}
+            {flattenedNodes.map(Rect)}
+            {paths.map(Path)}
         </svg>
     );
 };
@@ -131,7 +152,7 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
 const App: React.FC = () => {
     return (
         <div className="App">
-            <Diagram layers={layers}/>
+            <Diagram layers={layers} edges={edges}/>
         </div>
     );
 };

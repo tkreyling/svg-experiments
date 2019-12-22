@@ -11,7 +11,7 @@ test('renders 7 rectangles', () => {
       return {name: name}
     })
   });
-  const { getAllByTestId } = render(<Diagram layers={layers} />);
+  const { getAllByTestId } = render(<Diagram layers={layers} edges={[]} />);
   const rects = getAllByTestId("rect");
   expect(rects).toHaveLength(7);
 });
