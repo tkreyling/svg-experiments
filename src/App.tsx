@@ -26,6 +26,11 @@ export function widthOfElements(elements: any[]) {
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
+function height(layers: string[][]) {
+    let n = layers.length;
+    return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
+}
+
 export function layout(layers: string[][]): RectProps[][] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
@@ -76,7 +81,9 @@ type DiagramProps = {
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     return (
-        <svg viewBox={"0 0 " + (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " 150"}>
+        <svg viewBox={"0 0 " +
+        (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
+        (height(props.layers) + 2 * MARGIN_TOP)}>
             {layout(props.layers).flat().map(Rect)}
         </svg>
     );
