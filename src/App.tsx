@@ -42,7 +42,7 @@ export const Rect: React.FC<RectProps> = (props) => {
   );
 };
 
-const elements = ["element", "element"];
+const elements = ["element", "element", "element", "element"];
 
 const App: React.FC = () => {
   return (
