@@ -4,8 +4,12 @@ import './App.css';
 type RectProps = {
     x: number
     y: number
-    element: string
+    element: Node
     key: string
+}
+
+type Node = {
+    name: string
 }
 
 export const MARGIN_TOP = 5;
@@ -26,19 +30,19 @@ export function widthOfElements(elements: any[]) {
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
-function height(layers: string[][]) {
+function height(layers: Node[][]) {
     let n = layers.length;
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
 }
 
-export function layout(layers: string[][]): RectProps[][] {
+export function layout(layers: Node[][]): RectProps[][] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         return layoutHorizontally(elements, layerIndex, fullWidth)
     });
 }
 
-export function layoutHorizontally(elements: string[], layerIndex: number, fullWidth: number): RectProps[] {
+export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): RectProps[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map((element, index) => {
         return {
@@ -59,7 +63,7 @@ export const Rect: React.FC<RectProps> = (props) => {
                 fill="lightgrey" strokeWidth={1} stroke="black"/>
 
           <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
-                clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element}
+                clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element.name}
           </text>
 
           <clipPath id={"clip-element-text-" + props.key}>
@@ -69,14 +73,18 @@ export const Rect: React.FC<RectProps> = (props) => {
   );
 };
 
-const layers = [
+const layers: Node[][] = [
     ["element 1", "element 2", "an element with long text", "element 4"],
     ["element 1", "element 2", "element 3"],
     ["element 1", "element 2", "element 3", "element 4", "element 5"]
-];
+].map(layer => {
+    return layer.map(name => {
+        return {name: name}
+    })
+});
 
 type DiagramProps = {
-    layers: string[][]
+    layers: Node[][]
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
