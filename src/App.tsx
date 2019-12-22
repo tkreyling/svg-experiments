@@ -86,17 +86,21 @@ type PathProps = {
 }
 
 export const Path: React.FC<PathProps> = (props) => {
-    let fromNodeX = props.from.x + ELEMENT_WIDTH / 2;
-    let fromNodeY = props.from.y + ELEMENT_HEIGHT;
-    let fromEdgesY = props.from.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2;
-    let toNodeX = props.to.x + ELEMENT_WIDTH / 2;
-    let toNodeY = props.to.y;
+    let fromIsUpper = props.from.layerIndex <= props.to.layerIndex;
+    let upper = fromIsUpper ? props.from : props.to;
+    let lower = fromIsUpper ? props.to : props.from;
+
+    let upperNodeX = upper.x + ELEMENT_WIDTH / 2;
+    let upperNodeY = upper.y + ELEMENT_HEIGHT;
+    let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2;
+    let lowerNodeX = lower.x + ELEMENT_WIDTH / 2;
+    let lowerNodeY = lower.y;
     return (
         <path d={
-            "M " + fromNodeX + " " + fromNodeY + " " +
-            "L " + fromNodeX + " " + fromEdgesY + " " +
-            "L " + toNodeX + " " + fromEdgesY + " " +
-            "L " + toNodeX + " " + toNodeY
+            "M " + upperNodeX + " " + upperNodeY + " " +
+            "L " + upperNodeX + " " + upperNodeEdgesY + " " +
+            "L " + lowerNodeX + " " + upperNodeEdgesY + " " +
+            "L " + lowerNodeX + " " + lowerNodeY
         }
               stroke="black"
               strokeWidth={1}
