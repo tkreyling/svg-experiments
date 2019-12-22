@@ -24,14 +24,14 @@ export function widthOfElements(elements: any[]) {
 }
 
 export function layout(layers: string[][]): RectProps[][] {
-    return layers.map((elements) => {
-        return layoutHorizontally(elements)
+    return layers.map((elements, layerIndex) => {
+        return layoutHorizontally(elements, layerIndex)
     });
 }
 
-export function layoutHorizontally(elements: string[]): RectProps[] {
+export function layoutHorizontally(elements: string[], layerIndex: number): RectProps[] {
     return elements.map((element, index) => {
-        return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0, element: element, key: index}
+        return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: layerIndex * ELEMENT_HEIGHT, element: element, key: index}
     });
 }
 
