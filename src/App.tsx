@@ -9,19 +9,20 @@ type RectProps = {
 export const ELEMENT_WIDTH = 100;
 export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
+export const TEXT_PADDING = 5;
 
 export function width(elements: any[]) {
-  const n = elements.length;
-  if (n === 0) return 0;
-  return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
-}
+    const n = elements.length;
+    if (n === 0) return 0;
+    return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 
+}
 export function layoutHorizontally(elements: any[]): RectProps[] {
-  return elements.map((element, index) => {
+    return elements.map((element, index) => {
     return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0}
   });
-}
 
+}
 export const Rect: React.FC<RectProps> = (props) => {
   return (
       <g>
@@ -30,12 +31,12 @@ export const Rect: React.FC<RectProps> = (props) => {
                 width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
                 fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)"/>
 
-          <text x={props.x + 5 } y={props.y + ELEMENT_HEIGHT / 2} fill="red"
+          <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="red"
                 clipPath={"url(#clip-element-text-" + props.x + ")"}>I'm a div inside a SVG.
           </text>
 
           <clipPath id={"clip-element-text-" + props.x}>
-              <rect x={props.x + 5} y={props.y} width={ELEMENT_WIDTH - 10} height={ELEMENT_HEIGHT}/>
+              <rect x={props.x + TEXT_PADDING} y={props.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
           </clipPath>
       </g>
   );
