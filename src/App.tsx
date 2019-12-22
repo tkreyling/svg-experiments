@@ -56,9 +56,9 @@ export const Rect: React.FC<RectProps> = (props) => {
           <rect data-testid="rect"
                 x={props.x} y={props.y}
                 width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
-                fill="rgb(0,0,255)" strokeWidth={1} stroke="rgb(0,0,0)"/>
+                fill="lightgrey" strokeWidth={1} stroke="black"/>
 
-          <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="red"
+          <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
                 clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element}
           </text>
 
