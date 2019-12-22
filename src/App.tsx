@@ -114,12 +114,16 @@ type DiagramProps = {
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(props.layers);
+    let edges = [
+        {from: nodes[0][1], to: nodes[1][0]},
+        {from: nodes[0][2], to: nodes[1][2]}
+    ];
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
         (height(props.layers) + 2 * MARGIN_TOP)}>
             {nodes.flat().map(Rect)}
-            <Path from={nodes[0][1]} to={nodes[1][0]} />
+            {edges.map(Path)}
         </svg>
     );
 };
