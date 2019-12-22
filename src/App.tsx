@@ -30,7 +30,7 @@ export const Rect: React.FC<RectProps> = (props) => {
                 width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
                 fill="rgb(0,0,255)" strokeWidth={3} stroke="rgb(0,0,0)"/>
 
-          <text x={props.x} y={props.y + ELEMENT_HEIGHT / 2} fill="red"
+          <text x={props.x + 5 } y={props.y + ELEMENT_HEIGHT / 2} fill="red"
                 clipPath={"url(#clip-element-text-" + props.x + ")"}>I'm a div inside a SVG.
           </text>
 
