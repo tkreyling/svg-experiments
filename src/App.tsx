@@ -5,7 +5,7 @@ type RectProps = {
     x: number
     y: number
     element: string
-    key: number
+    key: string
 }
 
 export const ELEMENT_WIDTH = 100;
@@ -31,7 +31,12 @@ export function layout(layers: string[][]): RectProps[][] {
 
 export function layoutHorizontally(elements: string[], layerIndex: number): RectProps[] {
     return elements.map((element, index) => {
-        return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: layerIndex * ELEMENT_HEIGHT, element: element, key: index}
+        return {
+            x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING),
+            y: layerIndex * ELEMENT_HEIGHT,
+            element: element,
+            key: layerIndex + "_" + index
+        }
     });
 }
 
@@ -63,7 +68,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <svg viewBox={"0 0 " + widthOfLayers(layers) + " 100"}>
-        {layout(layers)[0].map(Rect)}
+        {layout(layers).flat().map(Rect)}
       </svg>
     </div>
   );
