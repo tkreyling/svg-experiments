@@ -23,10 +23,16 @@ export function widthOfElements(elements: any[]) {
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
+export function layout(layers: string[][]): RectProps[][] {
+    return layers.map((elements) => {
+        return layoutHorizontally(elements)
+    });
+}
+
 export function layoutHorizontally(elements: string[]): RectProps[] {
     return elements.map((element, index) => {
-    return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0, element: element, key: index}
-  });
+        return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0, element: element, key: index}
+    });
 }
 
 export const Rect: React.FC<RectProps> = (props) => {
@@ -57,7 +63,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <svg viewBox={"0 0 " + widthOfLayers(layers) + " 100"}>
-        {layoutHorizontally(layers[0]).map(Rect)}
+        {layout(layers)[0].map(Rect)}
       </svg>
     </div>
   );
