@@ -66,7 +66,8 @@ export const Rect: React.FC<RectProps> = (props) => {
 
 const layers = [
     ["element 1", "element 2", "an element with long text", "element 4"],
-    ["element 1", "element 2", "element 3"]
+    ["element 1", "element 2", "element 3"],
+    ["element 1", "element 2", "element 3", "element 4", "element 5"]
 ];
 
 type DiagramProps = {
@@ -75,8 +76,8 @@ type DiagramProps = {
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     return (
-        <svg viewBox={"0 0 " + (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " 100"}>
-            {layout(layers).flat().map(Rect)}
+        <svg viewBox={"0 0 " + (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " 150"}>
+            {layout(props.layers).flat().map(Rect)}
         </svg>
     );
 };
