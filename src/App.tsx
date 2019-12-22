@@ -13,6 +13,7 @@ export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 100;
 export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
+export const VERTICAL_SPACING = 10;
 export const TEXT_PADDING = 5;
 
 export function widthOfLayers(layers: any[][]) {
@@ -35,7 +36,7 @@ export function layoutHorizontally(elements: string[], layerIndex: number): Rect
     return elements.map((element, index) => {
         return {
             x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE,
-            y: layerIndex * ELEMENT_HEIGHT + MARGIN_TOP,
+            y: layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP,
             element: element,
             key: layerIndex + "_" + index
         }
