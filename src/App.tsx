@@ -13,18 +13,22 @@ export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
 export const TEXT_PADDING = 5;
 
-export function width(elements: any[]) {
+export function widthOfLayers(layers: any[][]) {
+    return Math.max(...layers.map(widthOfElements));
+}
+
+export function widthOfElements(elements: any[]) {
     const n = elements.length;
     if (n === 0) return 0;
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
-
 }
+
 export function layoutHorizontally(elements: string[]): RectProps[] {
     return elements.map((element, index) => {
     return {x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING), y: 0, element: element, key: index}
   });
-
 }
+
 export const Rect: React.FC<RectProps> = (props) => {
   return (
       <g key={props.key}>
@@ -44,13 +48,16 @@ export const Rect: React.FC<RectProps> = (props) => {
   );
 };
 
-const elements = ["element 1", "element 2", "an element with long text", "element 4"];
+const layers = [
+    ["element 1", "element 2", "an element with long text", "element 4"],
+    ["element 1", "element 2", "element 3"]
+];
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <svg viewBox={"0 0 " + width(elements) + " 100"}>
-        {layoutHorizontally(elements).map(Rect)}
+      <svg viewBox={"0 0 " + widthOfLayers(layers) + " 100"}>
+        {layoutHorizontally(layers[0]).map(Rect)}
       </svg>
     </div>
   );
