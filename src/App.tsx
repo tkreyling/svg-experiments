@@ -69,12 +69,22 @@ const layers = [
     ["element 1", "element 2", "element 3"]
 ];
 
+type DiagramProps = {
+    layers: string[][]
+}
+
+export const Diagram: React.FC<DiagramProps> = (props) => {
+    return (
+        <svg viewBox={"0 0 " + (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " 100"}>
+            {layout(layers).flat().map(Rect)}
+        </svg>
+    );
+};
+
 const App: React.FC = () => {
     return (
         <div className="App">
-            <svg viewBox={"0 0 " + (widthOfLayers(layers) + 2 * MARGIN_SIDE) + " 100"}>
-                {layout(layers).flat().map(Rect)}
-            </svg>
+            <Diagram layers={layers}/>
         </div>
     );
 };
