@@ -6,6 +6,7 @@ type RectProps = {
     y: number
     element: Node
     key: string
+    layerIndex: number
 }
 
 type Node = {
@@ -54,7 +55,8 @@ export function layoutHorizontally(elements: Node[], layerIndex: number, fullWid
             x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
             y: layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP,
             element: element,
-            key: layerIndex + "_" + index
+            key: layerIndex + "_" + index,
+            layerIndex: layerIndex
         }
     });
 }
