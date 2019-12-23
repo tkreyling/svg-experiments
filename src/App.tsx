@@ -4,7 +4,11 @@ import './App.css';
 export type Coordinates = {
     x: number
     y: number
+}
+
+export type LayerPosition = {
     key: string
+    index: number
     layerIndex: number
 }
 
@@ -40,26 +44,36 @@ function heightOfNodes(layers: Node[][]) {
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
 }
 
-export function layout(layers: Node[][]): (Node & Coordinates)[][] {
-    let fullWidth = widthOfLayers(layers);
+function addLayerPosition(layers: Node[][]): (Node & LayerPosition)[][] {
     return layers.map((elements, layerIndex) => {
-        return layoutHorizontally(elements, layerIndex, fullWidth)
-    });
-}
-
-export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): (Node & Coordinates)[] {
-    let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
-    return elements.map((element, index) => {
-        return Object.assign(element, {
-            x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
-            y: layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP,
-            key: layerIndex + "_" + index,
-            layerIndex: layerIndex
+        return elements.map((element, index) => {
+            return Object.assign(element, {
+                key: layerIndex + "_" + index,
+                index: index,
+                layerIndex: layerIndex
+            });
         });
     });
 }
 
-export const Rect: React.FC<Node & Coordinates> = (props) => {
+export function layout(layers: (Node & LayerPosition)[][]): (Node & LayerPosition & Coordinates)[][] {
+    let fullWidth = widthOfLayers(layers);
+    return layers.map((elements) => {
+        return layoutHorizontally(elements, fullWidth)
+    });
+}
+
+export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth: number): (Node & LayerPosition & Coordinates)[] {
+    let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
+    return elements.map((element) => {
+        return Object.assign(element, {
+            x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
+            y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP
+        });
+    });
+}
+
+export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     return (
         <g key={props.key}>
             <rect data-testid="rect"
@@ -78,7 +92,7 @@ export const Rect: React.FC<Node & Coordinates> = (props) => {
     );
 };
 
-export const Path: React.FC<Edge<Coordinates>> = (props) => {
+export const Path: React.FC<Edge<LayerPosition & Coordinates>> = (props) => {
     let fromIsUpper = props.from.layerIndex <= props.to.layerIndex;
     let upper = fromIsUpper ? props.from : props.to;
     let lower = fromIsUpper ? props.to : props.from;
@@ -125,9 +139,10 @@ type DiagramProps = {
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
-    let nodes = layout(props.layers);
+    let positioned = addLayerPosition(props.layers);
+    let nodes = layout(positioned);
     let flattenedNodes = nodes.flat();
-    let paths = props.edges as unknown as Edge<Coordinates>[];
+    let paths = props.edges as unknown as Edge<LayerPosition & Coordinates>[];
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
