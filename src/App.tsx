@@ -4,7 +4,6 @@ import './App.css';
 type RectProps = {
     x: number
     y: number
-    element: Node
     key: string
     layerIndex: number
 }
@@ -41,27 +40,26 @@ function heightOfNodes(layers: Node[][]) {
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
 }
 
-export function layout(layers: Node[][]): RectProps[][] {
+export function layout(layers: Node[][]): (Node & RectProps)[][] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         return layoutHorizontally(elements, layerIndex, fullWidth)
     });
 }
 
-export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): RectProps[] {
+export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): (Node & RectProps)[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map((element, index) => {
-        return {
+        return Object.assign(element, {
             x: index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
             y: layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP,
-            element: element,
             key: layerIndex + "_" + index,
             layerIndex: layerIndex
-        }
+        });
     });
 }
 
-export const Rect: React.FC<RectProps> = (props) => {
+export const Rect: React.FC<RectProps & Node> = (props) => {
     return (
         <g key={props.key}>
             <rect data-testid="rect"
@@ -70,7 +68,7 @@ export const Rect: React.FC<RectProps> = (props) => {
                   fill="lightgrey" strokeWidth={1} stroke="black"/>
 
             <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
-                  clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.element.name}
+                  clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.name}
             </text>
 
             <clipPath id={"clip-element-text-" + props.key}>
@@ -131,21 +129,10 @@ type DiagramProps = {
     edges: Edge[]
 }
 
-function findRectProp(rects: RectProps[], node: Node) {
-    return rects.find(rect => {
-        return rect.element === node;
-    });
-}
-
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(props.layers);
     let flattenedNodes = nodes.flat();
-    let paths: PathProps[] = props.edges.map(edge => {
-        return {
-            from: findRectProp(flattenedNodes, edge.from)!,
-            to: findRectProp(flattenedNodes, edge.to)!
-        };
-    });
+    let paths = props.edges as unknown as PathProps[];
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
