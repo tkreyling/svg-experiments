@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
 
-type RectProps = {
+export type Coordinates = {
     x: number
     y: number
     key: string
     layerIndex: number
 }
 
-type Node = {
+export type Node = {
     name: string
 }
 
@@ -40,14 +40,14 @@ function heightOfNodes(layers: Node[][]) {
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
 }
 
-export function layout(layers: Node[][]): (Node & RectProps)[][] {
+export function layout(layers: Node[][]): (Node & Coordinates)[][] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         return layoutHorizontally(elements, layerIndex, fullWidth)
     });
 }
 
-export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): (Node & RectProps)[] {
+export function layoutHorizontally(elements: Node[], layerIndex: number, fullWidth: number): (Node & Coordinates)[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map((element, index) => {
         return Object.assign(element, {
@@ -59,7 +59,7 @@ export function layoutHorizontally(elements: Node[], layerIndex: number, fullWid
     });
 }
 
-export const Rect: React.FC<RectProps & Node> = (props) => {
+export const Rect: React.FC<Node & Coordinates> = (props) => {
     return (
         <g key={props.key}>
             <rect data-testid="rect"
@@ -79,8 +79,8 @@ export const Rect: React.FC<RectProps & Node> = (props) => {
 };
 
 type PathProps = {
-    from: RectProps
-    to: RectProps
+    from: Coordinates
+    to: Coordinates
 }
 
 export const Path: React.FC<PathProps> = (props) => {

@@ -1,10 +1,10 @@
-import {Rect} from "./App";
+import {Coordinates, Node, Rect} from "./App";
 
 test('coordinates are just passed through', () => {
-  let props = {
+  let props: Node & Coordinates = {
     x: 10,
     y: 10,
-    element: {name: "element 1"},
+    name: "element 1",
     key: "0_0",
     layerIndex: 0
   };
