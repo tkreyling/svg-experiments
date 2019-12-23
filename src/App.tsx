@@ -12,9 +12,9 @@ export type Node = {
     name: string
 }
 
-type Edge = {
-    from: Node
-    to: Node
+type Edge<T> = {
+    from: T
+    to: T
 }
 
 export const MARGIN_TOP = 5;
@@ -78,12 +78,7 @@ export const Rect: React.FC<Node & Coordinates> = (props) => {
     );
 };
 
-type PathProps = {
-    from: Coordinates
-    to: Coordinates
-}
-
-export const Path: React.FC<PathProps> = (props) => {
+export const Path: React.FC<Edge<Coordinates>> = (props) => {
     let fromIsUpper = props.from.layerIndex <= props.to.layerIndex;
     let upper = fromIsUpper ? props.from : props.to;
     let lower = fromIsUpper ? props.to : props.from;
@@ -126,13 +121,13 @@ const edges = [
 
 type DiagramProps = {
     layers: Node[][]
-    edges: Edge[]
+    edges: Edge<Node>[]
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(props.layers);
     let flattenedNodes = nodes.flat();
-    let paths = props.edges as unknown as PathProps[];
+    let paths = props.edges as unknown as Edge<Coordinates>[];
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
