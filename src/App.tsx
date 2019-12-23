@@ -16,7 +16,7 @@ export type Node = {
     name: string
 }
 
-type Edge<T> = {
+export type Edge<T> = {
     from: T
     to: T
 }
