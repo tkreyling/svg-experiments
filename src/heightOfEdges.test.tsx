@@ -81,3 +81,9 @@ test('edges from the bottom layer to the bottom layer requires space below the b
   ], 1))
       .toStrictEqual([10])
 });
+
+test('layers without edges do not require additional height, but will result in an 0 entry', () => {
+    expect(heightOfEdges([
+    ], 4))
+        .toStrictEqual([0, 0, 0, 0])
+});
