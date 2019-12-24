@@ -162,10 +162,11 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(positioned);
     let flattenedNodes = nodes.flat();
     let paths = props.edges as unknown as Edge<LayerPosition & Coordinates>[];
+    let heightOfAllEdges = heightOfEdges(paths, layers.length).reduce((sum, add) => sum + add);
     return (
         <svg viewBox={"0 0 " +
         (widthOfLayers(props.layers) + 2 * MARGIN_SIDE) + " " +
-        (heightOfNodes(props.layers) + 2 * MARGIN_TOP)}>
+        (heightOfNodes(props.layers) + heightOfAllEdges + 2 * MARGIN_TOP)}>
             {flattenedNodes.map(Rect)}
             {paths.map(Path)}
         </svg>
