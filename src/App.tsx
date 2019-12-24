@@ -42,7 +42,7 @@ export function widthOfElements(elements: any[]) {
 
 function heightOfNodes(layers: Node[][]) {
     let n = layers.length;
-    return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
+    return n*ELEMENT_HEIGHT + n*VERTICAL_SPACING;
 }
 
 function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
@@ -155,7 +155,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates> & LayerPosition> =
     let upperNodeY = upper.y + ELEMENT_HEIGHT;
     let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
     let lowerNodeX = lower.x + ELEMENT_WIDTH / 2;
-    let lowerNodeY = lower.y;
+    let lowerNodeY = lower.y + (upper.layerIndex === lower.layerIndex ? ELEMENT_HEIGHT : 0);
     return (
         <path d={
             "M " + upperNodeX + " " + upperNodeY + " " +
@@ -185,7 +185,9 @@ const edges = [
     {from: layers[0][2], to: layers[1][2]},
     {from: layers[0][3], to: layers[1][1]},
     {from: layers[1][2], to: layers[2][2]},
-    {from: layers[2][0], to: layers[1][0]}
+    {from: layers[2][0], to: layers[1][0]},
+    {from: layers[2][0], to: layers[2][3]},
+    {from: layers[0][0], to: layers[0][2]}
 ];
 
 type DiagramProps = {
