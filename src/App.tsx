@@ -28,6 +28,7 @@ export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
+export const EDGE_SPACING = 10;
 
 export function widthOfLayers(layers: any[][]) {
     return Math.max(...layers.map(widthOfElements));
@@ -42,6 +43,24 @@ export function widthOfElements(elements: any[]) {
 function heightOfNodes(layers: Node[][]) {
     let n = layers.length;
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
+}
+
+function getUpperNode(edge: Edge<LayerPosition>): LayerPosition {
+    return edge.from.layerIndex <= edge.to.layerIndex ? edge.from : edge.to;
+}
+
+export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
+    let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
+    edges.forEach(edge => {
+        let layerIndex = getUpperNode(edge).layerIndex;
+        let grouped = groupedByLayerIndex.get(layerIndex) || [];
+        grouped.push(edge);
+        groupedByLayerIndex.set(layerIndex, grouped);
+    });
+    let layerIndices = Array.from(Array(numberOfLayers).keys());
+    return layerIndices.map(layerIndex => {
+        return ((groupedByLayerIndex.get(layerIndex)?.length || 1) - 1) * EDGE_SPACING;
+    })
 }
 
 function addLayerPosition(layers: Node[][]): (Node & LayerPosition)[][] {

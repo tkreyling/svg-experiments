@@ -1,24 +1,4 @@
-import {Edge, LayerPosition} from "./App";
-
-const EDGE_SPACING = 10;
-
-function getUpperNode(edge: Edge<LayerPosition>): LayerPosition {
-    return edge.from.layerIndex <= edge.to.layerIndex ? edge.from : edge.to;
-}
-
-function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
-    let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
-    edges.forEach(edge => {
-        let layerIndex = getUpperNode(edge).layerIndex;
-        let grouped = groupedByLayerIndex.get(layerIndex) || [];
-        grouped.push(edge);
-        groupedByLayerIndex.set(layerIndex, grouped);
-    });
-    let layerIndices = Array.from(Array(numberOfLayers).keys());
-    return layerIndices.map(layerIndex => {
-        return ((groupedByLayerIndex.get(layerIndex)?.length || 1) - 1) * EDGE_SPACING;
-    })
-}
+import {EDGE_SPACING, heightOfEdges} from "./App";
 
 test('no edges need no additional space after a layer', () => {
   expect(heightOfEdges([], 1))
@@ -51,7 +31,7 @@ test('two edges between two consecutive layers require additional spacing', () =
             to: {key: "1_1", index: 1, layerIndex: 1}
         }
     ], 2))
-        .toStrictEqual([10, 0])
+        .toStrictEqual([EDGE_SPACING, 0])
 });
 
 test('an edge from a lower layer to an upper layer requires space below the upper layer', () => {
@@ -65,7 +45,7 @@ test('an edge from a lower layer to an upper layer requires space below the uppe
       to: {key: "0_1", index: 1, layerIndex: 0}
     }
   ], 2))
-      .toStrictEqual([10, 0])
+      .toStrictEqual([EDGE_SPACING, 0])
 });
 
 test('edges from the bottom layer to the bottom layer requires space below the bottom layer', () => {
@@ -79,7 +59,7 @@ test('edges from the bottom layer to the bottom layer requires space below the b
       to: {key: "0_3", index: 3, layerIndex: 0}
     }
   ], 1))
-      .toStrictEqual([10])
+      .toStrictEqual([EDGE_SPACING])
 });
 
 test('layers without edges do not require additional height, but will result in an 0 entry', () => {
