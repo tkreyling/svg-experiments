@@ -139,13 +139,13 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     );
 };
 
-export const Path: React.FC<Edge<LayerPosition & Coordinates>> = (props) => {
+export const Path: React.FC<Edge<LayerPosition & Coordinates> & LayerPosition> = (props) => {
     let upper = getUpperNode(props);
     let lower = getLowerNode(props);
 
     let upperNodeX = upper.x + ELEMENT_WIDTH / 2;
     let upperNodeY = upper.y + ELEMENT_HEIGHT;
-    let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2;
+    let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
     let lowerNodeX = lower.x + ELEMENT_WIDTH / 2;
     let lowerNodeY = lower.y;
     return (
@@ -186,12 +186,13 @@ type DiagramProps = {
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let positioned = addLayerPositionToNode(props.layers);
-    let edgesWithPositions = props.edges as unknown as Edge<LayerPosition>[];
+    let edgesWithNodePositions = props.edges as unknown as Edge<LayerPosition>[];
+    let heightOfAllEdges = heightOfEdges(edgesWithNodePositions, layers.length);
 
-    let heightOfAllEdges = heightOfEdges(edgesWithPositions, layers.length);
     let nodes = layout(positioned, heightOfAllEdges);
 
-    let paths = props.edges as unknown as Edge<LayerPosition & Coordinates>[];
+    addLayerPositionToEdge(edgesWithNodePositions);
+    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates> & LayerPosition)[];
 
     let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
     let height = heightOfNodes(props.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
