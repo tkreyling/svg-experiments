@@ -159,15 +159,19 @@ type DiagramProps = {
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let positioned = addLayerPosition(props.layers);
+    let edgesWithPositions = props.edges as unknown as Edge<LayerPosition>[];
+
+    let heightOfAllEdges = heightOfEdges(edgesWithPositions, layers.length);
     let nodes = layout(positioned);
-    let flattenedNodes = nodes.flat();
+
     let paths = props.edges as unknown as Edge<LayerPosition & Coordinates>[];
-    let heightOfAllEdges = heightOfEdges(paths, layers.length).reduce((sum, add) => sum + add);
+
     let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
-    let height = heightOfNodes(props.layers) + heightOfAllEdges + 2 * MARGIN_TOP;
+    let height = heightOfNodes(props.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
+
     return (
         <svg viewBox={"0 0 " + width + " " + height}>
-            {flattenedNodes.map(Rect)}
+            {nodes.flat().map(Rect)}
             {paths.map(Path)}
         </svg>
     );
