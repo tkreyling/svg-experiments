@@ -128,6 +128,30 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
     });
 }
 
+export function addEgressIndexAndNumber(edges: Edge<LayerPosition>[]) {
+    let groupedByUpperNodeKey = new Map<string, Edge<LayerPosition>[]>();
+    edges.forEach(edge => {
+        let key = getUpperNode(edge).key;
+        let grouped = groupedByUpperNodeKey.get(key) || [];
+        grouped.push(edge);
+        groupedByUpperNodeKey.set(key, grouped);
+    });
+
+    Array.from(groupedByUpperNodeKey.values()).forEach(upperNodeEdges => {
+        upperNodeEdges.sort((edge1, edge2) => {
+            return getLowerNode(edge1).index - getLowerNode(edge2).index;
+        });
+        Object.assign(getUpperNode(upperNodeEdges[0]), {
+            egressNumber: upperNodeEdges.length
+        });
+        upperNodeEdges.forEach((edge, index) => {
+            Object.assign(edge, {
+                egressIndex: index
+            });
+        });
+    });
+}
+
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     return (
         <g key={props.key}>
@@ -203,6 +227,7 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(positioned, heightOfAllEdges);
 
     addLayerPositionToEdge(edgesWithNodePositions);
+    addEgressIndexAndNumber(edgesWithNodePositions);
     let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates> & LayerPosition)[];
 
     let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
