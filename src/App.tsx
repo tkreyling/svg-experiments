@@ -75,19 +75,20 @@ function addLayerPosition(layers: Node[][]): (Node & LayerPosition)[][] {
     });
 }
 
-export function layout(layers: (Node & LayerPosition)[][]): (Node & LayerPosition & Coordinates)[][] {
+export function layout(layers: (Node & LayerPosition)[][], heightOfEdges: number[]): (Node & LayerPosition & Coordinates)[][] {
     let fullWidth = widthOfLayers(layers);
-    return layers.map((elements) => {
-        return layoutHorizontally(elements, fullWidth)
+    return layers.map((elements, layerIndex) => {
+        let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
+        return layoutHorizontally(elements, fullWidth, additionalEdgeHeight)
     });
 }
 
-export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth: number): (Node & LayerPosition & Coordinates)[] {
+export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth: number, additionalEdgeHeight: number): (Node & LayerPosition & Coordinates)[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map((element) => {
         return Object.assign(element, {
             x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
-            y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP
+            y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
         });
     });
 }
@@ -162,7 +163,7 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
     let edgesWithPositions = props.edges as unknown as Edge<LayerPosition>[];
 
     let heightOfAllEdges = heightOfEdges(edgesWithPositions, layers.length);
-    let nodes = layout(positioned);
+    let nodes = layout(positioned, heightOfAllEdges);
 
     let paths = props.edges as unknown as Edge<LayerPosition & Coordinates>[];
 
