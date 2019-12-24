@@ -45,8 +45,12 @@ function heightOfNodes(layers: Node[][]) {
     return n*ELEMENT_HEIGHT + (n - 1)*VERTICAL_SPACING;
 }
 
-function getUpperNode(edge: Edge<LayerPosition>): LayerPosition {
+function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
     return edge.from.layerIndex <= edge.to.layerIndex ? edge.from : edge.to;
+}
+
+function getLowerNode<T extends LayerPosition>(edge: Edge<T>): T {
+    return edge.from.layerIndex <= edge.to.layerIndex ? edge.to : edge.from;
 }
 
 export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
@@ -113,9 +117,8 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
 };
 
 export const Path: React.FC<Edge<LayerPosition & Coordinates>> = (props) => {
-    let fromIsUpper = props.from.layerIndex <= props.to.layerIndex;
-    let upper = fromIsUpper ? props.from : props.to;
-    let lower = fromIsUpper ? props.to : props.from;
+    let upper = getUpperNode(props);
+    let lower = getLowerNode(props);
 
     let upperNodeX = upper.x + ELEMENT_WIDTH / 2;
     let upperNodeY = upper.y + ELEMENT_HEIGHT;
