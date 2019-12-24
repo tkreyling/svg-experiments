@@ -67,7 +67,7 @@ export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: numb
     })
 }
 
-function addLayerPosition(layers: Node[][]): (Node & LayerPosition)[][] {
+function addLayerPositionToNode(layers: Node[][]): (Node & LayerPosition)[][] {
     return layers.map((elements, layerIndex) => {
         return elements.map((element, index) => {
             return Object.assign(element, {
@@ -162,7 +162,7 @@ type DiagramProps = {
 }
 
 export const Diagram: React.FC<DiagramProps> = (props) => {
-    let positioned = addLayerPosition(props.layers);
+    let positioned = addLayerPositionToNode(props.layers);
     let edgesWithPositions = props.edges as unknown as Edge<LayerPosition>[];
 
     let heightOfAllEdges = heightOfEdges(edgesWithPositions, layers.length);
