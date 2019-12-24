@@ -109,7 +109,15 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
     Array.from(groupedByLayerIndex.entries()).forEach(pair => {
         let layerIndex = pair[0];
         let edgesAfterLayer = pair[1];
-        edgesAfterLayer.sort();
+        edgesAfterLayer.sort((edge1, edge2) => {
+            let upperNode1 = getUpperNode(edge1);
+            let upperNode2 = getUpperNode(edge2);
+            if (upperNode1.index === upperNode2.index) {
+                return getLowerNode(edge1).index - getLowerNode(edge2).index;
+            } else {
+                return upperNode1.index - upperNode2.index;
+            }
+        });
         edgesAfterLayer.forEach((edge, index) => {
             Object.assign(edge, {
                 key: layerIndex + "_" + index,
