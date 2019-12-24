@@ -97,6 +97,29 @@ export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth
     });
 }
 
+export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
+    let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
+    edges.forEach(edge => {
+        let layerIndex = getUpperNode(edge).layerIndex;
+        let grouped = groupedByLayerIndex.get(layerIndex) || [];
+        grouped.push(edge);
+        groupedByLayerIndex.set(layerIndex, grouped);
+    });
+
+    Array.from(groupedByLayerIndex.entries()).forEach(pair => {
+        let layerIndex = pair[0];
+        let edgesAfterLayer = pair[1];
+        edgesAfterLayer.sort();
+        edgesAfterLayer.forEach((edge, index) => {
+            Object.assign(edge, {
+                key: layerIndex + "_" + index,
+                index: index,
+                layerIndex: layerIndex
+            });
+        });
+    });
+}
+
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     return (
         <g key={props.key}>
