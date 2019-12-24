@@ -183,7 +183,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & EgressNumber> & L
     let upper = getUpperNode(props);
     let lower = getLowerNode(props);
 
-    let upperNodeX = upper.x + ELEMENT_WIDTH / 2 + props.egressIndex * EDGE_SPACING;
+    let upperNodeX = upper.x + (ELEMENT_WIDTH - (upper.egressNumber - 1) * EDGE_SPACING) / 2 + props.egressIndex * EDGE_SPACING;
     let upperNodeY = upper.y + ELEMENT_HEIGHT;
     let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
     let lowerNodeX = lower.x + ELEMENT_WIDTH / 2;
