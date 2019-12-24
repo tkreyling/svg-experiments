@@ -21,6 +21,14 @@ export type Edge<T> = {
     to: T
 }
 
+type EgressIndex = {
+    egressIndex: number
+}
+
+type EgressNumber = {
+    egressNumber: number
+}
+
 export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 100;
@@ -171,11 +179,11 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     );
 };
 
-export const Path: React.FC<Edge<LayerPosition & Coordinates> & LayerPosition> = (props) => {
+export const Path: React.FC<Edge<LayerPosition & Coordinates & EgressNumber> & LayerPosition & EgressIndex> = (props) => {
     let upper = getUpperNode(props);
     let lower = getLowerNode(props);
 
-    let upperNodeX = upper.x + ELEMENT_WIDTH / 2;
+    let upperNodeX = upper.x + ELEMENT_WIDTH / 2 + props.egressIndex * EDGE_SPACING;
     let upperNodeY = upper.y + ELEMENT_HEIGHT;
     let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
     let lowerNodeX = lower.x + ELEMENT_WIDTH / 2;
@@ -210,6 +218,7 @@ const edges = [
     {from: layers[0][3], to: layers[1][1]},
     {from: layers[1][2], to: layers[2][2]},
     {from: layers[2][0], to: layers[1][0]},
+    {from: layers[2][1], to: layers[1][0]},
     {from: layers[2][0], to: layers[2][3]},
     {from: layers[0][0], to: layers[0][2]}
 ];
@@ -228,7 +237,7 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
 
     addLayerPositionToEdge(edgesWithNodePositions);
     addEgressIndexAndNumber(edgesWithNodePositions);
-    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates> & LayerPosition)[];
+    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates & EgressNumber> & LayerPosition & EgressIndex)[];
 
     let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
     let height = heightOfNodes(props.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
