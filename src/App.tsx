@@ -99,12 +99,11 @@ export function layout(layers: (Node & LayerPosition)[][], heightOfEdges: number
 
 export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth: number, additionalEdgeHeight: number): (Node & LayerPosition & Coordinates)[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
-    return elements.map((element) => {
-        return Object.assign(element, {
+    return elements.map(element =>
+        Object.assign(element, {
             x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
             y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
-        });
-    });
+        }));
 }
 
 export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
