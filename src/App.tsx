@@ -268,21 +268,22 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     );
 };
 
-export const Path: React.FC<Edge<LayerPosition & Coordinates & EgressIngressNumbers> & LayerPosition & EgressIngressIndices> = (props) => {
-    let upper = getUpperNode(props);
-    let lower = getLowerNode(props);
-
-    let upperNodeX = upper.x + (ELEMENT_WIDTH - (upper.egressNumber - 1) * EDGE_SPACING) / 2 + props.egressIndex * EDGE_SPACING;
-    let upperNodeY = upper.y + ELEMENT_HEIGHT;
-    let upperNodeEdgesY = upper.y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
-    let lowerNodeX = lower.x + (ELEMENT_WIDTH - (lower.ingressNumber - 1) * EDGE_SPACING) / 2 + props.ingressIndex * EDGE_SPACING;
-    let lowerNodeY = lower.y + (upper.layerIndex === lower.layerIndex ? ELEMENT_HEIGHT : 0);
+export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = (props) => {
+    let fromNodeOnLowerSide = props.from.layerIndex <= props.to.layerIndex;
+    let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? props.from.lowerSideEdges : props.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let fromNodeX = props.from.x + fromNodeCenteringOffset + props.fromIndex * EDGE_SPACING;
+    let fromNodeY = props.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
+    let upperNodeEdgesY = getUpperNode(props).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
+    let toNodeOnLowerSide = props.from.layerIndex >= props.to.layerIndex;
+    let toNodeCenteringOffset = (ELEMENT_WIDTH - ((toNodeOnLowerSide ? props.to.lowerSideEdges : props.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let toNodeX = props.to.x + toNodeCenteringOffset + props.toIndex * EDGE_SPACING;
+    let toNodeY = props.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
     return (
         <path d={
-            "M " + upperNodeX + " " + upperNodeY + " " +
-            "L " + upperNodeX + " " + upperNodeEdgesY + " " +
-            "L " + lowerNodeX + " " + upperNodeEdgesY + " " +
-            "L " + lowerNodeX + " " + lowerNodeY
+            "M " + fromNodeX + " " + fromNodeY + " " +
+            "L " + fromNodeX + " " + upperNodeEdgesY + " " +
+            "L " + toNodeX + " " + upperNodeEdgesY + " " +
+            "L " + toNodeX + " " + toNodeY
         }
               stroke="black"
               strokeWidth={1}
@@ -326,9 +327,8 @@ export const Diagram: React.FC<DiagramProps> = (props) => {
     let nodes = layout(positioned, heightOfAllEdges);
 
     addLayerPositionToEdge(edgesWithNodePositions);
-    addEgressIndexAndNumber(edgesWithNodePositions);
-    addIngressIndexAndNumber(edgesWithNodePositions);
-    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates & EgressIngressNumbers> & LayerPosition & EgressIngressIndices)[];
+    addConnectionIndexAndNumberOfEdges(edgesWithNodePositions);
+    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
 
     let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
     let height = heightOfNodes(props.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
