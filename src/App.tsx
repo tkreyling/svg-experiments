@@ -116,9 +116,7 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
         groupedByLayerIndex.set(layerIndex, grouped);
     });
 
-    Array.from(groupedByLayerIndex.entries()).forEach(pair => {
-        let layerIndex = pair[0];
-        let edgesAfterLayer = pair[1];
+    Array.from(groupedByLayerIndex.entries()).forEach(([layerIndex, edgesAfterLayer]) => {
         edgesAfterLayer.sort((edge1, edge2) => {
             let upperNode1 = getUpperNode(edge1);
             let upperNode2 = getUpperNode(edge2);
