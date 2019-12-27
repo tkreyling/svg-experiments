@@ -261,7 +261,7 @@ type DiagramProps = {
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let positioned = addLayerPositionToNode(props.layers);
     let edgesWithNodePositions = props.edges as unknown as Edge<LayerPosition>[];
-    let heightOfAllEdges = heightOfEdges(edgesWithNodePositions, layers.length);
+    let heightOfAllEdges = heightOfEdges(edgesWithNodePositions, props.layers.length);
 
     let nodes = layout(positioned, heightOfAllEdges);
 
