@@ -172,20 +172,20 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
         addEdgeEnd(edge.to, edge.from, index=> Object.assign(edge, {toIndex: index}));
     });
 
-    Array.from(groupedByNodeAndSide.values()).forEach(nodeSide => {
-        nodeSide.edgeEnds.sort((edgeEnd1, edgeEnd2) => {
+    Array.from(groupedByNodeAndSide.values()).forEach(({edgeEnds, node, side}) => {
+        edgeEnds.sort((edgeEnd1, edgeEnd2) => {
             return edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index;
         });
-        nodeSide.edgeEnds.forEach((edgeEnd, index) => {
+        edgeEnds.forEach((edgeEnd, index) => {
             edgeEnd.setIndex(index);
         });
-        if (nodeSide.side === "UPPER") {
-            Object.assign(nodeSide.node, {
-                upperSideEdges: nodeSide.edgeEnds.length
+        if (side === "UPPER") {
+            Object.assign(node, {
+                upperSideEdges: edgeEnds.length
             });
         } else {
-            Object.assign(nodeSide.node, {
-                lowerSideEdges: nodeSide.edgeEnds.length
+            Object.assign(node, {
+                lowerSideEdges: edgeEnds.length
             });
         }
     });
