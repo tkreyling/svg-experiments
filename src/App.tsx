@@ -21,16 +21,6 @@ export type Edge<T> = {
     to: T
 }
 
-type EgressIngressIndices = {
-    egressIndex: number
-    ingressIndex: number
-}
-
-type EgressIngressNumbers = {
-    egressNumber: number
-    ingressNumber: number
-}
-
 type ConnectionIndex = {
     fromIndex: number
     toIndex: number
@@ -148,30 +138,6 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
     });
 }
 
-export function addEgressIndexAndNumber(edges: Edge<LayerPosition>[]) {
-    let groupedByUpperNodeKey = new Map<string, Edge<LayerPosition>[]>();
-    edges.forEach(edge => {
-        let key = getUpperNode(edge).key;
-        let grouped = groupedByUpperNodeKey.get(key) || [];
-        grouped.push(edge);
-        groupedByUpperNodeKey.set(key, grouped);
-    });
-
-    Array.from(groupedByUpperNodeKey.values()).forEach(upperNodeEdges => {
-        upperNodeEdges.sort((edge1, edge2) => {
-            return getLowerNode(edge1).index - getLowerNode(edge2).index;
-        });
-        Object.assign(getUpperNode(upperNodeEdges[0]), {
-            egressNumber: upperNodeEdges.length
-        });
-        upperNodeEdges.forEach((edge, index) => {
-            Object.assign(edge, {
-                egressIndex: index
-            });
-        });
-    });
-}
-
 export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[]) {
     type NodeSide = {
         node: LayerPosition
@@ -222,30 +188,6 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
                 lowerSideEdges: nodeSide.edgeEnds.length
             });
         }
-    });
-}
-
-export function addIngressIndexAndNumber(edges: Edge<LayerPosition>[]) {
-    let groupedByLowerNodeKey = new Map<string, Edge<LayerPosition>[]>();
-    edges.forEach(edge => {
-        let key = getLowerNode(edge).key;
-        let grouped = groupedByLowerNodeKey.get(key) || [];
-        grouped.push(edge);
-        groupedByLowerNodeKey.set(key, grouped);
-    });
-
-    Array.from(groupedByLowerNodeKey.values()).forEach(lowerNodeEdges => {
-        lowerNodeEdges.sort((edge1, edge2) => {
-            return getUpperNode(edge1).index - getUpperNode(edge2).index;
-        });
-        Object.assign(getLowerNode(lowerNodeEdges[0]), {
-            ingressNumber: lowerNodeEdges.length
-        });
-        lowerNodeEdges.forEach((edge, index) => {
-            Object.assign(edge, {
-                ingressIndex: index
-            });
-        });
     });
 }
 
