@@ -31,6 +31,16 @@ type EgressIngressNumbers = {
     ingressNumber: number
 }
 
+type ConnectionIndex = {
+    fromIndex: number
+    toIndex: number
+}
+
+type NumberOfEdges = {
+    upperSideEdges: number
+    lowerSideEdges: number
+}
+
 export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 100;
@@ -159,6 +169,59 @@ export function addEgressIndexAndNumber(edges: Edge<LayerPosition>[]) {
                 egressIndex: index
             });
         });
+    });
+}
+
+export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[]) {
+    type NodeSide = {
+        node: LayerPosition
+        side: "LOWER" | "UPPER"
+        edgeEnds: EdgeEnd[]
+    }
+
+    type EdgeEnd = {
+        reverseNode: LayerPosition
+        setIndex: (index: number) => void
+    }
+
+    let groupedByNodeAndSide = new Map<string, NodeSide>();
+
+    function addEdgeEnd(firstNode: LayerPosition, secondNode: LayerPosition, setIndex: (index: number) => void) {
+        let side: "LOWER" | "UPPER" = firstNode.layerIndex <= secondNode.layerIndex ? "LOWER" : "UPPER";
+        let key = firstNode.key + side;
+        let nodeSide: NodeSide = groupedByNodeAndSide.get(key) || {
+            node: firstNode,
+            side: side,
+            edgeEnds: []
+        };
+        nodeSide.edgeEnds.push({
+            reverseNode: secondNode,
+            setIndex: setIndex
+        });
+        groupedByNodeAndSide.set(key, nodeSide);
+    }
+
+    edges.forEach(edge => {
+        addEdgeEnd(edge.from, edge.to, (index: number) => Object.assign(edge, {fromIndex: index}));
+        addEdgeEnd(edge.to, edge.from, (index: number) => Object.assign(edge, {toIndex: index}));
+    });
+
+    Array.from(groupedByNodeAndSide.values()).forEach(nodeSide => {
+        nodeSide.edgeEnds.sort((edgeEnd1, edgeEnd2) => {
+            return edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index;
+        });
+        nodeSide.edgeEnds.forEach((edgeEnd, index) => {
+            edgeEnd.setIndex(index);
+        });
+        if (nodeSide.side === "UPPER") {
+            Object.assign(nodeSide.node, {
+                upperSideEdges: nodeSide.edgeEnds.length
+            });
+        } else {
+            Object.assign(nodeSide.node, {
+                lowerSideEdges: nodeSide.edgeEnds.length
+            });
+        }
     });
 }
 
