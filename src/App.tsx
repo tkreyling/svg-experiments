@@ -168,8 +168,8 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
     }
 
     edges.forEach(edge => {
-        addEdgeEnd(edge.from, edge.to, (index: number) => Object.assign(edge, {fromIndex: index}));
-        addEdgeEnd(edge.to, edge.from, (index: number) => Object.assign(edge, {toIndex: index}));
+        addEdgeEnd(edge.from, edge.to, index => Object.assign(edge, {fromIndex: index}));
+        addEdgeEnd(edge.to, edge.from, index=> Object.assign(edge, {toIndex: index}));
     });
 
     Array.from(groupedByNodeAndSide.values()).forEach(nodeSide => {
