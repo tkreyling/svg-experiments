@@ -268,16 +268,16 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
     );
 };
 
-export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = (props) => {
-    let fromNodeOnLowerSide = props.from.layerIndex <= props.to.layerIndex;
-    let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? props.from.lowerSideEdges : props.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
-    let fromNodeX = props.from.x + fromNodeCenteringOffset + props.fromIndex * EDGE_SPACING;
-    let fromNodeY = props.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
-    let upperNodeEdgesY = getUpperNode(props).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + props.index * EDGE_SPACING;
-    let toNodeOnLowerSide = props.from.layerIndex >= props.to.layerIndex;
-    let toNodeCenteringOffset = (ELEMENT_WIDTH - ((toNodeOnLowerSide ? props.to.lowerSideEdges : props.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
-    let toNodeX = props.to.x + toNodeCenteringOffset + props.toIndex * EDGE_SPACING;
-    let toNodeY = props.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
+export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
+    let fromNodeOnLowerSide = edge.from.layerIndex <= edge.to.layerIndex;
+    let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let fromNodeX = edge.from.x + fromNodeCenteringOffset + edge.fromIndex * EDGE_SPACING;
+    let fromNodeY = edge.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
+    let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
+    let toNodeOnLowerSide = edge.from.layerIndex >= edge.to.layerIndex;
+    let toNodeCenteringOffset = (ELEMENT_WIDTH - ((toNodeOnLowerSide ? edge.to.lowerSideEdges : edge.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let toNodeX = edge.to.x + toNodeCenteringOffset + edge.toIndex * EDGE_SPACING;
+    let toNodeY = edge.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
     return (
         <path d={
             "M " + fromNodeX + " " + fromNodeY + " " +
