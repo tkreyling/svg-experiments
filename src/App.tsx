@@ -189,20 +189,20 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
     });
 }
 
-export const Rect: React.FC<Node & LayerPosition & Coordinates> = (props) => {
+export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     return (
-        <g key={props.key}>
+        <g key={node.key}>
             <rect data-testid="rect"
-                  x={props.x} y={props.y}
+                  x={node.x} y={node.y}
                   width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
                   fill="lightgrey" strokeWidth={1} stroke="black"/>
 
-            <text x={props.x + TEXT_PADDING } y={props.y + ELEMENT_HEIGHT / 2} fill="black"
-                  clipPath={"url(#clip-element-text-" + props.key + ")"}>{props.name}
+            <text x={node.x + TEXT_PADDING } y={node.y + ELEMENT_HEIGHT / 2} fill="black"
+                  clipPath={"url(#clip-element-text-" + node.key + ")"}>{node.name}
             </text>
 
-            <clipPath id={"clip-element-text-" + props.key}>
-                <rect x={props.x + TEXT_PADDING} y={props.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
+            <clipPath id={"clip-element-text-" + node.key}>
+                <rect x={node.x + TEXT_PADDING} y={node.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
             </clipPath>
         </g>
     );
