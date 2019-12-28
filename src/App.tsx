@@ -170,16 +170,17 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
     });
 
     Array.from(groupedByNodeAndSide.values()).forEach(({edgeEnds, node, side}) => {
-        edgeEnds.sort((edgeEnd1, edgeEnd2) => {
-            if (edgeEnd1.reverseNode.layerIndex === node.layerIndex && edgeEnd2.reverseNode.layerIndex === node.layerIndex) {
-                return edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index;
-            } else if (edgeEnd1.reverseNode.layerIndex !== node.layerIndex && edgeEnd2.reverseNode.layerIndex !== node.layerIndex) {
-                return edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index;
-            } else {
-                return edgeEnd2.reverseNode.layerIndex - edgeEnd1.reverseNode.layerIndex;
-            }
-        });
-        edgeEnds.forEach((edgeEnd, index) => {
+        let sameLayer = edgeEnds.filter(edgeEnd => edgeEnd.reverseNode.layerIndex === node.layerIndex);
+        let before = sameLayer.filter(edgeEnd => edgeEnd.reverseNode.index <= node.index);
+        let after = sameLayer.filter(edgeEnd => edgeEnd.reverseNode.index >= node.index);
+        let otherLayer = edgeEnds.filter(edgeEnd => edgeEnd.reverseNode.layerIndex !== node.layerIndex);
+
+        before.sort((edgeEnd1, edgeEnd2) => edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index);
+        otherLayer.sort((edgeEnd1, edgeEnd2) => edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index);
+        after.sort((edgeEnd1, edgeEnd2) => edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index);
+
+        let all = before.concat(otherLayer).concat(after);
+        all.forEach((edgeEnd, index) => {
             edgeEnd.setIndex(index);
         });
         if (side === "UPPER") {
@@ -256,10 +257,13 @@ const edges = [
     {from: layers[2][0], to: layers[1][0]},
     {from: layers[2][1], to: layers[1][0]},
     {from: layers[2][0], to: layers[2][3]},
+    {from: layers[2][1], to: layers[2][3]},
     {from: layers[0][0], to: layers[0][2]},
     {from: layers[0][0], to: layers[0][1]},
     {from: layers[0][0], to: layers[1][0]},
-    {from: layers[0][0], to: layers[1][0]}
+    {from: layers[0][0], to: layers[1][0]},
+    {from: layers[1][1], to: layers[1][0]},
+    {from: layers[1][1], to: layers[1][2]}
 ];
 
 type DiagramProps = {

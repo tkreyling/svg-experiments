@@ -132,7 +132,7 @@ test('edges to the same layer are sorted reversely', () => {
         ]);
 });
 
-test('edges to the same layer are sorted after edges to another layer', () => {
+test('edges to the same layer are sorted after edges to another layer, if they are after the origin node', () => {
     let node = {key: "0_0", index: 0, layerIndex: 0};
     let edges = [
         {
@@ -158,6 +158,38 @@ test('edges to the same layer are sorted after edges to another layer', () => {
             {
                 fromIndex: 0,
                 from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "1_0", index: 0, layerIndex: 1, upperSideEdges: 1},
+                toIndex: 0
+            }
+        ]);
+});
+
+test('edges to the same layer are sorted before edges to another layer, if they are before the origin node', () => {
+    let node = {key: "0_1", index: 1, layerIndex: 0};
+    let edges = [
+        {
+            from: node,
+            to: {key: "0_0", index: 0, layerIndex: 0}
+        },
+        {
+            from: node,
+            to: {key: "1_0", index: 0, layerIndex: 1}
+        }
+    ];
+
+    addConnectionIndexAndNumberOfEdges(edges);
+
+    expect(edges)
+        .toStrictEqual([
+            {
+                fromIndex: 0,
+                from: {key: "0_1", index: 1, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 1},
+                toIndex: 0
+            },
+            {
+                fromIndex: 1,
+                from: {key: "0_1", index: 1, layerIndex: 0, lowerSideEdges: 2},
                 to: {key: "1_0", index: 0, layerIndex: 1, upperSideEdges: 1},
                 toIndex: 0
             }
