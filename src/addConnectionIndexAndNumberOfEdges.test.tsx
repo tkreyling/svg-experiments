@@ -67,7 +67,8 @@ test('an edge on the same layer has two times lowerSideEdges = 1', () => {
         ]);
 });
 
-test('the second edge from one node will get an increased index', () => {
+test('the second edge from one node will get an increased index and ' +
+    'edges are sorted by the index of the other node in the layer', () => {
     let node = {key: "0_0", index: 0, layerIndex: 0};
     let edges = [
         {
@@ -94,6 +95,70 @@ test('the second edge from one node will get an increased index', () => {
                 fromIndex: 1,
                 from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
                 to: {key: "1_1", index: 1, layerIndex: 1, upperSideEdges: 1},
+                toIndex: 0
+            }
+        ]);
+});
+
+test('edges to the same layer are sorted reversely', () => {
+    let node = {key: "0_0", index: 0, layerIndex: 0};
+    let edges = [
+        {
+            from: node,
+            to: {key: "0_1", index: 1, layerIndex: 0}
+        },
+        {
+            from: node,
+            to: {key: "0_2", index: 2, layerIndex: 0}
+        }
+    ];
+
+    addConnectionIndexAndNumberOfEdges(edges);
+
+    expect(edges)
+        .toStrictEqual([
+            {
+                fromIndex: 1,
+                from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "0_1", index: 1, layerIndex: 0, lowerSideEdges: 1},
+                toIndex: 0
+            },
+            {
+                fromIndex: 0,
+                from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "0_2", index: 2, layerIndex: 0, lowerSideEdges: 1},
+                toIndex: 0
+            }
+        ]);
+});
+
+test('edges to the same layer are sorted after edges to another layer', () => {
+    let node = {key: "0_0", index: 0, layerIndex: 0};
+    let edges = [
+        {
+            from: node,
+            to: {key: "0_1", index: 1, layerIndex: 0}
+        },
+        {
+            from: node,
+            to: {key: "1_0", index: 0, layerIndex: 1}
+        }
+    ];
+
+    addConnectionIndexAndNumberOfEdges(edges);
+
+    expect(edges)
+        .toStrictEqual([
+            {
+                fromIndex: 1,
+                from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "0_1", index: 1, layerIndex: 0, lowerSideEdges: 1},
+                toIndex: 0
+            },
+            {
+                fromIndex: 0,
+                from: {key: "0_0", index: 0, layerIndex: 0, lowerSideEdges: 2},
+                to: {key: "1_0", index: 0, layerIndex: 1, upperSideEdges: 1},
                 toIndex: 0
             }
         ]);

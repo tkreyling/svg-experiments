@@ -171,7 +171,13 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
 
     Array.from(groupedByNodeAndSide.values()).forEach(({edgeEnds, node, side}) => {
         edgeEnds.sort((edgeEnd1, edgeEnd2) => {
-            return edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index;
+            if (edgeEnd1.reverseNode.layerIndex === node.layerIndex && edgeEnd2.reverseNode.layerIndex === node.layerIndex) {
+                return edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index;
+            } else if (edgeEnd1.reverseNode.layerIndex !== node.layerIndex && edgeEnd2.reverseNode.layerIndex !== node.layerIndex) {
+                return edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index;
+            } else {
+                return edgeEnd2.reverseNode.layerIndex - edgeEnd1.reverseNode.layerIndex;
+            }
         });
         edgeEnds.forEach((edgeEnd, index) => {
             edgeEnd.setIndex(index);
@@ -250,7 +256,10 @@ const edges = [
     {from: layers[2][0], to: layers[1][0]},
     {from: layers[2][1], to: layers[1][0]},
     {from: layers[2][0], to: layers[2][3]},
-    {from: layers[0][0], to: layers[0][2]}
+    {from: layers[0][0], to: layers[0][2]},
+    {from: layers[0][0], to: layers[0][1]},
+    {from: layers[0][0], to: layers[1][0]},
+    {from: layers[0][0], to: layers[1][0]}
 ];
 
 type DiagramProps = {
