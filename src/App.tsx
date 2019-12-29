@@ -9,6 +9,7 @@ export type Coordinates = {
 export type LayerPosition = {
     key: string
     index: number
+    relativePosition: number
     layerIndex: number
 }
 
@@ -77,12 +78,16 @@ export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: numb
     })
 }
 
-function addLayerPositionToNode(layers: Node[][]): (Node & LayerPosition)[][] {
+export function addLayerPositionToNode(layers: Node[][]): (Node & LayerPosition)[][] {
+    let fullWidth = Math.max(...layers.map(nodes => nodes.length));
     return layers.map((elements, layerIndex) => {
+        let width = elements.length;
+        let layerOffset = (fullWidth - width) / 2;
         return elements.map((element, index) => {
             return Object.assign(element, {
                 key: layerIndex + "_" + index,
                 index: index,
+                relativePosition : layerOffset + index,
                 layerIndex: layerIndex
             });
         });
