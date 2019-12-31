@@ -57,11 +57,17 @@ function heightOfNodes(layers: Node[][]) {
 }
 
 function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
-    return edge.from.layerIndex <= edge.to.layerIndex ? edge.from : edge.to;
+    if (edge.from.layerIndex === edge.to.layerIndex) {
+        return edge.from.index <= edge.to.index ? edge.from : edge.to;
+    }
+    return edge.from.layerIndex < edge.to.layerIndex ? edge.from : edge.to;
 }
 
 function getLowerNode<T extends LayerPosition>(edge: Edge<T>): T {
-    return edge.from.layerIndex <= edge.to.layerIndex ? edge.to : edge.from;
+    if (edge.from.layerIndex === edge.to.layerIndex) {
+        return edge.from.index <= edge.to.index ? edge.to : edge.from;
+    }
+    return edge.from.layerIndex < edge.to.layerIndex ? edge.to : edge.from;
 }
 
 export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
