@@ -56,18 +56,19 @@ function heightOfNodes(layers: Node[][]) {
     return n*ELEMENT_HEIGHT + n*VERTICAL_SPACING;
 }
 
-function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
+function fromIsUpper<T extends LayerPosition>(edge: Edge<T>) {
     if (edge.from.layerIndex === edge.to.layerIndex) {
-        return edge.from.index <= edge.to.index ? edge.from : edge.to;
+        return edge.from.index <= edge.to.index;
     }
-    return edge.from.layerIndex < edge.to.layerIndex ? edge.from : edge.to;
+    return edge.from.layerIndex < edge.to.layerIndex;
+}
+
+function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
+    return fromIsUpper(edge) ? edge.from : edge.to;
 }
 
 function getLowerNode<T extends LayerPosition>(edge: Edge<T>): T {
-    if (edge.from.layerIndex === edge.to.layerIndex) {
-        return edge.from.index <= edge.to.index ? edge.to : edge.from;
-    }
-    return edge.from.layerIndex < edge.to.layerIndex ? edge.to : edge.from;
+    return fromIsUpper(edge) ? edge.to : edge.from;
 }
 
 export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
