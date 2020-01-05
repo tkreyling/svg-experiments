@@ -91,7 +91,14 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
     })
 }
 
-export function addLayerPositionToNode(layers: Node[][]): (Node & LayerPosition)[][] {
+function addLayerPositionToNodeG<N, E>(graph: Graph<N, E>): Graph<N & LayerPosition, E> {
+    return {
+        layers: addLayerPositionToNode(graph.layers),
+        edges: graph.edges as unknown as (Edge<N & LayerPosition> & E)[]
+    }
+}
+
+export function addLayerPositionToNode<N>(layers: N[][]): (N & LayerPosition)[][] {
     let fullWidth = Math.max(...layers.map(nodes => nodes.length));
     return layers.map((elements, layerIndex) => {
         let width = elements.length;
@@ -322,8 +329,9 @@ const edges = [
 ];
 
 export const Diagram: React.FC<Graph<Node, unknown>> = (props) => {
-    let positioned = addLayerPositionToNode(props.layers);
-    let edgesWithNodePositions = props.edges as unknown as Edge<LayerPosition>[];
+    let graph = addLayerPositionToNodeG(props);
+    let positioned = graph.layers;
+    let edgesWithNodePositions = graph.edges;
 
     addLayerPositionToEdge(edgesWithNodePositions);
     let edgesWithEdgePositions = props.edges as unknown as (Edge<LayerPosition> & LayerPosition)[];
