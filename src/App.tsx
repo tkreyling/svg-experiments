@@ -114,9 +114,11 @@ export function addLayerPositionToNode<N>(layers: N[][]): (N & LayerPosition)[][
     });
 }
 
-function layoutG<N extends LayerPosition, E>(graph: Graph<N, E>, heightOfEdges: number[]): Graph<N & Coordinates, E> {
+function layoutG<N extends LayerPosition, E extends LayerPosition>(graph: Graph<N, E>):
+    Graph<N & Coordinates, E> {
+    let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
     return {
-        layers: layout(graph.layers, heightOfEdges),
+        layers: layout(graph.layers, heightOfAllEdges),
         edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
     }
 }
@@ -352,26 +354,24 @@ const edges = [
     {from: layers[1][1], to: layers[1][2]}
 ];
 
-export const Diagram: React.FC<Graph<Node, unknown>> = graph1 => {
-    let graph2 = addLayerPositionToNodeG(graph1);
+export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
+    return [graph]
+        .map(addLayerPositionToNodeG)
+        .map(addLayerPositionToEdgeG)
+        .map(layoutG)
+        .map(addConnectionIndexAndNumberOfEdgesG)
+        .map(graph => {
+            let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
+            let width = widthOfLayers(graph.layers) + 2 * MARGIN_SIDE;
+            let height = heightOfNodes(graph.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
 
-    let graph3 = addLayerPositionToEdgeG(graph2);
-
-    let heightOfAllEdges = heightOfEdges(graph3.edges, graph1.layers.length);
-
-    let graph4 = layoutG(graph3, heightOfAllEdges);
-
-    let graph5 = addConnectionIndexAndNumberOfEdgesG(graph4);
-
-    let width = widthOfLayers(graph1.layers) + 2 * MARGIN_SIDE;
-    let height = heightOfNodes(graph1.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
-
-    return (
-        <svg viewBox={"0 0 " + width + " " + height}>
-            {graph5.layers.flat().map(Rect)}
-            {graph5.edges.map(Path)}
-        </svg>
-    );
+            return (
+                <svg viewBox={"0 0 " + width + " " + height}>
+                    {graph.layers.flat().map(Rect)}
+                    {graph.edges.map(Path)}
+                </svg>
+            );
+        })[0];
 };
 
 const App: React.FC = () => {
