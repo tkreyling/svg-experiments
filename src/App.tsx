@@ -208,6 +208,15 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
     });
 }
 
+function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E>(graph: Graph<N, E>):
+    Graph<N & NumberOfEdges, E & ConnectionIndex> {
+    addConnectionIndexAndNumberOfEdges(graph.edges);
+    return {
+        layers: graph.layers as unknown as (N & NumberOfEdges)[][],
+        edges: graph.edges as unknown as (Edge<N & NumberOfEdges> & E & ConnectionIndex)[]
+    }
+}
+
 export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[]) {
     type NodeSide = {
         node: LayerPosition
@@ -351,18 +360,16 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph1 => {
     let heightOfAllEdges = heightOfEdges(graph3.edges, graph1.layers.length);
 
     let graph4 = layoutG(graph3, heightOfAllEdges);
-    let nodes = graph4.layers;
 
-    addConnectionIndexAndNumberOfEdges(graph2.edges);
-    let paths = graph1.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
+    let graph5 = addConnectionIndexAndNumberOfEdgesG(graph4);
 
     let width = widthOfLayers(graph1.layers) + 2 * MARGIN_SIDE;
     let height = heightOfNodes(graph1.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
 
     return (
         <svg viewBox={"0 0 " + width + " " + height}>
-            {nodes.flat().map(Rect)}
-            {paths.map(Path)}
+            {graph5.layers.flat().map(Rect)}
+            {graph5.edges.map(Path)}
         </svg>
     );
 };
