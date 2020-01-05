@@ -114,7 +114,7 @@ export function addLayerPositionToNode<N>(layers: N[][]): (N & LayerPosition)[][
     });
 }
 
-function layoutG<N extends LayerPosition, E extends LayerPosition>(graph: Graph<N, E>):
+function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition>(graph: Graph<N, E>):
     Graph<N & Coordinates, E> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
     return {
@@ -358,7 +358,7 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
         .map(addLayerPositionToEdgeG)
-        .map(layoutG)
+        .map(addCoordinatesToNodeG)
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
