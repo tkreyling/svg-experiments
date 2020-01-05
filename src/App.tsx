@@ -32,6 +32,11 @@ type NumberOfEdges = {
     lowerSideEdges: number
 }
 
+type Graph<N, E> = {
+    layers: N[][]
+    edges: (Edge<N> & E)[]
+}
+
 export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 150;
@@ -316,12 +321,7 @@ const edges = [
     {from: layers[1][1], to: layers[1][2]}
 ];
 
-type DiagramProps = {
-    layers: Node[][]
-    edges: Edge<Node>[]
-}
-
-export const Diagram: React.FC<DiagramProps> = (props) => {
+export const Diagram: React.FC<Graph<Node, unknown>> = (props) => {
     let positioned = addLayerPositionToNode(props.layers);
     let edgesWithNodePositions = props.edges as unknown as Edge<LayerPosition>[];
 
