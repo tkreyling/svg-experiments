@@ -71,8 +71,8 @@ function getLowerNode<T extends LayerPosition>(edge: Edge<T>): T {
     return fromIsUpper(edge) ? edge.to : edge.from;
 }
 
-export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: number): number[] {
-    let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
+export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], numberOfLayers: number): number[] {
+    let groupedByLayerIndex = new Map<number, (Edge<LayerPosition> & LayerPosition)[]>();
     edges.forEach(edge => {
         let layerIndex = getUpperNode(edge).layerIndex;
         let grouped = groupedByLayerIndex.get(layerIndex) || [];
@@ -81,7 +81,8 @@ export function heightOfEdges(edges: Edge<LayerPosition>[], numberOfLayers: numb
     });
     let layerIndices = Array.from(Array(numberOfLayers).keys());
     return layerIndices.map(layerIndex => {
-        return ((groupedByLayerIndex.get(layerIndex)?.length || 1) - 1) * EDGE_SPACING;
+        let edgeIndices = groupedByLayerIndex.get(layerIndex)?.map(edge => edge.index) || [0];
+        return Math.max(...edgeIndices) * EDGE_SPACING;
     })
 }
 
@@ -323,11 +324,14 @@ type DiagramProps = {
 export const Diagram: React.FC<DiagramProps> = (props) => {
     let positioned = addLayerPositionToNode(props.layers);
     let edgesWithNodePositions = props.edges as unknown as Edge<LayerPosition>[];
-    let heightOfAllEdges = heightOfEdges(edgesWithNodePositions, props.layers.length);
+
+    addLayerPositionToEdge(edgesWithNodePositions);
+    let edgesWithEdgePositions = props.edges as unknown as (Edge<LayerPosition> & LayerPosition)[];
+
+    let heightOfAllEdges = heightOfEdges(edgesWithEdgePositions, props.layers.length);
 
     let nodes = layout(positioned, heightOfAllEdges);
 
-    addLayerPositionToEdge(edgesWithNodePositions);
     addConnectionIndexAndNumberOfEdges(edgesWithNodePositions);
     let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
 
