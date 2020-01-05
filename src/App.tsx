@@ -120,30 +120,63 @@ export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth
 
 export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
     let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
+
     edges.forEach(edge => {
-        let layerIndex = getUpperNode(edge).layerIndex;
-        let grouped = groupedByLayerIndex.get(layerIndex) || [];
-        grouped.push(edge);
-        groupedByLayerIndex.set(layerIndex, grouped);
+        let key = getUpperNode(edge).layerIndex;
+        let edges = groupedByLayerIndex.get(key) || [];
+        edges.push(edge);
+        groupedByLayerIndex.set(key, edges);
     });
 
-    Array.from(groupedByLayerIndex.entries()).forEach(([layerIndex, edgesAfterLayer]) => {
-        edgesAfterLayer.sort((edge1, edge2) => {
-            let upperNode1 = getUpperNode(edge1);
-            let upperNode2 = getUpperNode(edge2);
-            if (upperNode1.index === upperNode2.index) {
-                return getLowerNode(edge1).index - getLowerNode(edge2).index;
-            } else {
-                return upperNode1.index - upperNode2.index;
-            }
-        });
-        edgesAfterLayer.forEach((edge, index) => {
+    Array.from(groupedByLayerIndex.values()).forEach(addLayerPositionToEdgeForLayer);
+}
+
+function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
+    let groupedByUpperNode = new Map<string, Edge<LayerPosition>[]>();
+
+    edges.forEach(edge => {
+        let key = getUpperNode(edge).key;
+        let edges = groupedByUpperNode.get(key) || [];
+        edges.push(edge);
+        groupedByUpperNode.set(key, edges);
+    });
+
+    let nodeKeys = Array.from(groupedByUpperNode.keys());
+    nodeKeys.sort();
+
+    let indexOffset = 0;
+    nodeKeys.forEach(nodeKey => {
+        let edges = groupedByUpperNode.get(nodeKey)!;
+
+        let sameLayer = edges.filter(edge => getLowerNode(edge).layerIndex === getUpperNode(edge).layerIndex);
+        let sameLayerBefore = sameLayer.filter(edge => getLowerNode(edge).index <= getUpperNode(edge).index);
+        let sameLayerAfter = sameLayer.filter(edge => getLowerNode(edge).index > getUpperNode(edge).index);
+        let otherLayer = edges.filter(edge => getLowerNode(edge).layerIndex !== getUpperNode(edge).layerIndex);
+        let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).relativePosition <= getUpperNode(edge).relativePosition);
+        let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).relativePosition > getUpperNode(edge).relativePosition);
+
+        sameLayerBefore.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
+        otherLayerBefore.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
+        otherLayerAfter.sort((edge1, edge2) =>  getLowerNode(edge2).index - getLowerNode(edge1).index);
+        sameLayerAfter.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
+
+        let before = sameLayerBefore.concat(otherLayerBefore);
+        let after = sameLayerAfter.concat(otherLayerAfter);
+
+        function addLayerPosition(edge: Edge<LayerPosition>, indexInArray: number) {
+            let layerIndex = getUpperNode(edge).layerIndex;
+            let index = indexOffset + indexInArray;
             Object.assign(edge, {
                 key: layerIndex + "_" + index,
                 index: index,
                 layerIndex: layerIndex
             });
-        });
+        }
+
+        before.forEach((edge, index) => addLayerPosition(edge, index));
+        after.forEach((edge, index) => addLayerPosition(edge, index));
+
+        indexOffset += Math.max(before.length, after.length);
     });
 }
 
@@ -265,6 +298,8 @@ const edges = [
     {from: layers[0][2], to: layers[1][2]},
     {from: layers[0][3], to: layers[1][1]},
     {from: layers[1][2], to: layers[2][2]},
+    {from: layers[1][1], to: layers[2][4]},
+    {from: layers[1][1], to: layers[2][3]},
     {from: layers[1][1], to: layers[2][2]},
     {from: layers[1][1], to: layers[2][1]},
     {from: layers[1][1], to: layers[2][0]},
