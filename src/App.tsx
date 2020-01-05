@@ -34,7 +34,7 @@ type NumberOfEdges = {
 
 export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
-export const ELEMENT_WIDTH = 100;
+export const ELEMENT_WIDTH = 150;
 export const ELEMENT_HEIGHT = 40;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
