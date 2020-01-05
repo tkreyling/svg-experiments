@@ -114,7 +114,14 @@ export function addLayerPositionToNode<N>(layers: N[][]): (N & LayerPosition)[][
     });
 }
 
-export function layout(layers: (Node & LayerPosition)[][], heightOfEdges: number[]): (Node & LayerPosition & Coordinates)[][] {
+function layoutG<N extends LayerPosition, E>(graph: Graph<N, E>, heightOfEdges: number[]): Graph<N & Coordinates, E> {
+    return {
+        layers: layout(graph.layers, heightOfEdges),
+        edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
+    }
+}
+
+export function layout<N>(layers: (N & LayerPosition)[][], heightOfEdges: number[]): (N & LayerPosition & Coordinates)[][] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
@@ -122,13 +129,21 @@ export function layout(layers: (Node & LayerPosition)[][], heightOfEdges: number
     });
 }
 
-export function layoutHorizontally(elements: (Node & LayerPosition)[], fullWidth: number, additionalEdgeHeight: number): (Node & LayerPosition & Coordinates)[] {
+export function layoutHorizontally<N>(elements: (N & LayerPosition)[], fullWidth: number, additionalEdgeHeight: number): (N & LayerPosition & Coordinates)[] {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map(element =>
         Object.assign(element, {
             x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
             y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
         }));
+}
+
+function addLayerPositionToEdgeG<N extends LayerPosition, E>(graph: Graph<N, E>): Graph<N, E & LayerPosition> {
+    addLayerPositionToEdge(graph.edges);
+    return {
+        layers: graph.layers,
+        edges: graph.edges as unknown as (Edge<N> & E & LayerPosition)[]
+    }
 }
 
 export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
@@ -331,12 +346,12 @@ const edges = [
 export const Diagram: React.FC<Graph<Node, unknown>> = graph1 => {
     let graph2 = addLayerPositionToNodeG(graph1);
 
-    addLayerPositionToEdge(graph2.edges);
-    let edgesWithEdgePositions = graph1.edges as unknown as (Edge<LayerPosition> & LayerPosition)[];
+    let graph3 = addLayerPositionToEdgeG(graph2);
 
-    let heightOfAllEdges = heightOfEdges(edgesWithEdgePositions, graph1.layers.length);
+    let heightOfAllEdges = heightOfEdges(graph3.edges, graph1.layers.length);
 
-    let nodes = layout(graph2.layers, heightOfAllEdges);
+    let graph4 = layoutG(graph3, heightOfAllEdges);
+    let nodes = graph4.layers;
 
     addConnectionIndexAndNumberOfEdges(graph2.edges);
     let paths = graph1.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
