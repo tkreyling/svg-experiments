@@ -328,23 +328,21 @@ const edges = [
     {from: layers[1][1], to: layers[1][2]}
 ];
 
-export const Diagram: React.FC<Graph<Node, unknown>> = (props) => {
-    let graph = addLayerPositionToNodeG(props);
-    let positioned = graph.layers;
-    let edgesWithNodePositions = graph.edges;
+export const Diagram: React.FC<Graph<Node, unknown>> = graph1 => {
+    let graph2 = addLayerPositionToNodeG(graph1);
 
-    addLayerPositionToEdge(edgesWithNodePositions);
-    let edgesWithEdgePositions = props.edges as unknown as (Edge<LayerPosition> & LayerPosition)[];
+    addLayerPositionToEdge(graph2.edges);
+    let edgesWithEdgePositions = graph1.edges as unknown as (Edge<LayerPosition> & LayerPosition)[];
 
-    let heightOfAllEdges = heightOfEdges(edgesWithEdgePositions, props.layers.length);
+    let heightOfAllEdges = heightOfEdges(edgesWithEdgePositions, graph1.layers.length);
 
-    let nodes = layout(positioned, heightOfAllEdges);
+    let nodes = layout(graph2.layers, heightOfAllEdges);
 
-    addConnectionIndexAndNumberOfEdges(edgesWithNodePositions);
-    let paths = props.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
+    addConnectionIndexAndNumberOfEdges(graph2.edges);
+    let paths = graph1.edges as unknown as (Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex)[];
 
-    let width = widthOfLayers(props.layers) + 2 * MARGIN_SIDE;
-    let height = heightOfNodes(props.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
+    let width = widthOfLayers(graph1.layers) + 2 * MARGIN_SIDE;
+    let height = heightOfNodes(graph1.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
 
     return (
         <svg viewBox={"0 0 " + width + " " + height}>
