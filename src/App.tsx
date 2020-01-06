@@ -243,6 +243,7 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
         };
         nodeSide.edgeEnds.push({
             reverseNode: secondNode,
+            error: "here",
             setIndex: setIndex
         });
         groupedByNodeAndSide.set(key, nodeSide);
