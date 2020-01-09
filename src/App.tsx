@@ -325,7 +325,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
 const layers: Node[][] = [
     ["element 1", "element 2", "an element with long text", "element 4"],
     ["element 1", "element 2", "element 3"],
-    ["element 1", "element 2", "element 3", "element 4", "element 5"]
+    ["element 1", "element 2", "element 3", "element with changed name", "element 5"]
 ].map(layer => {
     return layer.map(name => {
         return {name: name}
