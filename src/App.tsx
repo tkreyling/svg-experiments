@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 export type Coordinates = {
@@ -366,7 +366,7 @@ graph
 `;
 
 // eslint-disable-next-line
-const graph: Graph<Node, unknown> = eval(graphAsString);
+const initialGraph: Graph<Node, unknown> = eval(graphAsString);
 
 export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
     return [graph]
@@ -389,9 +389,17 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
 };
 
 const App: React.FC = () => {
+    const [graph, setGraph] = useState(initialGraph);
+
+    function handleChange(changeEvent: React.ChangeEvent<HTMLTextAreaElement>) {
+// eslint-disable-next-line
+        setGraph(eval(changeEvent.target.value))
+    }
+
     return (
         <div className="App">
             <Diagram layers={graph.layers} edges={graph.edges}/>
+            <textarea cols={120} rows={20} onChange={handleChange}>{graphAsString}</textarea>
         </div>
     );
 };
