@@ -322,17 +322,19 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-const layers: Node[][] = [
-    ["element 1", "element 2", "an element with long text", "element 4"],
+let graphAsString = `
+var layers = [
+    ["element 11", "element 2", "an element with long text", "element 4"],
     ["element 1", "element 2", "element 3"],
     ["element 1", "element 2", "element 3", "element with changed name", "element 5"]
-].map(layer => {
+]
+.map(layer => {
     return layer.map(name => {
         return {name: name}
     })
 });
 
-const edges = [
+var edges = [
     {from: layers[0][1], to: layers[1][0]},
     {from: layers[0][2], to: layers[1][2]},
     {from: layers[0][3], to: layers[1][1]},
@@ -346,6 +348,7 @@ const edges = [
     {from: layers[2][1], to: layers[1][0]},
     {from: layers[2][0], to: layers[2][3]},
     {from: layers[2][1], to: layers[2][3]},
+    {from: layers[2][4], to: layers[2][3]},
     {from: layers[0][0], to: layers[0][2]},
     {from: layers[0][0], to: layers[0][1]},
     {from: layers[0][0], to: layers[1][0]},
@@ -353,6 +356,17 @@ const edges = [
     {from: layers[1][1], to: layers[1][0]},
     {from: layers[1][1], to: layers[1][2]}
 ];
+
+var graph = {
+    layers: layers,
+    edges: edges
+};
+
+graph
+`;
+
+// eslint-disable-next-line
+const graph: Graph<Node, unknown> = eval(graphAsString);
 
 export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
     return [graph]
@@ -377,7 +391,7 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
 const App: React.FC = () => {
     return (
         <div className="App">
-            <Diagram layers={layers} edges={edges}/>
+            <Diagram layers={graph.layers} edges={graph.edges}/>
         </div>
     );
 };
