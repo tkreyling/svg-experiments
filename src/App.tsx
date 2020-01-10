@@ -397,9 +397,13 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="App">
-            <Diagram layers={graph.layers} edges={graph.edges}/>
-            <textarea cols={120} rows={20} onChange={handleChange}>{graphAsString}</textarea>
+        <div id="parent" className="App">
+            <div id="graph">
+                <Diagram layers={graph.layers} edges={graph.edges}/>
+            </div>
+            <div>
+                <textarea cols={100} rows={45} onChange={handleChange}>{graphAsString}</textarea>
+            </div>
         </div>
     );
 };
