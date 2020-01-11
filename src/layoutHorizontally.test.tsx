@@ -1,4 +1,4 @@
-import {ELEMENT_WIDTH, HORIZONTAL_SPACING, layoutHorizontally, MARGIN_SIDE, MARGIN_TOP, widthOfElements} from "./App";
+import {ELEMENT_WIDTH, HORIZONTAL_SPACING, layoutHorizontally, MARGIN_SIDE, MARGIN_TOP, widthOfElements, Layer} from "./App";
 
 test('no element results in no layouted elements', () => {
     expect(layoutHorizontally([], widthOfElements([]), 0))
@@ -6,11 +6,11 @@ test('no element results in no layouted elements', () => {
 });
 
 test('one element is layouted to the origin', () => {
-    let elements = [
+    let elements: Layer<any> = [[
         {name: "element", key: "0_0", index: 0, layerIndex: 0}
-    ];
+    ]];
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-      .toStrictEqual([
+      .toStrictEqual([[
         {
             x: MARGIN_SIDE,
             y: MARGIN_TOP,
@@ -19,16 +19,16 @@ test('one element is layouted to the origin', () => {
             index: 0,
             layerIndex: 0
         }
-      ])
+      ]])
 });
 
 test('two elements are layouted right beside each other', () => {
-    let elements = [
+    let elements: Layer<any> = [[
         {name: "element", key: "0_0", index: 0, layerIndex: 0},
         {name: "element", key: "0_1", index: 1, layerIndex: 0}
-    ];
+    ]];
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-      .toStrictEqual([
+      .toStrictEqual([[
         {
             x: MARGIN_SIDE,
             y: MARGIN_TOP,
@@ -45,5 +45,5 @@ test('two elements are layouted right beside each other', () => {
             index: 1,
             layerIndex: 0
         }
-      ])
+      ]])
 });

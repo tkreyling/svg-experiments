@@ -32,7 +32,9 @@ type NumberOfEdges = {
     lowerSideEdges: number
 }
 
-type Layer<N> = N[]
+type Group<N> = N[]
+
+export type Layer<N> = Group<N>[]
 
 type Graph<N, E> = {
     layers: Layer<N>[]
@@ -48,17 +50,19 @@ export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 
-export function widthOfLayers(layers: any[][]) {
+export function widthOfLayers(layers: Layer<any>[]) {
     return Math.max(...layers.map(widthOfElements));
 }
 
-export function widthOfElements(elements: any[]) {
-    const n = elements.length;
+export function widthOfElements(groups: Layer<any>) {
+    const n = groups
+        .map(elements => elements.length)
+        .reduce((sum, add) => sum + add, 0);
     if (n === 0) return 0;
     return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
 }
 
-function heightOfNodes(layers: Node[][]) {
+function heightOfNodes(layers: Layer<any>[]) {
     let n = layers.length;
     return n*ELEMENT_HEIGHT + n*VERTICAL_SPACING;
 }
@@ -101,19 +105,40 @@ function addLayerPositionToNodeG<N, E>(graph: Graph<N, E>): Graph<N & LayerPosit
 }
 
 export function addLayerPositionToNode<N>(layers: Layer<N>[]): Layer<N & LayerPosition>[] {
-    let fullWidth = Math.max(...layers.map(nodes => nodes.length));
-    return layers.map((elements, layerIndex) => {
-        let width = elements.length;
-        let layerOffset = (fullWidth - width) / 2;
-        return elements.map((element, index) => {
-            return Object.assign(element, {
+    let fullWidth = Math.max(...layers.map(groups => {
+        return groups
+            .map(elements => elements.length)
+            .reduce((sum, add) => sum + add, 0);
+    }));
+
+    return layers.map((groups, layerIndex) =>
+        addLayerPositionToNodeForLayer(groups, fullWidth, layerIndex)
+    );
+}
+
+function addLayerPositionToNodeForLayer<N>(groups: Layer<N>, fullWidth: number, layerIndex: number):
+    Layer<N & LayerPosition> {
+    let layerWidth = groups
+        .map(elements => elements.length)
+        .reduce((sum, add) => sum + add, 0);
+    let layerOffset = (fullWidth - layerWidth) / 2;
+
+    let resultGroups: Layer<N & LayerPosition> = [];
+    let index = 0;
+    groups.forEach(elements => {
+        let resultElements = elements.map(element => {
+            let resultElement = Object.assign(element, {
                 key: layerIndex + "_" + index,
                 index: index,
-                relativePosition : layerOffset + index,
+                relativePosition: layerOffset + index,
                 layerIndex: layerIndex
             });
+            index++;
+            return resultElement;
         });
+        resultGroups.push(resultElements);
     });
+    return resultGroups;
 }
 
 function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition>(graph: Graph<N, E>):
@@ -133,13 +158,15 @@ export function layout<N>(layers: Layer<N & LayerPosition>[], heightOfEdges: num
     });
 }
 
-export function layoutHorizontally<N>(elements: Layer<N & LayerPosition>, fullWidth: number, additionalEdgeHeight: number): Layer<N & LayerPosition & Coordinates> {
-    let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
-    return elements.map(element =>
-        Object.assign(element, {
-            x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
-            y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
-        }));
+export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidth: number, additionalEdgeHeight: number): Layer<N & LayerPosition & Coordinates> {
+    let offsetToCenter = (fullWidth - widthOfElements(groups)) / 2;
+    return groups.map(elements => {
+        return elements.map(element =>
+            Object.assign(element, {
+                x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
+                y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
+            }));
+    });
 }
 
 function addLayerPositionToEdgeG<N extends LayerPosition, E>(graph: Graph<N, E>): Graph<N, E & LayerPosition> {
@@ -326,37 +353,39 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
 
 let graphAsString = `
 var layers = [
-    ["element 11", "element 2", "an element with long text", "element 4"],
-    ["element 1", "element 2", "element 3"],
-    ["element 1", "element 2", "element 3", "element with changed name", "element 5"]
+    [["element 11", "element 2", "an element with long text"], ["element 4"]],
+    [["element 1", "element 2", "element 3"]],
+    [["element 1", "element 2", "element 3", "element with changed name", "element 5"]]
 ]
 .map(layer => {
-    return layer.map(name => {
-        return {name: name}
-    })
+    return layer.map(group => {
+        return group.map(name => {
+            return {name: name}
+        });
+    });
 });
 
 var edges = [
-    {from: layers[0][1], to: layers[1][0]},
-    {from: layers[0][2], to: layers[1][2]},
-    {from: layers[0][3], to: layers[1][1]},
-    {from: layers[1][2], to: layers[2][2]},
-    {from: layers[1][1], to: layers[2][4]},
-    {from: layers[1][1], to: layers[2][3]},
-    {from: layers[1][1], to: layers[2][2]},
-    {from: layers[1][1], to: layers[2][1]},
-    {from: layers[1][1], to: layers[2][0]},
-    {from: layers[2][0], to: layers[1][0]},
-    {from: layers[2][1], to: layers[1][0]},
-    {from: layers[2][0], to: layers[2][3]},
-    {from: layers[2][1], to: layers[2][3]},
-    {from: layers[2][4], to: layers[2][3]},
-    {from: layers[0][0], to: layers[0][2]},
-    {from: layers[0][0], to: layers[0][1]},
-    {from: layers[0][0], to: layers[1][0]},
-    {from: layers[0][0], to: layers[1][0]},
-    {from: layers[1][1], to: layers[1][0]},
-    {from: layers[1][1], to: layers[1][2]}
+    {from: layers[0][0][1], to: layers[1][0][0]},
+    {from: layers[0][0][2], to: layers[1][0][2]},
+    {from: layers[0][1][0], to: layers[1][0][1]},
+    {from: layers[1][0][2], to: layers[2][0][2]},
+    {from: layers[1][0][1], to: layers[2][0][4]},
+    {from: layers[1][0][1], to: layers[2][0][3]},
+    {from: layers[1][0][1], to: layers[2][0][2]},
+    {from: layers[1][0][1], to: layers[2][0][1]},
+    {from: layers[1][0][1], to: layers[2][0][0]},
+    {from: layers[2][0][0], to: layers[1][0][0]},
+    {from: layers[2][0][1], to: layers[1][0][0]},
+    {from: layers[2][0][0], to: layers[2][0][3]},
+    {from: layers[2][0][1], to: layers[2][0][3]},
+    {from: layers[2][0][4], to: layers[2][0][3]},
+    {from: layers[0][0][0], to: layers[0][0][2]},
+    {from: layers[0][0][0], to: layers[0][0][1]},
+    {from: layers[0][0][0], to: layers[1][0][0]},
+    {from: layers[0][0][0], to: layers[1][0][0]},
+    {from: layers[1][0][1], to: layers[1][0][0]},
+    {from: layers[1][0][1], to: layers[1][0][2]}
 ];
 
 var graph = {
@@ -383,7 +412,7 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
 
             return (
                 <svg viewBox={"0 0 " + width + " " + height}>
-                    {graph.layers.flat().map(Rect)}
+                    {graph.layers.flat().flat().map(Rect)}
                     {graph.edges.map(Path)}
                 </svg>
             );
