@@ -478,7 +478,7 @@ const App: React.FC = () => {
                 <Diagram layers={graph.layers} edges={graph.edges}/>
             </div>
             <div>
-                <textarea cols={100} rows={45} onChange={handleChange}>{graphAsString}</textarea>
+                <textarea cols={100} rows={45} onChange={handleChange} defaultValue={graphAsString}/>
                 <p className="error-message">{errorMessage}</p>
             </div>
         </div>
