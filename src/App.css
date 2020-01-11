@@ -4,3 +4,7 @@
 #graph {
   flex: 1;
 }
+.error-message {
+  color: red;
+  font-weight: bold;
+}

@@ -390,10 +390,17 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
 
 const App: React.FC = () => {
     const [graph, setGraph] = useState(initialGraph);
+    const [errorMessage, setErrorMessage] = useState("");
 
     function handleChange(changeEvent: React.ChangeEvent<HTMLTextAreaElement>) {
+        try {
 // eslint-disable-next-line
-        setGraph(eval(changeEvent.target.value))
+            let graph = eval(changeEvent.target.value);
+            setGraph(graph);
+            setErrorMessage("");
+        } catch (e) {
+            setErrorMessage(e.message);
+        }
     }
 
     return (
@@ -403,6 +410,7 @@ const App: React.FC = () => {
             </div>
             <div>
                 <textarea cols={100} rows={45} onChange={handleChange}>{graphAsString}</textarea>
+                <p className="error-message">{errorMessage}</p>
             </div>
         </div>
     );
