@@ -388,18 +388,32 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
         })[0];
 };
 
+export function parseGraph(text: string): Graph<Node, unknown> | string {
+    try {
+// eslint-disable-next-line
+        let graph = eval(text);
+
+        if (graph === undefined) return "Script is not returning a graph object!";
+        if (graph.layers === undefined) return "Property layers is missing in graph object!";
+        if (graph.edges === undefined) return "Property edges is missing in graph object!";
+
+        return graph;
+    } catch (e) {
+        return e.message;
+    }
+}
+
 const App: React.FC = () => {
     const [graph, setGraph] = useState(initialGraph);
     const [errorMessage, setErrorMessage] = useState("");
 
     function handleChange(changeEvent: React.ChangeEvent<HTMLTextAreaElement>) {
-        try {
-// eslint-disable-next-line
-            let graph = eval(changeEvent.target.value);
-            setGraph(graph);
+        let result = parseGraph(changeEvent.target.value);
+        if (typeof result === 'string') {
+            setErrorMessage(result);
+        } else {
+            setGraph(result);
             setErrorMessage("");
-        } catch (e) {
-            setErrorMessage(e.message);
         }
     }
 
