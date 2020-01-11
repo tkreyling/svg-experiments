@@ -351,19 +351,22 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-let graphAsString = `
-var layers = [
+export function stringsToNodes(strings: string[][][]): Layer<Node>[] {
+    return strings.map(layer => {
+        return layer.map(group => {
+            return group.map(name => {
+                return {name: name}
+            });
+        });
+    });
+}
+
+let graphAsString =
+`var layers = stringsToNodes([
     [["element 11", "element 2", "an element with long text"], ["element 4"]],
     [["element 1", "element 2", "element 3"]],
     [["element 1", "element 2", "element 3", "element with changed name", "element 5"]]
-]
-.map(layer => {
-    return layer.map(group => {
-        return group.map(name => {
-            return {name: name}
-        });
-    });
-});
+]);
 
 var edges = [
     {from: layers[0][0][1], to: layers[1][0][0]},
