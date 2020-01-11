@@ -7,6 +7,7 @@ test('coordinates are just passed through', () => {
     name: "element 1",
     key: "0_0",
     index: 0,
+    relativePosition: 0,
     layerIndex: 0
   };
 
