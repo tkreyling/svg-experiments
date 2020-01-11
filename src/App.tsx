@@ -428,10 +428,24 @@ export function parseGraph(text: string): Graph<Node, unknown> | string {
         let graph = eval(text);
 
         if (graph === undefined) return "Script is not returning a graph object!";
+
         if (graph.layers === undefined) return "Property layers is missing in graph object!";
         if (graph.edges === undefined) return "Property edges is missing in graph object!";
-        if (graph.layers.flat().flat().filter((node: Node) => node.name === undefined))
-            return "Node name must not be undefined!";
+
+        let layers: Node[][][] = graph.layers;
+        let aNodeIsUndefined = false;
+        // It is necessary to go through the nested arrays by index,
+        // because the array operations `every`, `map` and `flat` bypass empty array elements.
+        for (let layerIndex = 0; layerIndex < layers.length; layerIndex++) {
+            let groups = layers[layerIndex];
+            for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
+                let elements = groups[groupIndex];
+                for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+                    if (elements[elementIndex] === undefined) aNodeIsUndefined = true;
+                }
+            }
+        }
+        if (aNodeIsUndefined) return "Every node must be defined!";
 
         return graph;
     } catch (e) {

@@ -35,7 +35,7 @@ test('reports missing property edges', () => {
 test('reports undefined nodes', () => {
     let text = `
     var layers = [
-        [[{name: "element 1"}, {name: undefined}, {name: "element 2"}]]
+        [[{name: "element 1"},, {name: "element 2"}]]
     ];
     var g = {
         layers: layers,
@@ -43,5 +43,24 @@ test('reports undefined nodes', () => {
     };
     g
     `;
-    expect(parseGraph(text)).toStrictEqual("Node name must not be undefined!");
+    expect(parseGraph(text)).toStrictEqual("Every node must be defined!");
+});
+
+test('returns valid graph', () => {
+    let text = `
+    var layers = [
+        [[{name: "element 1"}, {name: "element 2"}]]
+    ];
+    var g = {
+        layers: layers,
+        edges: []
+    };
+    g
+    `;
+    expect(parseGraph(text)).toStrictEqual({
+        layers: [
+            [[{name: "element 1"}, {name: "element 2"}]]
+        ],
+        edges: []
+    });
 });
