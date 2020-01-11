@@ -64,3 +64,50 @@ test('returns valid graph', () => {
         edges: []
     });
 });
+
+test('reports undefined property from', () => {
+    let text = `
+    var layers = [
+        [[{name: "element 1"}, {name: "element 2"}]]
+    ];
+    var g = {
+        layers: layers,
+        edges: [{from: layers[0][0][3], to: layers[0][0][1]}]
+    };
+    g
+    `;
+    expect(parseGraph(text)).toStrictEqual("Property from must be defined on every edge!");
+});
+
+test('reports undefined property to', () => {
+    let text = `
+    var layers = [
+        [[{name: "element 1"}, {name: "element 2"}]]
+    ];
+    var g = {
+        layers: layers,
+        edges: [{from: layers[0][0][0], to: layers[0][0][3]}]
+    };
+    g
+    `;
+    expect(parseGraph(text)).toStrictEqual("Property to must be defined on every edge!");
+});
+
+test('returns valid graph with edges', () => {
+    let text = `
+    var layers = [
+        [[{name: "element 1"}, {name: "element 2"}]]
+    ];
+    var g = {
+        layers: layers,
+        edges: [{from: layers[0][0][0], to: layers[0][0][1]}]
+    };
+    g
+    `;
+    expect(parseGraph(text)).toStrictEqual({
+        layers: [
+            [[{name: "element 1"}, {name: "element 2"}]]
+        ],
+        edges: [{from: {name: "element 1"}, to: {name: "element 2"}}]
+    });
+});

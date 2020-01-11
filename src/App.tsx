@@ -447,6 +447,11 @@ export function parseGraph(text: string): Graph<Node, unknown> | string {
         }
         if (aNodeIsUndefined) return "Every node must be defined!";
 
+        if (!graph.edges.every((edge: Edge<Node>) => edge.from !== undefined))
+            return "Property from must be defined on every edge!";
+        if (!graph.edges.every((edge: Edge<Node>) => edge.to !== undefined))
+            return "Property to must be defined on every edge!";
+
         return graph;
     } catch (e) {
         return e.message;
