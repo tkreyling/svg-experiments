@@ -32,8 +32,10 @@ type NumberOfEdges = {
     lowerSideEdges: number
 }
 
+type Layer<N> = N[]
+
 type Graph<N, E> = {
-    layers: N[][]
+    layers: Layer<N>[]
     edges: (Edge<N> & E)[]
 }
 
@@ -98,7 +100,7 @@ function addLayerPositionToNodeG<N, E>(graph: Graph<N, E>): Graph<N & LayerPosit
     }
 }
 
-export function addLayerPositionToNode<N>(layers: N[][]): (N & LayerPosition)[][] {
+export function addLayerPositionToNode<N>(layers: Layer<N>[]): Layer<N & LayerPosition>[] {
     let fullWidth = Math.max(...layers.map(nodes => nodes.length));
     return layers.map((elements, layerIndex) => {
         let width = elements.length;
@@ -123,7 +125,7 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition>
     }
 }
 
-export function layout<N>(layers: (N & LayerPosition)[][], heightOfEdges: number[]): (N & LayerPosition & Coordinates)[][] {
+export function layout<N>(layers: Layer<N & LayerPosition>[], heightOfEdges: number[]): Layer<N & LayerPosition & Coordinates>[] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
@@ -131,7 +133,7 @@ export function layout<N>(layers: (N & LayerPosition)[][], heightOfEdges: number
     });
 }
 
-export function layoutHorizontally<N>(elements: (N & LayerPosition)[], fullWidth: number, additionalEdgeHeight: number): (N & LayerPosition & Coordinates)[] {
+export function layoutHorizontally<N>(elements: Layer<N & LayerPosition>, fullWidth: number, additionalEdgeHeight: number): Layer<N & LayerPosition & Coordinates> {
     let offsetToCenter = (fullWidth - widthOfElements(elements)) / 2;
     return elements.map(element =>
         Object.assign(element, {
@@ -214,7 +216,7 @@ function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E>(graph: 
     Graph<N & NumberOfEdges, E & ConnectionIndex> {
     addConnectionIndexAndNumberOfEdges(graph.edges);
     return {
-        layers: graph.layers as unknown as (N & NumberOfEdges)[][],
+        layers: graph.layers as unknown as Layer<N & NumberOfEdges>[],
         edges: graph.edges as unknown as (Edge<N & NumberOfEdges> & E & ConnectionIndex)[]
     }
 }
