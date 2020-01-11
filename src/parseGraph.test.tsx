@@ -31,3 +31,17 @@ test('reports missing property edges', () => {
     `;
     expect(parseGraph(text)).toStrictEqual("Property edges is missing in graph object!");
 });
+
+test('reports undefined nodes', () => {
+    let text = `
+    var layers = [
+        [[{name: "element 1"}, {name: undefined}, {name: "element 2"}]]
+    ];
+    var g = {
+        layers: layers,
+        edges: []
+    };
+    g
+    `;
+    expect(parseGraph(text)).toStrictEqual("Node name must not be undefined!");
+});

@@ -430,6 +430,8 @@ export function parseGraph(text: string): Graph<Node, unknown> | string {
         if (graph === undefined) return "Script is not returning a graph object!";
         if (graph.layers === undefined) return "Property layers is missing in graph object!";
         if (graph.edges === undefined) return "Property edges is missing in graph object!";
+        if (graph.layers.flat().flat().filter((node: Node) => node.name === undefined))
+            return "Node name must not be undefined!";
 
         return graph;
     } catch (e) {
