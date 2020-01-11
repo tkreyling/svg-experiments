@@ -222,18 +222,18 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
 
-        function addLayerPosition(edge: Edge<LayerPosition>, indexInArray: number) {
+        function addLayerPosition(edge: Edge<LayerPosition>, indexInArray: number, beforeOrAfter: "A" | "B") {
             let layerIndex = getUpperNode(edge).layerIndex;
             let index = indexOffset + indexInArray;
             Object.assign(edge, {
-                key: layerIndex + "_" + index,
+                key: nodeKey + "_" + beforeOrAfter + "_" + index,
                 index: index,
                 layerIndex: layerIndex
             });
         }
 
-        before.forEach((edge, index) => addLayerPosition(edge, index));
-        after.forEach((edge, index) => addLayerPosition(edge, index));
+        before.forEach((edge, index) => addLayerPosition(edge, index, "B"));
+        after.forEach((edge, index) => addLayerPosition(edge, index, "A"));
 
         indexOffset += Math.max(before.length, after.length);
     });
@@ -338,7 +338,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     let toNodeX = edge.to.x + toNodeCenteringOffset + edge.toIndex * EDGE_SPACING;
     let toNodeY = edge.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
     return (
-        <path d={
+        <path key={edge.key} d={
             "M " + fromNodeX + " " + fromNodeY + " " +
             "L " + fromNodeX + " " + upperNodeEdgesY + " " +
             "L " + toNodeX + " " + upperNodeEdgesY + " " +
