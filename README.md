@@ -1,3 +1,10 @@
+## Intro 
+
+The app renders a graph defined as code to SVG markup. 
+
+While the layouting of the nodes is declaratively defined in the code, the edges are layouted automatically. 
+
+
 ## Live Example
 
 The app is continuously deployed to [https://tkreyling.github.io/svg-experiments/](https://tkreyling.github.io/svg-experiments/).
