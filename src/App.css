@@ -1,6 +1,11 @@
 #parent {
   display: flex;
 }
+@media (max-width: 1000px) {
+  #parent {
+    display: block;
+  }
+}
 #graph {
   flex: 1;
 }
