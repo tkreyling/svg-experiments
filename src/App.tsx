@@ -365,15 +365,15 @@ export function stringsToNodes(strings: string[][][]): Layer<Node>[] {
 let graphAsString =
 `var layers = stringsToNodes([
     [["element 11", "element 2", "an element with long text"], ["element 4"]],
-    [["element 1", "element 2", "element 3"]],
+    [["element 1", "element 2"], ["element 3"]],
     [["element 1", "element 2", "element 3", "element with changed name", "element 5"]]
 ]);
 
 var edges = [
     {from: layers[0][0][1], to: layers[1][0][0]},
-    {from: layers[0][0][2], to: layers[1][0][2]},
+    {from: layers[0][0][2], to: layers[1][1][0]},
     {from: layers[0][1][0], to: layers[1][0][1]},
-    {from: layers[1][0][2], to: layers[2][0][2]},
+    {from: layers[1][1][0], to: layers[2][0][2]},
     {from: layers[1][0][1], to: layers[2][0][4]},
     {from: layers[1][0][1], to: layers[2][0][3]},
     {from: layers[1][0][1], to: layers[2][0][2]},
@@ -389,7 +389,7 @@ var edges = [
     {from: layers[0][0][0], to: layers[1][0][0]},
     {from: layers[0][0][0], to: layers[1][0][0]},
     {from: layers[1][0][1], to: layers[1][0][0]},
-    {from: layers[1][0][1], to: layers[1][0][2]}
+    {from: layers[1][0][1], to: layers[1][1][0]}
 ];
 
 var graph = {
