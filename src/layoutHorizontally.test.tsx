@@ -6,7 +6,7 @@ import {
     MARGIN_TOP,
     widthOfElements,
     Layer,
-    BORDER_MARGIN_SIDE, BORDER_MARGIN_TOP
+    BORDER_MARGIN_SIDE, BORDER_MARGIN_TOP, ELEMENT_HEIGHT, VERTICAL_SPACING
 } from "./App";
 
 test('no element results in no layouted elements', () => {
@@ -27,6 +27,23 @@ test('one element is layouted to the origin', () => {
                 key: "0_0",
                 index: 0,
                 layerIndex: 0
+            }
+        ]])
+});
+
+test('one element in the second layer keeps space for the two borders between the layers', () => {
+    let elements: Layer<any> = [[
+        {name: "element", key: "0_0", index: 0, layerIndex: 1}
+    ]];
+    expect(layoutHorizontally(elements, widthOfElements(elements), 0))
+        .toStrictEqual([[
+            {
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP + ELEMENT_HEIGHT + BORDER_MARGIN_TOP + VERTICAL_SPACING + BORDER_MARGIN_TOP,
+                name: "element",
+                key: "0_0",
+                index: 0,
+                layerIndex: 1
             }
         ]])
 });
