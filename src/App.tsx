@@ -45,6 +45,7 @@ export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 150;
 export const ELEMENT_HEIGHT = 40;
+export const BORDER_MARGIN_TOP = 10;
 export const BORDER_MARGIN_SIDE = 10;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
@@ -165,7 +166,7 @@ export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidt
         return elements.map(element =>
             Object.assign(element, {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE + groupIndex * 2 * BORDER_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
-                y: MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + additionalEdgeHeight
+                y: MARGIN_TOP + BORDER_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + additionalEdgeHeight
             }));
     });
 }

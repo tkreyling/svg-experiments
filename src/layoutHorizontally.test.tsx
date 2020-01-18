@@ -6,7 +6,7 @@ import {
     MARGIN_TOP,
     widthOfElements,
     Layer,
-    BORDER_MARGIN_SIDE
+    BORDER_MARGIN_SIDE, BORDER_MARGIN_TOP
 } from "./App";
 
 test('no element results in no layouted elements', () => {
@@ -22,7 +22,7 @@ test('one element is layouted to the origin', () => {
         .toStrictEqual([[
             {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                y: MARGIN_TOP,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP,
                 name: "element",
                 key: "0_0",
                 index: 0,
@@ -40,7 +40,7 @@ test('two elements are layouted right beside each other', () => {
         .toStrictEqual([[
             {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                y: MARGIN_TOP,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP,
                 name: "element",
                 key: "0_0",
                 index: 0,
@@ -48,7 +48,7 @@ test('two elements are layouted right beside each other', () => {
             },
             {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
-                y: MARGIN_TOP,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP,
                 name: "element",
                 key: "0_1",
                 index: 1,
@@ -67,7 +67,7 @@ test('two elements in two groups have an additional spacing for the two group bo
         .toStrictEqual([[
             {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                y: MARGIN_TOP,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP,
                 name: "element",
                 key: "0_0",
                 index: 0,
@@ -76,7 +76,7 @@ test('two elements in two groups have an additional spacing for the two group bo
         ], [
             {
                 x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * BORDER_MARGIN_SIDE,
-                y: MARGIN_TOP,
+                y: MARGIN_TOP + BORDER_MARGIN_TOP,
                 name: "element",
                 key: "0_1",
                 index: 1,
