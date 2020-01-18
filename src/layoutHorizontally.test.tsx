@@ -6,7 +6,7 @@ import {
     MARGIN_TOP,
     widthOfElements,
     Layer,
-    BORDER_MARGIN_SIDE, BORDER_MARGIN_TOP, ELEMENT_HEIGHT, VERTICAL_SPACING
+    GROUP_MARGIN_SIDE, GROUP_MARGIN_TOP, ELEMENT_HEIGHT, VERTICAL_SPACING
 } from "./App";
 
 test('no element results in no layouted elements', () => {
@@ -24,8 +24,8 @@ test('one element is layouted to the origin', () => {
         .toStrictEqual([{
             name: "group 1", nodes: [
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_0",
                     index: 0,
@@ -45,8 +45,8 @@ test('one element in the second layer keeps space for the two borders between th
         .toStrictEqual([{
             name: "group 1", nodes: [
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP + ELEMENT_HEIGHT + BORDER_MARGIN_TOP + VERTICAL_SPACING + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_TOP + VERTICAL_SPACING + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_0",
                     index: 0,
@@ -67,16 +67,16 @@ test('two elements are layouted right beside each other', () => {
         .toStrictEqual([{
             name: "group 1", nodes: [
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_0",
                     index: 0,
                     layerIndex: 0
                 },
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_1",
                     index: 1,
@@ -100,8 +100,8 @@ test('two elements in two groups have an additional spacing for the two group bo
         .toStrictEqual([{
             name: "group 1", nodes: [
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_0",
                     index: 0,
@@ -111,8 +111,8 @@ test('two elements in two groups have an additional spacing for the two group bo
         }, {
             name: "group 2", nodes: [
                 {
-                    x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * BORDER_MARGIN_SIDE,
-                    y: MARGIN_TOP + BORDER_MARGIN_TOP,
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_1",
                     index: 1,
