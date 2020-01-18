@@ -66,7 +66,7 @@ export function widthOfElements(groups: Layer<any>) {
 
 function heightOfNodes(layers: Layer<any>[]) {
     let n = layers.length;
-    return n*ELEMENT_HEIGHT + n*VERTICAL_SPACING;
+    return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + 2 * n * BORDER_MARGIN_TOP;
 }
 
 function fromIsUpper<T extends LayerPosition>(edge: Edge<T>) {
