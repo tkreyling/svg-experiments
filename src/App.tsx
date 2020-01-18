@@ -45,6 +45,7 @@ export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 150;
 export const ELEMENT_HEIGHT = 40;
+export const BORDER_MARGIN_SIDE = 10;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
@@ -160,11 +161,11 @@ export function layout<N>(layers: Layer<N & LayerPosition>[], heightOfEdges: num
 
 export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidth: number, additionalEdgeHeight: number): Layer<N & LayerPosition & Coordinates> {
     let offsetToCenter = (fullWidth - widthOfElements(groups)) / 2;
-    return groups.map(elements => {
+    return groups.map((elements, groupIndex) => {
         return elements.map(element =>
             Object.assign(element, {
-                x: element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + MARGIN_SIDE + offsetToCenter,
-                y: element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + MARGIN_TOP + additionalEdgeHeight
+                x: MARGIN_SIDE + groupIndex * 2 * BORDER_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                y: MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + additionalEdgeHeight
             }));
     });
 }
