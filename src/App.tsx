@@ -164,7 +164,7 @@ export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidt
     return groups.map((elements, groupIndex) => {
         return elements.map(element =>
             Object.assign(element, {
-                x: MARGIN_SIDE + groupIndex * 2 * BORDER_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE + groupIndex * 2 * BORDER_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
                 y: MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING) + additionalEdgeHeight
             }));
     });

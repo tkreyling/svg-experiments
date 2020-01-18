@@ -21,7 +21,7 @@ test('one element is layouted to the origin', () => {
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
         .toStrictEqual([[
             {
-                x: MARGIN_SIDE,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
                 y: MARGIN_TOP,
                 name: "element",
                 key: "0_0",
@@ -39,7 +39,7 @@ test('two elements are layouted right beside each other', () => {
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
         .toStrictEqual([[
             {
-                x: MARGIN_SIDE,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
                 y: MARGIN_TOP,
                 name: "element",
                 key: "0_0",
@@ -47,7 +47,7 @@ test('two elements are layouted right beside each other', () => {
                 layerIndex: 0
             },
             {
-                x: MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
                 y: MARGIN_TOP,
                 name: "element",
                 key: "0_1",
@@ -66,7 +66,7 @@ test('two elements in two groups have an additional spacing for the two group bo
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
         .toStrictEqual([[
             {
-                x: MARGIN_SIDE,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE,
                 y: MARGIN_TOP,
                 name: "element",
                 key: "0_0",
@@ -75,7 +75,7 @@ test('two elements in two groups have an additional spacing for the two group bo
             },
         ], [
             {
-                x: MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * BORDER_MARGIN_SIDE,
+                x: MARGIN_SIDE + BORDER_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * BORDER_MARGIN_SIDE,
                 y: MARGIN_TOP,
                 name: "element",
                 key: "0_1",
