@@ -329,6 +329,18 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
+const Group: React.FC<Group<Coordinates>> = group => {
+    let firstNode = group[0];
+    let n = group.length;
+    return (
+        <rect
+              x={firstNode.x - BORDER_MARGIN_SIDE} y={firstNode.y - BORDER_MARGIN_TOP}
+              width={n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * BORDER_MARGIN_SIDE}
+              height={ELEMENT_HEIGHT + 2 * BORDER_MARGIN_TOP}
+              fill="none" strokeWidth={1} stroke="grey"/>
+    );
+};
+
 export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNodeOnLowerSide = edge.from.layerIndex <= edge.to.layerIndex;
     let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
@@ -418,6 +430,7 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
             return (
                 <svg viewBox={"0 0 " + width + " " + height}>
                     {graph.layers.flat().flat().map(Rect)}
+                    {graph.layers.flat().map(Group)}
                     {graph.edges.map(Path)}
                 </svg>
             );
