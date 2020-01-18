@@ -61,7 +61,7 @@ export function widthOfElements(groups: Layer<any>) {
         .map(elements => elements.length)
         .reduce((sum, add) => sum + add, 0);
     if (n === 0) return 0;
-    return n*ELEMENT_WIDTH + (n - 1)*HORIZONTAL_SPACING;
+    return groups.length * BORDER_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
 }
 
 function heightOfNodes(layers: Layer<any>[]) {
