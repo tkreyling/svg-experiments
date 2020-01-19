@@ -364,7 +364,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Coordinates & LayerPosition> & GroupPosition> = group => {
+const Group: React.FC<Group<Coordinates> & GroupPosition> = group => {
     let firstNode = group.nodes[0];
     let n = group.nodes.length;
     return (
