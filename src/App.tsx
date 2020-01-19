@@ -364,11 +364,12 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Coordinates & LayerPosition>> = group => {
+const Group: React.FC<Group<Coordinates & LayerPosition> & GroupPosition> = group => {
     let firstNode = group.nodes[0];
     let n = group.nodes.length;
     return (
         <rect
+            key={group.key}
             x={firstNode.x - GROUP_MARGIN_SIDE} y={firstNode.y - GROUP_MARGIN_TOP}
             width={n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE}
             height={ELEMENT_HEIGHT + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM}
