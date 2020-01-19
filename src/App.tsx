@@ -13,6 +13,12 @@ export type LayerPosition = {
     layerIndex: number
 }
 
+export type GroupPosition = {
+    key: string
+    index: number
+    layerIndex: number
+}
+
 export type Node = {
     name: string
 }
@@ -321,6 +327,24 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
     });
 }
 
+function addPositionToGroupG<N, E, G>(graph: Graph<N, E, G>): Graph<N, E, G & GroupPosition> {
+    return {
+        layers: addPositionToGroup(graph.layers),
+        edges: graph.edges
+    }
+}
+
+export function addPositionToGroup<N, G>(layers: Layer<N, G>[]): Layer<N, G & GroupPosition>[] {
+    return layers.map((groups, layerIndex) =>
+        groups.map((group, groupIndex) =>
+            Object.assign(group, {
+                key: "G_" + layerIndex + "_" + groupIndex,
+                index: groupIndex,
+                layerIndex: layerIndex
+            }))
+    );
+}
+
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     return (
         <g key={node.key}>
@@ -436,6 +460,7 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
         .map(addLayerPositionToEdgeG)
         .map(addCoordinatesToNodeG)
         .map(addConnectionIndexAndNumberOfEdgesG)
+        .map(addPositionToGroupG)
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
             let width = widthOfLayers(graph.layers) + 2 * MARGIN_SIDE;
