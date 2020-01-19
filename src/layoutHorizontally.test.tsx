@@ -15,7 +15,7 @@ test('no element results in no layouted elements', () => {
 });
 
 test('one element is layouted to the origin', () => {
-    let elements: Layer<any> = [{
+    let elements: Layer<any, unknown> = [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0}
         ]
@@ -36,7 +36,7 @@ test('one element is layouted to the origin', () => {
 });
 
 test('one element in the second layer keeps space for the two borders between the layers', () => {
-    let elements: Layer<any> = [{
+    let elements: Layer<any, unknown> = [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 1}
         ]
@@ -57,7 +57,7 @@ test('one element in the second layer keeps space for the two borders between th
 });
 
 test('two elements are layouted right beside each other', () => {
-    let elements: Layer<any> = [{
+    let elements: Layer<any, unknown> = [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0},
             {name: "element", key: "0_1", index: 1, layerIndex: 0}
@@ -87,7 +87,7 @@ test('two elements are layouted right beside each other', () => {
 });
 
 test('two elements in two groups have an additional spacing for the two group borders', () => {
-    let elements: Layer<any> = [{
+    let elements: Layer<any, unknown> = [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0}
         ]

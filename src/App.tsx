@@ -37,10 +37,10 @@ type Group<N> = {
     nodes: N[]
 }
 
-export type Layer<N> = Group<N>[]
+export type Layer<N, G> = (Group<N> & G)[]
 
-type Graph<N, E> = {
-    layers: Layer<N>[]
+type Graph<N, E, G> = {
+    layers: Layer<N, G>[]
     edges: (Edge<N> & E)[]
 }
 
@@ -56,11 +56,11 @@ export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 
-export function widthOfLayers(layers: Layer<any>[]) {
+export function widthOfLayers(layers: Layer<any, any>[]) {
     return Math.max(...layers.map(widthOfElements));
 }
 
-export function widthOfElements(groups: Layer<any>) {
+export function widthOfElements(groups: Layer<any, any>) {
     const n = groups
         .map(group => group.nodes.length)
         .reduce((sum, add) => sum + add, 0);
@@ -68,7 +68,7 @@ export function widthOfElements(groups: Layer<any>) {
     return groups.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
 }
 
-function heightOfNodes(layers: Layer<any>[]) {
+function heightOfNodes(layers: Layer<any, any>[]) {
     let n = layers.length;
     return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + n * GROUP_MARGIN_TOP + n * GROUP_MARGIN_BOTTOM;
 }
@@ -103,14 +103,14 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
     })
 }
 
-function addLayerPositionToNodeG<N, E>(graph: Graph<N, E>): Graph<N & LayerPosition, E> {
+function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
     return {
         layers: addLayerPositionToNode(graph.layers),
         edges: graph.edges as unknown as (Edge<N & LayerPosition> & E)[]
     }
 }
 
-export function addLayerPositionToNode<N>(layers: Layer<N>[]): Layer<N & LayerPosition>[] {
+export function addLayerPositionToNode<N, G>(layers: Layer<N, G>[]): Layer<N & LayerPosition, G>[] {
     let fullWidth = Math.max(...layers.map(groups => {
         return groups
             .map(group => group.nodes.length)
@@ -122,18 +122,17 @@ export function addLayerPositionToNode<N>(layers: Layer<N>[]): Layer<N & LayerPo
     );
 }
 
-function addLayerPositionToNodeForLayer<N>(groups: Layer<N>, fullWidth: number, layerIndex: number):
-    Layer<N & LayerPosition> {
+function addLayerPositionToNodeForLayer<N, G>(groups: Layer<N, G>, fullWidth: number, layerIndex: number):
+    Layer<N & LayerPosition, G> {
     let layerWidth = groups
         .map(group => group.nodes.length)
         .reduce((sum, add) => sum + add, 0);
     let layerOffset = (fullWidth - layerWidth) / 2;
 
-    let resultGroups: Layer<N & LayerPosition> = [];
+    let resultGroups: Layer<N & LayerPosition, G> = [];
     let index = 0;
     groups.forEach(group => {
-        let resultGroup = {
-            name: group.name,
+        let resultGroup = Object.assign(group, {
             nodes: group.nodes.map(element => {
                 let resultElement = Object.assign(element, {
                     key: layerIndex + "_" + index,
@@ -144,14 +143,14 @@ function addLayerPositionToNodeForLayer<N>(groups: Layer<N>, fullWidth: number, 
                 index++;
                 return resultElement;
             })
-        };
+        });
         resultGroups.push(resultGroup);
     });
     return resultGroups;
 }
 
-function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition>(graph: Graph<N, E>):
-    Graph<N & Coordinates, E> {
+function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition, G>(graph: Graph<N, E, G>):
+    Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
     return {
         layers: layout(graph.layers, heightOfAllEdges),
@@ -159,7 +158,8 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition>
     }
 }
 
-export function layout<N>(layers: Layer<N & LayerPosition>[], heightOfEdges: number[]): Layer<N & LayerPosition & Coordinates>[] {
+export function layout<N, G>(layers: Layer<N & LayerPosition, G>[], heightOfEdges: number[]):
+    Layer<N & LayerPosition & Coordinates, G>[] {
     let fullWidth = widthOfLayers(layers);
     return layers.map((elements, layerIndex) => {
         let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
@@ -167,21 +167,22 @@ export function layout<N>(layers: Layer<N & LayerPosition>[], heightOfEdges: num
     });
 }
 
-export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidth: number, additionalEdgeHeight: number): Layer<N & LayerPosition & Coordinates> {
+export function layoutHorizontally<N, G>(groups: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
+    Layer<N & LayerPosition & Coordinates, G> {
     let offsetToCenter = (fullWidth - widthOfElements(groups)) / 2;
     return groups.map((group, groupIndex) => {
-        return {
-            name: group.name,
+        return Object.assign(group, {
             nodes: group.nodes.map(element =>
                 Object.assign(element, {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
                 }))
-        };
+        });
     });
 }
 
-function addLayerPositionToEdgeG<N extends LayerPosition, E>(graph: Graph<N, E>): Graph<N, E & LayerPosition> {
+function addLayerPositionToEdgeG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):
+    Graph<N, E & LayerPosition, G> {
     addLayerPositionToEdge(graph.edges);
     return {
         layers: graph.layers,
@@ -251,11 +252,11 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
     });
 }
 
-function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E>(graph: Graph<N, E>):
-    Graph<N & NumberOfEdges, E & ConnectionIndex> {
+function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):
+    Graph<N & NumberOfEdges, E & ConnectionIndex, G> {
     addConnectionIndexAndNumberOfEdges(graph.edges);
     return {
-        layers: graph.layers as unknown as Layer<N & NumberOfEdges>[],
+        layers: graph.layers as unknown as Layer<N & NumberOfEdges, G>[],
         edges: graph.edges as unknown as (Edge<N & NumberOfEdges> & E & ConnectionIndex)[]
     }
 }
@@ -339,7 +340,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Coordinates>> = group => {
+const Group: React.FC<Group<Coordinates & LayerPosition>> = group => {
     let firstNode = group.nodes[0];
     let n = group.nodes.length;
     return (
@@ -375,7 +376,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-export function stringsToNodes(strings: string[][][]): Layer<Node>[] {
+export function stringsToNodes(strings: string[][][]): Layer<Node, unknown>[] {
     return strings.map(layer => {
         return layer.map(group => {
             return {
@@ -427,9 +428,9 @@ graph
 `;
 
 // eslint-disable-next-line
-const initialGraph: Graph<Node, unknown> = eval(graphAsString);
+const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
-export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
+export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
         .map(addLayerPositionToEdgeG)
@@ -450,7 +451,7 @@ export const Diagram: React.FC<Graph<Node, unknown>> = graph => {
         })[0];
 };
 
-export function parseGraph(text: string): Graph<Node, unknown> | string {
+export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {
     try {
 // eslint-disable-next-line
         let graph = eval(text);
