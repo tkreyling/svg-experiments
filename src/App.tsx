@@ -48,7 +48,8 @@ export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 150;
 export const ELEMENT_HEIGHT = 40;
-export const GROUP_MARGIN_TOP = 10;
+export const GROUP_MARGIN_TOP = 30;
+export const GROUP_MARGIN_BOTTOM = 10;
 export const GROUP_MARGIN_SIDE = 10;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
@@ -69,7 +70,7 @@ export function widthOfElements(groups: Layer<any>) {
 
 function heightOfNodes(layers: Layer<any>[]) {
     let n = layers.length;
-    return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + 2 * n * GROUP_MARGIN_TOP;
+    return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + n * GROUP_MARGIN_TOP + n * GROUP_MARGIN_BOTTOM;
 }
 
 function fromIsUpper<T extends LayerPosition>(edge: Edge<T>) {
@@ -174,7 +175,7 @@ export function layoutHorizontally<N>(groups: Layer<N & LayerPosition>, fullWidt
             nodes: group.nodes.map(element =>
                 Object.assign(element, {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
-                    y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + 2 * GROUP_MARGIN_TOP) + additionalEdgeHeight
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
                 }))
         };
     });
@@ -345,7 +346,7 @@ const Group: React.FC<Group<Coordinates>> = group => {
         <rect
             x={firstNode.x - GROUP_MARGIN_SIDE} y={firstNode.y - GROUP_MARGIN_TOP}
             width={n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE}
-            height={ELEMENT_HEIGHT + 2 * GROUP_MARGIN_TOP}
+            height={ELEMENT_HEIGHT + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM}
             fill="none" strokeWidth={1} stroke="grey"/>
     );
 };
@@ -355,7 +356,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
     let fromNodeX = edge.from.x + fromNodeCenteringOffset + edge.fromIndex * EDGE_SPACING;
     let fromNodeY = edge.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
-    let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + GROUP_MARGIN_TOP + edge.index * EDGE_SPACING;
+    let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + GROUP_MARGIN_BOTTOM + edge.index * EDGE_SPACING;
     let toNodeOnLowerSide = edge.from.layerIndex >= edge.to.layerIndex;
     let toNodeCenteringOffset = (ELEMENT_WIDTH - ((toNodeOnLowerSide ? edge.to.lowerSideEdges : edge.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
     let toNodeX = edge.to.x + toNodeCenteringOffset + edge.toIndex * EDGE_SPACING;

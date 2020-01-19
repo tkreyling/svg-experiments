@@ -6,7 +6,7 @@ import {
     MARGIN_TOP,
     widthOfElements,
     Layer,
-    GROUP_MARGIN_SIDE, GROUP_MARGIN_TOP, ELEMENT_HEIGHT, VERTICAL_SPACING
+    GROUP_MARGIN_SIDE, GROUP_MARGIN_TOP, ELEMENT_HEIGHT, VERTICAL_SPACING, GROUP_MARGIN_BOTTOM
 } from "./App";
 
 test('no element results in no layouted elements', () => {
@@ -46,7 +46,7 @@ test('one element in the second layer keeps space for the two borders between th
             name: "group 1", nodes: [
                 {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_TOP + VERTICAL_SPACING + GROUP_MARGIN_TOP,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING + GROUP_MARGIN_TOP,
                     name: "element",
                     key: "0_0",
                     index: 0,
