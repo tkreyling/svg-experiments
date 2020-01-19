@@ -1,16 +1,16 @@
 import {stringsToNodes} from "./App";
 
 test('one string results in one node', () => {
-    expect(stringsToNodes([[["node"]]]))
+    expect(stringsToNodes([[{name: "group 1", nodes: ["node"]}]]))
         .toStrictEqual([
-            [{name: "group", nodes: [{name: "node"}]}]
+            [{name: "group 1", nodes: [{name: "node"}]}]
         ]);
 });
 
 test('empty array element result in undefined node', () => {
     // noinspection JSConsecutiveCommasInArrayLiteral
-    expect(stringsToNodes([[["a", ,"b"] as any]]))
+    expect(stringsToNodes([[{name: "group 1", nodes: ["a", ,"b"] as any}]]))
         .toStrictEqual([
-            [{name: "group", nodes: [{name: "a"}, undefined, {name: "b"}]}]
+            [{name: "group 1", nodes: [{name: "a"}, undefined, {name: "b"}]}]
         ]);
 });

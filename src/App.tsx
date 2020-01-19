@@ -417,12 +417,12 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-export function stringsToNodes(strings: string[][][]): Layer<Node, unknown>[] {
+export function stringsToNodes(strings: Group<string>[][]): Layer<Node, unknown>[] {
     return strings.map(layer => {
         return layer.map(group => {
             return {
-                name: "group",
-                nodes: group.map(name => {
+                name: group.name,
+                nodes: group.nodes.map(name => {
                     return {name: name}
                 })
             }
@@ -432,9 +432,17 @@ export function stringsToNodes(strings: string[][][]): Layer<Node, unknown>[] {
 
 let graphAsString =
 `var layers = stringsToNodes([
-    [["element 11", "element 2", "an element with long text"], ["element 4"]],
-    [["element 1", "element 2"], ["element 3"]],
-    [["element 1", "element 2", "element 3", "element with changed name", "element 5"]]
+    [
+        {name: "group 1", nodes: ["element 11", "element 2", "an element with long text"]},
+        {name: "group 2", nodes: ["element 4"]}
+    ],
+    [
+        {name: "group 3", nodes: ["element 1", "element 2"]},
+        {name: "group 4", nodes: ["element 3"]}
+    ],
+    [
+        {name: "group 5", nodes: ["element 1", "element 2", "element 3", "element with changed name", "element 5"]}
+    ]
 ]);
 
 var edges = [
