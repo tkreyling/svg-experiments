@@ -383,6 +383,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
 };
 
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
+    let isComponent = node.symbol === "component";
     return (
         <g key={node.key}>
             <rect data-testid="rect"
@@ -395,10 +396,13 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
             </text>
 
             <clipPath id={"clip-element-text-" + node.key}>
-                <rect x={node.x + TEXT_PADDING} y={node.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
+                <rect
+                    x={node.x + TEXT_PADDING} y={node.y}
+                    width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (isComponent ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                    height={ELEMENT_HEIGHT}/>
             </clipPath>
 
-            {(node.symbol === "component") ?
+            {isComponent ?
                 <ComponentSymbol
                     symbolKey={node.key + "CS"}
                     x={node.x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
@@ -482,7 +486,11 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, u
 let graphAsString =
 `var layers = stringsToNodes([
     [
-        {name: "group 1", nodes: ["element 11", {name: "element 2", symbol: "component"}, "an element with long text"]},
+        {name: "group 1", nodes: [
+            "element 11", 
+            {name: "element 2", symbol: "component"}, 
+            {name: "an element with long text", symbol: "component"}            
+        ]},
         {name: "group 2", nodes: ["element 4"]}
     ],
     [
