@@ -54,6 +54,8 @@ export const MARGIN_TOP = 5;
 export const MARGIN_SIDE = 5;
 export const ELEMENT_WIDTH = 150;
 export const ELEMENT_HEIGHT = 40;
+export const SYMBOL_WIDTH = 12;
+export const SYMBOL_SPACING = 3;
 export const GROUP_MARGIN_TOP = 30;
 export const GROUP_MARGIN_BOTTOM = 10;
 export const GROUP_MARGIN_SIDE = 10;
@@ -61,6 +63,7 @@ export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
 export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
+export const STROKE_WIDTH = 0.5;
 
 export function widthOfLayers(layers: Layer<any, any>[]) {
     return Math.max(...layers.map(widthOfElements));
@@ -345,13 +348,44 @@ export function addPositionToGroup<N, G>(layers: Layer<N, G>[]): Layer<N, G & Gr
     );
 }
 
+type Symbol = {
+    x: number
+    y: number
+    width: number
+    symbolKey: string
+}
+
+export const ComponentSymbol: React.FC<Symbol> = symbol => {
+    const symbolHeightRelative = 1.1;
+    const barWidthRelative = 0.4;
+    const barHeightRelative = 0.15;
+    const barWidthAbsolute = symbol.width * barWidthRelative;
+    const barHeightAbsolute = symbol.width * barHeightRelative;
+    return (
+        <g key={symbol.symbolKey}>
+            <rect
+                x={symbol.x + barWidthAbsolute / 2} y={symbol.y}
+                width={symbol.width * (1 - barWidthRelative / 2)} height={symbol.width * symbolHeightRelative}
+                fill="none" strokeWidth={STROKE_WIDTH} stroke="black"/>
+            <rect
+                x={symbol.x} y={symbol.y + barHeightAbsolute}
+                width={barWidthAbsolute} height={barHeightAbsolute}
+                fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
+            <rect
+                x={symbol.x} y={symbol.y + barHeightAbsolute * 3}
+                width={barWidthAbsolute} height={barHeightAbsolute}
+                fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
+        </g>
+    );
+};
+
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     return (
         <g key={node.key}>
             <rect data-testid="rect"
                   x={node.x} y={node.y}
                   width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
-                  fill="lightgrey" strokeWidth={1} stroke="black"/>
+                  fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
 
             <text x={node.x + TEXT_PADDING } y={node.y + ELEMENT_HEIGHT / 2} fill="black"
                   clipPath={"url(#clip-element-text-" + node.key + ")"}>{node.name}
@@ -360,6 +394,12 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
             <clipPath id={"clip-element-text-" + node.key}>
                 <rect x={node.x + TEXT_PADDING} y={node.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
             </clipPath>
+
+            <ComponentSymbol
+                symbolKey={node.key + "CS"}
+                x={node.x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
+                y={node.y + SYMBOL_SPACING}
+                width={SYMBOL_WIDTH}/>
         </g>
     );
 };
@@ -377,7 +417,7 @@ const Group: React.FC<Group<Coordinates> & GroupPosition> = group => {
                 x={x} y={y}
                 width={contentWidth + 2 * GROUP_MARGIN_SIDE}
                 height={ELEMENT_HEIGHT + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM}
-                fill="none" strokeWidth={1} stroke="grey"/>
+                fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text x={x + GROUP_MARGIN_SIDE} y={y + ELEMENT_HEIGHT / 2} fill="black"
                   clipPath={"url(#clip-element-text-" + group.key + ")"}>{group.name}
@@ -411,7 +451,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
             "L " + toNodeX + " " + toNodeY
         }
               stroke="black"
-              strokeWidth={1}
+              strokeWidth={STROKE_WIDTH}
               fill="none"
         />
     );
