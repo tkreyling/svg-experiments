@@ -14,3 +14,10 @@ test('empty array element result in undefined node', () => {
             [{name: "group 1", nodes: [{name: "a"}, undefined, {name: "b"}]}]
         ]);
 });
+
+test('an element with symbol is passed through', () => {
+    expect(stringsToNodes([[{name: "group 1", nodes: [{name: "node", symbol: "component"}]}]]))
+        .toStrictEqual([
+            [{name: "group 1", nodes: [{name: "node", symbol: "component"}]}]
+        ]);
+});

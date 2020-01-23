@@ -19,8 +19,11 @@ export type GroupPosition = {
     layerIndex: number
 }
 
+type Symbols = "component"
+
 export type Node = {
     name: string
+    symbol?: Symbols
 }
 
 export type Edge<T> = {
@@ -395,11 +398,13 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
                 <rect x={node.x + TEXT_PADDING} y={node.y} width={ELEMENT_WIDTH - 2 * TEXT_PADDING} height={ELEMENT_HEIGHT}/>
             </clipPath>
 
-            <ComponentSymbol
-                symbolKey={node.key + "CS"}
-                x={node.x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
-                y={node.y + SYMBOL_SPACING}
-                width={SYMBOL_WIDTH}/>
+            {(node.symbol === "component") ?
+                <ComponentSymbol
+                    symbolKey={node.key + "CS"}
+                    x={node.x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
+                    y={node.y + SYMBOL_SPACING}
+                    width={SYMBOL_WIDTH}/>
+                : ""}
         </g>
     );
 };
@@ -457,13 +462,17 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-export function stringsToNodes(strings: Group<string>[][]): Layer<Node, unknown>[] {
+export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, unknown>[] {
     return strings.map(layer => {
         return layer.map(group => {
             return {
                 name: group.name,
-                nodes: group.nodes.map(name => {
-                    return {name: name}
+                nodes: group.nodes.map(element => {
+                    if (typeof element === 'string') {
+                        return {name: element}
+                    } else {
+                        return element
+                    }
                 })
             }
         });
@@ -473,7 +482,7 @@ export function stringsToNodes(strings: Group<string>[][]): Layer<Node, unknown>
 let graphAsString =
 `var layers = stringsToNodes([
     [
-        {name: "group 1", nodes: ["element 11", "element 2", "an element with long text"]},
+        {name: "group 1", nodes: ["element 11", {name: "element 2", symbol: "component"}, "an element with long text"]},
         {name: "group 2", nodes: ["element 4"]}
     ],
     [
