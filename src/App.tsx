@@ -43,7 +43,7 @@ type NumberOfEdges = {
 
 type Group<N> = {
     name: string
-    nodes: N[]
+    elements: N[]
 }
 
 export type Layer<N, G> = {
@@ -70,13 +70,13 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function widthOfLayers(layers: Layer<any, any>[]) {
+export function widthOfLayers(layers: Layer<unknown, unknown>[]) {
     return Math.max(...layers.map(widthOfElements));
 }
 
-export function widthOfElements(layer: Layer<any, any>) {
+export function widthOfElements(layer: Layer<unknown, unknown>) {
     const n = layer.elements
-        .map(group => group.nodes.length)
+        .map(group => group.elements.length)
         .reduce((sum, add) => sum + add, 0);
     if (n === 0) return 0;
     return layer.elements.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
@@ -127,7 +127,7 @@ function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & Laye
 export function addLayerPositionToNode<N, G>(layers: Layer<N, G>[]): Layer<N & LayerPosition, G>[] {
     let fullWidth = Math.max(...layers.map(layer => {
         return layer.elements
-            .map(group => group.nodes.length)
+            .map(group => group.elements.length)
             .reduce((sum, add) => sum + add, 0);
     }));
 
@@ -139,7 +139,7 @@ export function addLayerPositionToNode<N, G>(layers: Layer<N, G>[]): Layer<N & L
 function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: number, layerIndex: number):
     Layer<N & LayerPosition, G> {
     let layerWidth = layer.elements
-        .map(group => group.nodes.length)
+        .map(group => group.elements.length)
         .reduce((sum, add) => sum + add, 0);
     let layerOffset = (fullWidth - layerWidth) / 2;
 
@@ -149,7 +149,7 @@ function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: num
     let index = 0;
     layer.elements.forEach(group => {
         let resultGroup = Object.assign(group, {
-            nodes: group.nodes.map(element => {
+            elements: group.elements.map(element => {
                 let resultElement = Object.assign(element, {
                     key: layerIndex + "_" + index,
                     index: index,
@@ -189,7 +189,7 @@ export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, ful
     return {
         elements: layer.elements.map((group, groupIndex) => {
             return Object.assign(group, {
-                nodes: group.nodes.map(element =>
+                elements: group.elements.map(element =>
                     Object.assign(element, {
                         x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
                         y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
@@ -420,8 +420,8 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
 };
 
 const Group: React.FC<Group<Coordinates> & GroupPosition> = group => {
-    let firstNode = group.nodes[0];
-    let n = group.nodes.length;
+    let firstNode = group.elements[0];
+    let n = group.elements.length;
 
     let x = firstNode.x - GROUP_MARGIN_SIDE;
     let y = firstNode.y - GROUP_MARGIN_TOP;
@@ -478,7 +478,7 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, u
             elements: layer.map(group => {
                 return {
                     name: group.name,
-                    nodes: group.nodes.map(element => {
+                    elements: group.elements.map(element => {
                         if (typeof element === 'string') {
                             return {name: element}
                         } else {
@@ -494,43 +494,43 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, u
 let graphAsString =
 `var layers = stringsToNodes([
     [
-        {name: "group 1", nodes: [
+        {name: "group 1", elements: [
             "element 11", 
             {name: "element 2", symbol: "component"}, 
             {name: "an element with long text", symbol: "component"}            
         ]},
-        {name: "group 2", nodes: ["element 4"]}
+        {name: "group 2", elements: ["element 4"]}
     ],
     [
-        {name: "group 3", nodes: ["element 1", "element 2"]},
-        {name: "group 4", nodes: ["element 3"]}
+        {name: "group 3", elements: ["element 1", "element 2"]},
+        {name: "group 4", elements: ["element 3"]}
     ],
     [
-        {name: "group 5", nodes: ["element 1", "element 2", "element 3", "element with changed name", "element 5"]}
+        {name: "group 5", elements: ["element 1", "element 2", "element 3", "element with changed name", "element 5"]}
     ]
 ]);
 
 var edges = [
-    {from: layers[0].elements[0].nodes[1], to: layers[1].elements[0].nodes[0]},
-    {from: layers[0].elements[0].nodes[2], to: layers[1].elements[1].nodes[0]},
-    {from: layers[0].elements[1].nodes[0], to: layers[1].elements[0].nodes[1]},
-    {from: layers[1].elements[1].nodes[0], to: layers[2].elements[0].nodes[2]},
-    {from: layers[1].elements[0].nodes[1], to: layers[2].elements[0].nodes[4]},
-    {from: layers[1].elements[0].nodes[1], to: layers[2].elements[0].nodes[3]},
-    {from: layers[1].elements[0].nodes[1], to: layers[2].elements[0].nodes[2]},
-    {from: layers[1].elements[0].nodes[1], to: layers[2].elements[0].nodes[1]},
-    {from: layers[1].elements[0].nodes[1], to: layers[2].elements[0].nodes[0]},
-    {from: layers[2].elements[0].nodes[0], to: layers[1].elements[0].nodes[0]},
-    {from: layers[2].elements[0].nodes[1], to: layers[1].elements[0].nodes[0]},
-    {from: layers[2].elements[0].nodes[0], to: layers[2].elements[0].nodes[3]},
-    {from: layers[2].elements[0].nodes[1], to: layers[2].elements[0].nodes[3]},
-    {from: layers[2].elements[0].nodes[4], to: layers[2].elements[0].nodes[3]},
-    {from: layers[0].elements[0].nodes[0], to: layers[0].elements[0].nodes[2]},
-    {from: layers[0].elements[0].nodes[0], to: layers[0].elements[0].nodes[1]},
-    {from: layers[0].elements[0].nodes[0], to: layers[1].elements[0].nodes[0]},
-    {from: layers[0].elements[0].nodes[0], to: layers[1].elements[0].nodes[0]},
-    {from: layers[1].elements[0].nodes[1], to: layers[1].elements[0].nodes[0]},
-    {from: layers[1].elements[0].nodes[1], to: layers[1].elements[1].nodes[0]}
+    {from: layers[0].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
+    {from: layers[0].elements[0].elements[2], to: layers[1].elements[1].elements[0]},
+    {from: layers[0].elements[1].elements[0], to: layers[1].elements[0].elements[1]},
+    {from: layers[1].elements[1].elements[0], to: layers[2].elements[0].elements[2]},
+    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[4]},
+    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[3]},
+    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[2]},
+    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[1]},
+    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[0]},
+    {from: layers[2].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
+    {from: layers[2].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
+    {from: layers[2].elements[0].elements[0], to: layers[2].elements[0].elements[3]},
+    {from: layers[2].elements[0].elements[1], to: layers[2].elements[0].elements[3]},
+    {from: layers[2].elements[0].elements[4], to: layers[2].elements[0].elements[3]},
+    {from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[2]},
+    {from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[1]},
+    {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
+    {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
+    {from: layers[1].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
+    {from: layers[1].elements[0].elements[1], to: layers[1].elements[1].elements[0]}
 ];
 
 var graph = {
@@ -558,7 +558,7 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
 
             return (
                 <svg viewBox={"0 0 " + width + " " + height}>
-                    {graph.layers.flatMap(layer => layer.elements).flatMap(group => group.nodes).map(Rect)}
+                    {graph.layers.flatMap(layer => layer.elements).flatMap(group => group.elements).map(Rect)}
                     {graph.layers.flatMap(layer => layer.elements).map(Group)}
                     {graph.edges.map(Path)}
                 </svg>
