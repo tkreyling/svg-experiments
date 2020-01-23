@@ -10,18 +10,19 @@ import {
 } from "./App";
 
 test('no element results in no layouted elements', () => {
-    expect(layoutHorizontally([], widthOfElements([]), 0))
-        .toStrictEqual([])
+    let layer = {elements: []};
+    expect(layoutHorizontally(layer, widthOfElements(layer), 0))
+        .toStrictEqual({elements: []})
 });
 
 test('one element is layouted to the origin', () => {
-    let elements: Layer<any, unknown> = [{
+    let elements: Layer<any, unknown> = {elements: [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0}
         ]
-    }];
+    }]};
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-        .toStrictEqual([{
+        .toStrictEqual({elements: [{
             name: "group 1", nodes: [
                 {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
@@ -32,17 +33,17 @@ test('one element is layouted to the origin', () => {
                     layerIndex: 0
                 }
             ]
-        }])
+        }]})
 });
 
 test('one element in the second layer keeps space for the two borders between the layers', () => {
-    let elements: Layer<any, unknown> = [{
+    let elements: Layer<any, unknown> = {elements: [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 1}
         ]
-    }];
+    }]};
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-        .toStrictEqual([{
+        .toStrictEqual({elements: [{
             name: "group 1", nodes: [
                 {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
@@ -53,18 +54,18 @@ test('one element in the second layer keeps space for the two borders between th
                     layerIndex: 1
                 }
             ]
-        }])
+        }]})
 });
 
 test('two elements are layouted right beside each other', () => {
-    let elements: Layer<any, unknown> = [{
+    let elements: Layer<any, unknown> = {elements: [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0},
             {name: "element", key: "0_1", index: 1, layerIndex: 0}
         ]
-    }];
+    }]};
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-        .toStrictEqual([{
+        .toStrictEqual({elements: [{
             name: "group 1", nodes: [
                 {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
@@ -83,11 +84,11 @@ test('two elements are layouted right beside each other', () => {
                     layerIndex: 0
                 }
             ]
-        }])
+        }]})
 });
 
 test('two elements in two groups have an additional spacing for the two group borders', () => {
-    let elements: Layer<any, unknown> = [{
+    let elements: Layer<any, unknown> = {elements: [{
         name: "group 1", nodes: [
             {name: "element", key: "0_0", index: 0, layerIndex: 0}
         ]
@@ -95,9 +96,9 @@ test('two elements in two groups have an additional spacing for the two group bo
         name: "group 2", nodes: [
             {name: "element", key: "0_1", index: 1, layerIndex: 0}
         ]
-    }];
+    }]};
     expect(layoutHorizontally(elements, widthOfElements(elements), 0))
-        .toStrictEqual([{
+        .toStrictEqual({elements: [{
             name: "group 1", nodes: [
                 {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
@@ -119,5 +120,5 @@ test('two elements in two groups have an additional spacing for the two group bo
                     layerIndex: 0
                 }
             ]
-        }])
+        }]})
 });
