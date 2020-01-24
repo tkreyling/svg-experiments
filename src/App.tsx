@@ -42,18 +42,18 @@ type NumberOfEdges = {
 }
 
 export type Group<N> = {
-    orientation: 'columns'
+    kind: 'columns'
     name: string
     elements: N[]
 }
 
 export type Layer<N, G> = {
-    orientation: 'columns'
+    kind: 'columns'
     elements: (Group<N> & G)[]
 }
 
 export type Stack<N, G> = {
-    orientation: 'rows'
+    kind: 'rows'
     elements: Layer<N, G>[]
 }
 
@@ -78,7 +78,7 @@ export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
 export function width(elements: Stack<unknown, unknown> | Layer<unknown, unknown>): number {
-    if (elements.orientation === 'rows') {
+    if (elements.kind === 'rows') {
         return Math.max(...elements.elements.map(width));
     } else {
         return elements.elements
@@ -137,7 +137,7 @@ type LayerOrStack<N, G> = Layer<N, G> | Stack<N, G>
 
 export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
     LayerOrStack<N & LayerPosition, G> {
-    if (elements.orientation === 'rows') {
+    if (elements.kind === 'rows') {
         let fullWidth = Math.max(...elements.elements.map(layer => {
             return layer.elements
                 .map(group => group.elements.length)
@@ -192,7 +192,7 @@ export function layout<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: 
     Stack<N & LayerPosition & Coordinates, G> {
     let fullWidth = width(stack);
     return {
-        orientation: 'rows',
+        kind: 'rows',
         elements: stack.elements.map((elements, layerIndex) => {
             let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
             return layoutHorizontally(elements, fullWidth, additionalEdgeHeight)
@@ -204,7 +204,7 @@ export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, ful
     Layer<N & LayerPosition & Coordinates, G> {
     let offsetToCenter = (fullWidth - width(layer)) / 2;
     return {
-        orientation: layer.orientation,
+        kind: layer.kind,
         elements: layer.elements.map((group, groupIndex) => {
             return Object.assign(group, {
                 elements: group.elements.map(element =>
@@ -366,9 +366,9 @@ function addPositionToGroupG<N, E, G>(graph: Graph<N, E, G>): Graph<N, E, G & Gr
 
 export function addPositionToGroup<N, G>(stack: Stack<N, G>): Stack<N, G & GroupPosition> {
     return {
-        orientation: 'rows',
+        kind: 'rows',
         elements: stack.elements.map((layer, layerIndex) => ({
-            orientation: layer.orientation,
+            kind: layer.kind,
             elements: layer.elements.map((group, groupIndex) =>
                 Object.assign(group, {
                     key: "G_" + layerIndex + "_" + groupIndex,
@@ -496,13 +496,13 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
 
 export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, unknown> {
     return {
-        orientation: 'rows',
+        kind: 'rows',
         elements: strings.map(layer => {
             return {
-                orientation: 'columns',
+                kind: 'columns',
                 elements: layer.map(group => {
                     return {
-                        orientation: 'columns',
+                        kind: 'columns',
                         name: group.name,
                         elements: group.elements.map(element => {
                             if (typeof element === 'string') {

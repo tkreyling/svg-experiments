@@ -1,21 +1,21 @@
 import {addPositionToGroup, GroupPosition, Stack} from "./App";
 
 test('no groups need no positioning', () => {
-    addPositionToGroup({orientation: 'rows', elements: []});
+    addPositionToGroup({kind: 'rows', elements: []});
 });
 
 test('one node in one layer ', () => {
-    let elements: Stack<unknown, unknown> = {orientation: 'rows', elements: [{
-        orientation: 'columns',
-        elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node 1"}]}]
+    let elements: Stack<unknown, unknown> = {kind: 'rows', elements: [{
+        kind: 'columns',
+        elements: [{name: "group 1", kind: 'columns', elements: [{name: "node 1"}]}]
     }]};
 
     let result = addPositionToGroup(elements);
 
-    let expectedElements: Stack<unknown, GroupPosition> = {orientation: 'rows', elements: [{
-        orientation: 'columns', elements: [{
+    let expectedElements: Stack<unknown, GroupPosition> = {kind: 'rows', elements: [{
+        kind: 'columns', elements: [{
             name: "group 1",
-            orientation: 'columns',
+            kind: 'columns',
             key: "G_0_0",
             index: 0,
             layerIndex: 0,
@@ -26,29 +26,29 @@ test('one node in one layer ', () => {
 });
 
 test('two nodes in one layer in two groups', () => {
-    let elements: Stack<unknown, unknown> = {orientation: 'rows', elements: [
+    let elements: Stack<unknown, unknown> = {kind: 'rows', elements: [
         {
-            orientation: 'columns', elements: [
-                {name: "group 1", orientation: 'columns', elements: [{name: "node 1"}]},
-                {name: "group 2", orientation: 'columns', elements: [{name: "node 2"}]}
+            kind: 'columns', elements: [
+                {name: "group 1", kind: 'columns', elements: [{name: "node 1"}]},
+                {name: "group 2", kind: 'columns', elements: [{name: "node 2"}]}
             ]
         }
     ]};
 
     let result = addPositionToGroup(elements);
 
-    let expectedElements: Stack<unknown, GroupPosition> = {orientation: 'rows', elements: [{
-        orientation: 'columns', elements: [
+    let expectedElements: Stack<unknown, GroupPosition> = {kind: 'rows', elements: [{
+        kind: 'columns', elements: [
             {
                 name: "group 1",
-                orientation: 'columns',
+                kind: 'columns',
                 key: "G_0_0",
                 index: 0,
                 layerIndex: 0,
                 elements: [{name: "node 1"}]
             }, {
                 name: "group 2",
-                orientation: 'columns',
+                kind: 'columns',
                 key: "G_0_1",
                 index: 1,
                 layerIndex: 0,
@@ -60,19 +60,19 @@ test('two nodes in one layer in two groups', () => {
 });
 
 test('two nodes and one node in two layers ', () => {
-    let elements: Stack<unknown, unknown> = {orientation: 'rows', elements: [
-        {orientation: 'columns', elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node 1"}, {name: "node 2"}]}]},
-        {orientation: 'columns', elements: [{name: "group 2", orientation: 'columns', elements: [{name: "node 3"}]}]}
+    let elements: Stack<unknown, unknown> = {kind: 'rows', elements: [
+        {kind: 'columns', elements: [{name: "group 1", kind: 'columns', elements: [{name: "node 1"}, {name: "node 2"}]}]},
+        {kind: 'columns', elements: [{name: "group 2", kind: 'columns', elements: [{name: "node 3"}]}]}
     ]};
 
     let result = addPositionToGroup(elements);
 
-    let expectedElements: Stack<unknown, GroupPosition> = {orientation: 'rows', elements: [{
-        orientation: 'columns',
+    let expectedElements: Stack<unknown, GroupPosition> = {kind: 'rows', elements: [{
+        kind: 'columns',
         elements: [
             {
                 name: "group 1",
-                orientation: 'columns',
+                kind: 'columns',
                 key: "G_0_0",
                 index: 0,
                 layerIndex: 0,
@@ -80,11 +80,11 @@ test('two nodes and one node in two layers ', () => {
             }
         ]
     }, {
-        orientation: 'columns',
+        kind: 'columns',
         elements: [
             {
                 name: "group 2",
-                orientation: 'columns',
+                kind: 'columns',
                 key: "G_1_0",
                 index: 0,
                 layerIndex: 1,

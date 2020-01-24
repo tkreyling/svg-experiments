@@ -1,11 +1,11 @@
 import {Node, Group, stringsToNodes, Stack} from "./App";
 
 test('one string results in one node', () => {
-    let input: Group<string | Node>[][] = [[{name: "group 1", orientation: 'columns', elements: ["node"]}]];
+    let input: Group<string | Node>[][] = [[{name: "group 1", kind: 'columns', elements: ["node"]}]];
 
     let expected: Stack<Node, unknown> = {
-        orientation: 'rows', elements: [
-            {orientation: 'columns', elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node"}]}]}
+        kind: 'rows', elements: [
+            {kind: 'columns', elements: [{name: "group 1", kind: 'columns', elements: [{name: "node"}]}]}
         ]
     };
     expect(stringsToNodes(input)).toStrictEqual(expected);
@@ -13,13 +13,13 @@ test('one string results in one node', () => {
 
 test('empty array element result in undefined node', () => {
     // noinspection JSConsecutiveCommasInArrayLiteral
-    let input: Group<string | Node>[][] = [[{name: "group 1", orientation: 'columns', elements: ["a", , "b"] as any}]];
+    let input: Group<string | Node>[][] = [[{name: "group 1", kind: 'columns', elements: ["a", , "b"] as any}]];
 
     let expected: Stack<Node | undefined, unknown> = {
-        orientation: 'rows', elements: [
+        kind: 'rows', elements: [
             {
-                orientation: 'columns',
-                elements: [{name: "group 1", orientation: 'columns', elements: [{name: "a"}, undefined, {name: "b"}]}]
+                kind: 'columns',
+                elements: [{name: "group 1", kind: 'columns', elements: [{name: "a"}, undefined, {name: "b"}]}]
             }
         ]
     };
@@ -29,15 +29,15 @@ test('empty array element result in undefined node', () => {
 test('an element with symbol is passed through', () => {
     let input: Group<string | Node>[][] = [[{
         name: "group 1",
-        orientation: 'columns',
+        kind: 'columns',
         elements: [{name: "node", symbol: "component"}]
     }]];
 
     let expected: Stack<Node, unknown> = {
-        orientation: 'rows', elements: [
+        kind: 'rows', elements: [
             {
-                orientation: 'columns',
-                elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node", symbol: "component"}]}]
+                kind: 'columns',
+                elements: [{name: "group 1", kind: 'columns', elements: [{name: "node", symbol: "component"}]}]
             }
         ]
     };
