@@ -1,4 +1,4 @@
-import {parseGraph} from "./App";
+import {parseGraph, Graph, Node} from "./App";
 
 test('reports unexpected token \;', () => {
     expect(parseGraph("var g = {;")).toStrictEqual("Unexpected token ';'");
@@ -25,7 +25,7 @@ test('reports missing property layers', () => {
 test('reports missing property edges', () => {
     let text = `
     var g = {
-        layers: []
+        stack: {kind: 'stack'}
     };
     g
     `;
@@ -34,11 +34,13 @@ test('reports missing property edges', () => {
 
 test('reports undefined nodes', () => {
     let text = `
-    var layers = [
-        [[{name: "element 1"},, {name: "element 2"}]]
-    ];
+    var stack = {elements: [
+        {elements: [
+            {elements: [{name: "element 1"},, {name: "element 2"}]}
+        ]}
+    ]};
     var g = {
-        layers: layers,
+        stack: stack,
         edges: []
     };
     g
@@ -48,31 +50,54 @@ test('reports undefined nodes', () => {
 
 test('returns valid graph', () => {
     let text = `
-    var layers = [
-        [[{name: "element 1"}, {name: "element 2"}]]
-    ];
+    var stack = {
+        kind: 'stack',
+        elements: [{
+            kind: 'layer',
+            elements: [{
+                kind: 'group', name: 'group 1',
+                elements: [{name: "element 1"}, {name: "element 2"}]
+            }]
+        }]
+    };
     var g = {
-        layers: layers,
+        stack: stack,
         edges: []
     };
     g
     `;
-    expect(parseGraph(text)).toStrictEqual({
-        layers: [
-            [[{name: "element 1"}, {name: "element 2"}]]
-        ],
+    let expected: Graph<Node, unknown, unknown> = {
+        stack: {
+            kind: 'stack',
+            elements: [{
+                kind: 'layer',
+                elements: [{
+                    kind: 'group', name: 'group 1',
+                    elements: [{name: "element 1"}, {name: "element 2"}]
+                }]
+            }]
+        },
         edges: []
-    });
+    };
+    expect(parseGraph(text)).toStrictEqual(expected);
 });
 
 test('reports undefined property from', () => {
     let text = `
-    var layers = [
-        [[{name: "element 1"}, {name: "element 2"}]]
-    ];
+    var stack = {
+        kind: 'stack',
+        elements: [{
+            kind: 'layer',
+            elements: [{
+                kind: 'group', name: 'group 1',
+                elements: [{name: "element 1"}, {name: "element 2"}]
+            }]
+        }]
+    };
+    var layers = stack.elements;
     var g = {
-        layers: layers,
-        edges: [{from: layers[0][0][3], to: layers[0][0][1]}]
+        stack: stack,
+        edges: [{from: layers[0].elements[0].elements[3], to: layers[0].elements[0].elements[1]}]
     };
     g
     `;
@@ -81,12 +106,20 @@ test('reports undefined property from', () => {
 
 test('reports undefined property to', () => {
     let text = `
-    var layers = [
-        [[{name: "element 1"}, {name: "element 2"}]]
-    ];
+    var stack = {
+        kind: 'stack',
+        elements: [{
+            kind: 'layer',
+            elements: [{
+                kind: 'group', name: 'group 1',
+                elements: [{name: "element 1"}, {name: "element 2"}]
+            }]
+        }]
+    };
+    var layers = stack.elements;
     var g = {
-        layers: layers,
-        edges: [{from: layers[0][0][0], to: layers[0][0][3]}]
+        stack: stack,
+        edges: [{from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[3]}]
     };
     g
     `;
@@ -95,19 +128,34 @@ test('reports undefined property to', () => {
 
 test('returns valid graph with edges', () => {
     let text = `
-    var layers = [
-        [[{name: "element 1"}, {name: "element 2"}]]
-    ];
+    var stack = {
+        kind: 'stack',
+        elements: [{
+            kind: 'layer',
+            elements: [{
+                kind: 'group', name: 'group 1',
+                elements: [{name: "element 1"}, {name: "element 2"}]
+            }]
+        }]
+    };
+    var layers = stack.elements;
     var g = {
-        layers: layers,
-        edges: [{from: layers[0][0][0], to: layers[0][0][1]}]
+        stack: stack,
+        edges: [{from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[1]}]
     };
     g
     `;
     expect(parseGraph(text)).toStrictEqual({
-        layers: [
-            [[{name: "element 1"}, {name: "element 2"}]]
-        ],
+        stack: {
+            kind: 'stack',
+            elements: [{
+                kind: 'layer',
+                elements: [{
+                    kind: 'group', name: 'group 1',
+                    elements: [{name: "element 1"}, {name: "element 2"}]
+                }]
+            }]
+        },
         edges: [{from: {name: "element 1"}, to: {name: "element 2"}}]
     });
 });

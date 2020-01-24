@@ -57,7 +57,7 @@ export type Stack<N, G> = {
     elements: Layer<N, G>[]
 }
 
-type Graph<N, E, G> = {
+export type Graph<N, E, G> = {
     stack: Stack<N, G>
     edges: (Edge<N> & E)[]
 }
@@ -597,21 +597,21 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
 export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {
     try {
 // eslint-disable-next-line
-        let graph = eval(text);
+        let graph: Graph<Node, unknown, unknown> = eval(text);
 
         if (graph === undefined) return "Script is not returning a graph object!";
 
-        if (graph.layers === undefined) return "Property layers is missing in graph object!";
+        if (graph.stack === undefined) return "Property layers is missing in graph object!";
         if (graph.edges === undefined) return "Property edges is missing in graph object!";
 
-        let layers: Node[][][] = graph.layers;
+        let layers = graph.stack.elements;
         let aNodeIsUndefined = false;
         // It is necessary to go through the nested arrays by index,
         // because the array operations `every`, `map` and `flat` bypass empty array elements.
         for (let layerIndex = 0; layerIndex < layers.length; layerIndex++) {
-            let groups = layers[layerIndex];
+            let groups = layers[layerIndex].elements;
             for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-                let elements = groups[groupIndex];
+                let elements = groups[groupIndex].elements;
                 for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
                     if (elements[elementIndex] === undefined) aNodeIsUndefined = true;
                 }
