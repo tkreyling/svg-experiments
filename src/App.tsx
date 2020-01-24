@@ -138,12 +138,11 @@ export function addLayerPositionToNode<N, G>(stack: Stack<N, G>): Stack<N & Laye
             .reduce((sum, add) => sum + add, 0);
     }));
 
-    return {
-        orientation: 'rows',
+    return Object.assign(stack, {
         elements: stack.elements.map((groups, layerIndex) =>
             addLayerPositionToNodeForLayer(groups, fullWidth, layerIndex)
         )
-    };
+    });
 }
 
 function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: number, layerIndex: number):
@@ -153,10 +152,7 @@ function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: num
         .reduce((sum, add) => sum + add, 0);
     let layerOffset = (fullWidth - layerWidth) / 2;
 
-    let resultLayer: Layer<N & LayerPosition, G> = {
-        orientation: layer.orientation,
-        elements: []
-    };
+    let resultElements: (Group<N & LayerPosition> & G)[] = [];
     let index = 0;
     layer.elements.forEach(group => {
         let resultGroup = Object.assign(group, {
@@ -171,9 +167,12 @@ function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: num
                 return resultElement;
             })
         });
-        resultLayer.elements.push(resultGroup);
+        resultElements.push(resultGroup);
     });
-    return resultLayer;
+
+    return Object.assign(layer, {
+        elements: resultElements
+    });
 }
 
 function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition, G>(graph: Graph<N, E, G>):
