@@ -41,7 +41,7 @@ type NumberOfEdges = {
     lowerSideEdges: number
 }
 
-type Group<N> = {
+export type Group<N> = {
     orientation: 'columns'
     name: string
     elements: N[]
@@ -52,8 +52,13 @@ export type Layer<N, G> = {
     elements: (Group<N> & G)[]
 }
 
+export type Stack<N, G> = {
+    orientation: 'rows'
+    elements: Layer<N, G>[]
+}
+
 type Graph<N, E, G> = {
-    layers: Layer<N, G>[]
+    stack: Stack<N, G>
     edges: (Edge<N> & E)[]
 }
 
@@ -72,8 +77,8 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function widthOfLayers(layers: Layer<unknown, unknown>[]) {
-    return Math.max(...layers.map(widthOfElements));
+export function widthOfLayers(stack: Stack<unknown, unknown>) {
+    return Math.max(...stack.elements.map(widthOfElements));
 }
 
 export function widthOfElements(layer: Layer<unknown, unknown>) {
@@ -84,8 +89,8 @@ export function widthOfElements(layer: Layer<unknown, unknown>) {
     return layer.elements.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
 }
 
-function heightOfNodes(layers: Layer<any, any>[]) {
-    let n = layers.length;
+function heightOfNodes(stack: Stack<unknown, unknown>) {
+    let n = stack.elements.length;
     return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + n * GROUP_MARGIN_TOP + n * GROUP_MARGIN_BOTTOM;
 }
 
@@ -121,21 +126,24 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
 
 function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
     return {
-        layers: addLayerPositionToNode(graph.layers),
+        stack: addLayerPositionToNode(graph.stack),
         edges: graph.edges as unknown as (Edge<N & LayerPosition> & E)[]
     }
 }
 
-export function addLayerPositionToNode<N, G>(layers: Layer<N, G>[]): Layer<N & LayerPosition, G>[] {
-    let fullWidth = Math.max(...layers.map(layer => {
+export function addLayerPositionToNode<N, G>(stack: Stack<N, G>): Stack<N & LayerPosition, G> {
+    let fullWidth = Math.max(...stack.elements.map(layer => {
         return layer.elements
             .map(group => group.elements.length)
             .reduce((sum, add) => sum + add, 0);
     }));
 
-    return layers.map((groups, layerIndex) =>
-        addLayerPositionToNodeForLayer(groups, fullWidth, layerIndex)
-    );
+    return {
+        orientation: 'rows',
+        elements: stack.elements.map((groups, layerIndex) =>
+            addLayerPositionToNodeForLayer(groups, fullWidth, layerIndex)
+        )
+    };
 }
 
 function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: number, layerIndex: number):
@@ -170,20 +178,23 @@ function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: num
 
 function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition, G>(graph: Graph<N, E, G>):
     Graph<N & Coordinates, E, G> {
-    let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
+    let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     return {
-        layers: layout(graph.layers, heightOfAllEdges),
+        stack: layout(graph.stack, heightOfAllEdges),
         edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
     }
 }
 
-export function layout<N, G>(layers: Layer<N & LayerPosition, G>[], heightOfEdges: number[]):
-    Layer<N & LayerPosition & Coordinates, G>[] {
-    let fullWidth = widthOfLayers(layers);
-    return layers.map((elements, layerIndex) => {
-        let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-        return layoutHorizontally(elements, fullWidth, additionalEdgeHeight)
-    });
+export function layout<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: number[]):
+    Stack<N & LayerPosition & Coordinates, G> {
+    let fullWidth = widthOfLayers(stack);
+    return {
+        orientation: 'rows',
+        elements: stack.elements.map((elements, layerIndex) => {
+            let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
+            return layoutHorizontally(elements, fullWidth, additionalEdgeHeight)
+        })
+    };
 }
 
 export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
@@ -207,7 +218,7 @@ function addLayerPositionToEdgeG<N extends LayerPosition, E, G>(graph: Graph<N, 
     Graph<N, E & LayerPosition, G> {
     addLayerPositionToEdge(graph.edges);
     return {
-        layers: graph.layers,
+        stack: graph.stack,
         edges: graph.edges as unknown as (Edge<N> & E & LayerPosition)[]
     }
 }
@@ -278,7 +289,7 @@ function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E, G>(grap
     Graph<N & NumberOfEdges, E & ConnectionIndex, G> {
     addConnectionIndexAndNumberOfEdges(graph.edges);
     return {
-        layers: graph.layers as unknown as Layer<N & NumberOfEdges, G>[],
+        stack: graph.stack as unknown as Stack<N & NumberOfEdges, G>,
         edges: graph.edges as unknown as (Edge<N & NumberOfEdges> & E & ConnectionIndex)[]
     }
 }
@@ -345,21 +356,24 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
 
 function addPositionToGroupG<N, E, G>(graph: Graph<N, E, G>): Graph<N, E, G & GroupPosition> {
     return {
-        layers: addPositionToGroup(graph.layers),
+        stack: addPositionToGroup(graph.stack),
         edges: graph.edges
     }
 }
 
-export function addPositionToGroup<N, G>(layers: Layer<N, G>[]): Layer<N, G & GroupPosition>[] {
-    return layers.map((layer, layerIndex) => ({
-        orientation: layer.orientation,
-        elements: layer.elements.map((group, groupIndex) =>
-            Object.assign(group, {
-                key: "G_" + layerIndex + "_" + groupIndex,
-                index: groupIndex,
-                layerIndex: layerIndex
-            }))
-    }));
+export function addPositionToGroup<N, G>(stack: Stack<N, G>): Stack<N, G & GroupPosition> {
+    return {
+        orientation: 'rows',
+        elements: stack.elements.map((layer, layerIndex) => ({
+            orientation: layer.orientation,
+            elements: layer.elements.map((group, groupIndex) =>
+                Object.assign(group, {
+                    key: "G_" + layerIndex + "_" + groupIndex,
+                    index: groupIndex,
+                    layerIndex: layerIndex
+                }))
+        }))
+    };
 }
 
 type Symbol = {
@@ -477,29 +491,32 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
-export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, unknown>[] {
-    return strings.map(layer => {
-        return {
-            orientation: 'columns',
-            elements: layer.map(group => {
-                return {
-                    orientation: 'columns',
-                    name: group.name,
-                    elements: group.elements.map(element => {
-                        if (typeof element === 'string') {
-                            return {name: element}
-                        } else {
-                            return element
-                        }
-                    })
-                }
-            })
-        }
-    });
+export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, unknown> {
+    return {
+        orientation: 'rows',
+        elements: strings.map(layer => {
+            return {
+                orientation: 'columns',
+                elements: layer.map(group => {
+                    return {
+                        orientation: 'columns',
+                        name: group.name,
+                        elements: group.elements.map(element => {
+                            if (typeof element === 'string') {
+                                return {name: element}
+                            } else {
+                                return element
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    };
 }
 
 let graphAsString =
-`var layers = stringsToNodes([
+`var stack = stringsToNodes([
     [
         {name: "group 1", elements: [
             "element 11", 
@@ -516,6 +533,7 @@ let graphAsString =
         {name: "group 5", elements: ["element 1", "element 2", "element 3", "element with changed name", "element 5"]}
     ]
 ]);
+var layers = stack.elements;
 
 var edges = [
     {from: layers[0].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
@@ -541,7 +559,7 @@ var edges = [
 ];
 
 var graph = {
-    layers: layers,
+    stack: stack,
     edges: edges
 };
 
@@ -559,14 +577,14 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(addPositionToGroupG)
         .map(graph => {
-            let heightOfAllEdges = heightOfEdges(graph.edges, graph.layers.length);
-            let width = widthOfLayers(graph.layers) + 2 * MARGIN_SIDE;
-            let height = heightOfNodes(graph.layers) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
+            let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
+            let width = widthOfLayers(graph.stack) + 2 * MARGIN_SIDE;
+            let height = heightOfNodes(graph.stack) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
 
             return (
                 <svg viewBox={"0 0 " + width + " " + height}>
-                    {graph.layers.flatMap(layer => layer.elements).flatMap(group => group.elements).map(Rect)}
-                    {graph.layers.flatMap(layer => layer.elements).map(Group)}
+                    {graph.stack.elements.flatMap(layer => layer.elements).flatMap(group => group.elements).map(Rect)}
+                    {graph.stack.elements.flatMap(layer => layer.elements).map(Group)}
                     {graph.edges.map(Path)}
                 </svg>
             );
@@ -626,7 +644,7 @@ const App: React.FC = () => {
     return (
         <div id="parent" className="App">
             <div id="graph">
-                <Diagram layers={graph.layers} edges={graph.edges}/>
+                <Diagram stack={graph.stack} edges={graph.edges}/>
             </div>
             <div>
                 <textarea cols={100} rows={45} onChange={handleChange} defaultValue={graphAsString}/>

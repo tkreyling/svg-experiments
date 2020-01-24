@@ -1,33 +1,45 @@
-import {stringsToNodes} from "./App";
+import {Node, Group, stringsToNodes, Stack} from "./App";
 
 test('one string results in one node', () => {
-    expect(stringsToNodes([[{name: "group 1", orientation: 'columns', elements: ["node"]}]]))
-        .toStrictEqual([
+    let input: Group<string | Node>[][] = [[{name: "group 1", orientation: 'columns', elements: ["node"]}]];
+
+    let expected: Stack<Node, unknown> = {
+        orientation: 'rows', elements: [
             {orientation: 'columns', elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node"}]}]}
-        ]);
+        ]
+    };
+    expect(stringsToNodes(input)).toStrictEqual(expected);
 });
 
 test('empty array element result in undefined node', () => {
     // noinspection JSConsecutiveCommasInArrayLiteral
-    expect(stringsToNodes([[{name: "group 1", orientation: 'columns', elements: ["a", , "b"] as any}]]))
-        .toStrictEqual([
+    let input: Group<string | Node>[][] = [[{name: "group 1", orientation: 'columns', elements: ["a", , "b"] as any}]];
+
+    let expected: Stack<Node | undefined, unknown> = {
+        orientation: 'rows', elements: [
             {
                 orientation: 'columns',
                 elements: [{name: "group 1", orientation: 'columns', elements: [{name: "a"}, undefined, {name: "b"}]}]
             }
-        ]);
+        ]
+    };
+    expect(stringsToNodes(input)).toStrictEqual(expected);
 });
 
 test('an element with symbol is passed through', () => {
-    expect(stringsToNodes([[{
+    let input: Group<string | Node>[][] = [[{
         name: "group 1",
         orientation: 'columns',
         elements: [{name: "node", symbol: "component"}]
-    }]]))
-        .toStrictEqual([
+    }]];
+
+    let expected: Stack<Node, unknown> = {
+        orientation: 'rows', elements: [
             {
                 orientation: 'columns',
                 elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node", symbol: "component"}]}]
             }
-        ]);
+        ]
+    };
+    expect(stringsToNodes(input)).toStrictEqual(expected);
 });
