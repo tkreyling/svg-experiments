@@ -47,6 +47,7 @@ type Group<N> = {
 }
 
 export type Layer<N, G> = {
+    orientation: 'columns'
     elements: (Group<N> & G)[]
 }
 
@@ -144,6 +145,7 @@ function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: num
     let layerOffset = (fullWidth - layerWidth) / 2;
 
     let resultLayer: Layer<N & LayerPosition, G> = {
+        orientation: layer.orientation,
         elements: []
     };
     let index = 0;
@@ -187,6 +189,7 @@ export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, ful
     Layer<N & LayerPosition & Coordinates, G> {
     let offsetToCenter = (fullWidth - widthOfElements(layer)) / 2;
     return {
+        orientation: layer.orientation,
         elements: layer.elements.map((group, groupIndex) => {
             return Object.assign(group, {
                 elements: group.elements.map(element =>
@@ -348,6 +351,7 @@ function addPositionToGroupG<N, E, G>(graph: Graph<N, E, G>): Graph<N, E, G & Gr
 
 export function addPositionToGroup<N, G>(layers: Layer<N, G>[]): Layer<N, G & GroupPosition>[] {
     return layers.map((layer, layerIndex) => ({
+        orientation: layer.orientation,
         elements: layer.elements.map((group, groupIndex) =>
             Object.assign(group, {
                 key: "G_" + layerIndex + "_" + groupIndex,
@@ -475,6 +479,7 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
 export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, unknown>[] {
     return strings.map(layer => {
         return {
+            orientation: 'columns',
             elements: layer.map(group => {
                 return {
                     name: group.name,
