@@ -126,53 +126,55 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
 
 function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
     return {
-        stack: addLayerPositionToNode(graph.stack),
+        stack: addLayerPositionToNode(graph.stack) as Stack<N & LayerPosition, G>,
         edges: graph.edges as unknown as (Edge<N & LayerPosition> & E)[]
     }
 }
 
-export function addLayerPositionToNode<N, G>(stack: Stack<N, G>): Stack<N & LayerPosition, G> {
-    let fullWidth = Math.max(...stack.elements.map(layer => {
-        return layer.elements
+type LayerOrStack<N, G> = Layer<N, G> | Stack<N, G>
+
+export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
+    LayerOrStack<N & LayerPosition, G> {
+    if (elements.orientation === 'rows') {
+        let fullWidth = Math.max(...elements.elements.map(layer => {
+            return layer.elements
+                .map(group => group.elements.length)
+                .reduce((sum, add) => sum + add, 0);
+        }));
+
+        return Object.assign(elements, {
+            elements: elements.elements.map((groups, layerIndex) =>
+                addLayerPositionToNode(groups, fullWidth, layerIndex) as Layer<N & LayerPosition, G>
+            )
+        });
+    } else {
+        let layerWidth = elements.elements
             .map(group => group.elements.length)
             .reduce((sum, add) => sum + add, 0);
-    }));
+        let layerOffset = (fullWidth - layerWidth) / 2;
 
-    return Object.assign(stack, {
-        elements: stack.elements.map((groups, layerIndex) =>
-            addLayerPositionToNodeForLayer(groups, fullWidth, layerIndex)
-        )
-    });
-}
-
-function addLayerPositionToNodeForLayer<N, G>(layer: Layer<N, G>, fullWidth: number, layerIndex: number):
-    Layer<N & LayerPosition, G> {
-    let layerWidth = layer.elements
-        .map(group => group.elements.length)
-        .reduce((sum, add) => sum + add, 0);
-    let layerOffset = (fullWidth - layerWidth) / 2;
-
-    let resultElements: (Group<N & LayerPosition> & G)[] = [];
-    let index = 0;
-    layer.elements.forEach(group => {
-        let resultGroup = Object.assign(group, {
-            elements: group.elements.map(element => {
-                let resultElement = Object.assign(element, {
-                    key: layerIndex + "_" + index,
-                    index: index,
-                    relativePosition: layerOffset + index,
-                    layerIndex: layerIndex
-                });
-                index++;
-                return resultElement;
-            })
+        let resultElements: (Group<N & LayerPosition> & G)[] = [];
+        let index = 0;
+        elements.elements.forEach(group => {
+            let resultGroup = Object.assign(group, {
+                elements: group.elements.map(element => {
+                    let resultElement = Object.assign(element, {
+                        key: layerIndex + "_" + index,
+                        index: index,
+                        relativePosition: layerOffset + index,
+                        layerIndex: layerIndex
+                    });
+                    index++;
+                    return resultElement;
+                })
+            });
+            resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
         });
-        resultElements.push(resultGroup);
-    });
 
-    return Object.assign(layer, {
-        elements: resultElements
-    });
+        return Object.assign(elements, {
+            elements: resultElements
+        });
+    }
 }
 
 function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition, G>(graph: Graph<N, E, G>):
