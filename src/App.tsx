@@ -81,11 +81,13 @@ export function width(elements: Stack<unknown, unknown> | Layer<unknown, unknown
     if (elements.orientation === 'rows') {
         return Math.max(...elements.elements.map(width));
     } else {
-        const n = elements.elements
-            .map(group => group.elements.length)
+        return elements.elements
+            .map((group, index) => {
+                let n = group.elements.length;
+                let spaceBetweenGroups = (index > 0) ? HORIZONTAL_SPACING : 0;
+                return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE + spaceBetweenGroups;
+            })
             .reduce((sum, add) => sum + add, 0);
-        if (n === 0) return 0;
-        return elements.elements.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
     }
 }
 
