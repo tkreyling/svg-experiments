@@ -7,7 +7,7 @@ test('no groups need no positioning', () => {
 test('one node in one layer ', () => {
     let elements: Layer<unknown, unknown>[] = [{
         orientation: 'columns',
-        elements: [{name: "group 1", elements: [{name: "node 1"}]}]
+        elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node 1"}]}]
     }];
 
     let result = addPositionToGroup(elements);
@@ -16,6 +16,7 @@ test('one node in one layer ', () => {
         .toStrictEqual([{
             orientation: 'columns', elements: [{
                 name: "group 1",
+                orientation: 'columns',
                 key: "G_0_0",
                 index: 0,
                 layerIndex: 0,
@@ -28,8 +29,8 @@ test('two nodes in one layer in two groups', () => {
     let elements: Layer<unknown, unknown>[] = [
         {
             orientation: 'columns', elements: [
-                {name: "group 1", elements: [{name: "node 1"}]},
-                {name: "group 2", elements: [{name: "node 2"}]}
+                {name: "group 1", orientation: 'columns', elements: [{name: "node 1"}]},
+                {name: "group 2", orientation: 'columns', elements: [{name: "node 2"}]}
             ]
         }
     ];
@@ -41,12 +42,14 @@ test('two nodes in one layer in two groups', () => {
             orientation: 'columns', elements: [
                 {
                     name: "group 1",
+                    orientation: 'columns',
                     key: "G_0_0",
                     index: 0,
                     layerIndex: 0,
                     elements: [{name: "node 1"}]
                 }, {
                     name: "group 2",
+                    orientation: 'columns',
                     key: "G_0_1",
                     index: 1,
                     layerIndex: 0,
@@ -58,8 +61,8 @@ test('two nodes in one layer in two groups', () => {
 
 test('two nodes and one node in two layers ', () => {
     let elements: Layer<unknown, unknown>[] = [
-        {orientation: 'columns', elements: [{name: "group 1", elements: [{name: "node 1"}, {name: "node 2"}]}]},
-        {orientation: 'columns', elements: [{name: "group 2", elements: [{name: "node 3"}]}]}
+        {orientation: 'columns', elements: [{name: "group 1", orientation: 'columns', elements: [{name: "node 1"}, {name: "node 2"}]}]},
+        {orientation: 'columns', elements: [{name: "group 2", orientation: 'columns', elements: [{name: "node 3"}]}]}
     ];
 
     let result = addPositionToGroup(elements);
@@ -70,6 +73,7 @@ test('two nodes and one node in two layers ', () => {
             elements: [
                 {
                     name: "group 1",
+                    orientation: 'columns',
                     key: "G_0_0",
                     index: 0,
                     layerIndex: 0,
@@ -81,6 +85,7 @@ test('two nodes and one node in two layers ', () => {
             elements: [
                 {
                     name: "group 2",
+                    orientation: 'columns',
                     key: "G_1_0",
                     index: 0,
                     layerIndex: 1,

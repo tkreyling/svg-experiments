@@ -42,6 +42,7 @@ type NumberOfEdges = {
 }
 
 type Group<N> = {
+    orientation: 'columns'
     name: string
     elements: N[]
 }
@@ -482,6 +483,7 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Layer<Node, u
             orientation: 'columns',
             elements: layer.map(group => {
                 return {
+                    orientation: 'columns',
                     name: group.name,
                     elements: group.elements.map(element => {
                         if (typeof element === 'string') {
