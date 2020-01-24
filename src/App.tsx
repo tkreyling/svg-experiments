@@ -77,16 +77,16 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function widthOfLayers(stack: Stack<unknown, unknown>) {
-    return Math.max(...stack.elements.map(widthOfElements));
-}
-
-export function widthOfElements(layer: Layer<unknown, unknown>) {
-    const n = layer.elements
-        .map(group => group.elements.length)
-        .reduce((sum, add) => sum + add, 0);
-    if (n === 0) return 0;
-    return layer.elements.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
+export function width(elements: Stack<unknown, unknown> | Layer<unknown, unknown>): number {
+    if (elements.orientation === 'rows') {
+        return Math.max(...elements.elements.map(width));
+    } else {
+        const n = elements.elements
+            .map(group => group.elements.length)
+            .reduce((sum, add) => sum + add, 0);
+        if (n === 0) return 0;
+        return elements.elements.length * GROUP_MARGIN_SIDE * 2 + n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING;
+    }
 }
 
 function heightOfNodes(stack: Stack<unknown, unknown>) {
@@ -187,7 +187,7 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
 
 export function layout<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: number[]):
     Stack<N & LayerPosition & Coordinates, G> {
-    let fullWidth = widthOfLayers(stack);
+    let fullWidth = width(stack);
     return {
         orientation: 'rows',
         elements: stack.elements.map((elements, layerIndex) => {
@@ -199,7 +199,7 @@ export function layout<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: 
 
 export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
     Layer<N & LayerPosition & Coordinates, G> {
-    let offsetToCenter = (fullWidth - widthOfElements(layer)) / 2;
+    let offsetToCenter = (fullWidth - width(layer)) / 2;
     return {
         orientation: layer.orientation,
         elements: layer.elements.map((group, groupIndex) => {
@@ -578,11 +578,11 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
         .map(addPositionToGroupG)
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-            let width = widthOfLayers(graph.stack) + 2 * MARGIN_SIDE;
+            let overallWidth = width(graph.stack) + 2 * MARGIN_SIDE;
             let height = heightOfNodes(graph.stack) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
 
             return (
-                <svg viewBox={"0 0 " + width + " " + height}>
+                <svg viewBox={"0 0 " + overallWidth + " " + height}>
                     {graph.stack.elements.flatMap(layer => layer.elements).flatMap(group => group.elements).map(Rect)}
                     {graph.stack.elements.flatMap(layer => layer.elements).map(Group)}
                     {graph.edges.map(Path)}

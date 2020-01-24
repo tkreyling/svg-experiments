@@ -1,15 +1,14 @@
 import {
-  widthOfElements,
+  width,
   ELEMENT_WIDTH,
   HORIZONTAL_SPACING,
-  widthOfLayers,
   GROUP_MARGIN_SIDE,
   Layer,
   Stack
 } from "./App";
 
 test('no element has no width', () => {
-    expect(widthOfElements({orientation: 'columns', elements: []}))
+    expect(width({orientation: 'columns', elements: []}))
         .toBe(0)
 });
 
@@ -18,7 +17,7 @@ test('one element has the general fixed width', () => {
         orientation: 'columns',
         elements: [{name: "group 1", orientation: 'columns', elements: ["element"]}]
     };
-    expect(widthOfElements(elements))
+    expect(width(elements))
         .toBe(ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
@@ -27,7 +26,7 @@ test('two elements have the width of both of them and a additional spacing', () 
     orientation: 'columns',
     elements: [{name: "group 1", orientation: 'columns', elements: ["element", "element"]}]
   };
-  expect(widthOfElements(elements))
+  expect(width(elements))
         .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
@@ -40,7 +39,7 @@ test('two elements in two groups have the width of both of them and a additional
       elements: ["element"]
     }]
   };
-  expect(widthOfElements(elements))
+  expect(width(elements))
       .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 4)
 });
 
@@ -49,7 +48,7 @@ test('three elements have the width of them three of them and two additional spa
     orientation: 'columns',
     elements: [{name: "group 1", orientation: 'columns', elements: ["element", "element", "element"]}]
   };
-  expect(widthOfElements(elements))
+  expect(width(elements))
         .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
@@ -66,6 +65,6 @@ test('for multiple layer the width of a layer is the max width of all layers', (
       }
     ]
   };
-  expect(widthOfLayers(elements))
+  expect(width(elements))
       .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
