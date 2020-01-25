@@ -206,11 +206,13 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
 }
 
 export function addCoordinatesToNode<N, G>(
-    element: Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G>,
+    element: Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G>,
     heightOfEdges: number[],
     fullWidth: number = 0,
-    additionalEdgeHeight: number = 0
-): Layer<N & LayerPosition & Coordinates, G> | Stack<N & LayerPosition & Coordinates, G> {
+    additionalEdgeHeight: number = 0,
+    groupIndex: number = 0,
+    offsetToCenter: number = 0
+): Group<N & LayerPosition & Coordinates> | Layer<N & LayerPosition & Coordinates, G> | Stack<N & LayerPosition & Coordinates, G> {
 
     switch (element.kind) {
         case "stack": {
@@ -224,20 +226,24 @@ export function addCoordinatesToNode<N, G>(
                 })
             };
         }
-        default: {
+        case "layer": {
             let offsetToCenter = (fullWidth - width(element)) / 2;
             return {
                 kind: element.kind,
-                elements: element.elements.map((group, groupIndex) => {
-                    return Object.assign(group, {
-                        elements: group.elements.map(element =>
-                            Object.assign(element, {
-                                x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
-                                y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
-                            }))
-                    });
+                elements: element.elements.map((elements, groupIndex) => {
+                    return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as
+                        Group<N & LayerPosition & Coordinates> & G;
                 })
             };
+        }
+        default: {
+            return Object.assign(element, {
+                elements: element.elements.map(node =>
+                    Object.assign(node, {
+                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + node.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                        y: MARGIN_TOP + GROUP_MARGIN_TOP + node.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+                    }))
+            });
         }
     }
 }
