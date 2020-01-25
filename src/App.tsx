@@ -77,17 +77,18 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function width(elements: Stack<unknown, unknown> | Layer<unknown, unknown>): number {
-    if (elements.kind === 'stack') {
-        return Math.max(...elements.elements.map(width));
-    } else {
-        return elements.elements
-            .map(group => {
-                let n = group.elements.length;
-                return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE;
-            })
-            .map((width, index) => width + (index > 0 ? HORIZONTAL_SPACING : 0))
-            .reduce((sum, add) => sum + add, 0);
+export function width(element: Stack<unknown, unknown> | Layer<unknown, unknown>): number {
+    switch (element.kind) {
+        case "stack":
+            return Math.max(...element.elements.map(width));
+        default:
+            return element.elements
+                .map(group => {
+                    let n = group.elements.length;
+                    return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE;
+                })
+                .map((width, index) => width + (index > 0 ? HORIZONTAL_SPACING : 0))
+                .reduce((sum, add) => sum + add, 0);
     }
 }
 
