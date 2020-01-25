@@ -137,16 +137,21 @@ function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & Laye
 
 type LayerOrStack<N, G> = Layer<N, G> | Stack<N, G>
 
-function numberOfElements<N, G>(elements: Layer<N, G>): number {
-    return elements.elements
-        .map(group => group.elements.length)
-        .reduce((sum, add) => sum + add, 0);
+function numberOfElements<N, G>(element: Layer<N, G> | Stack<N, G>): number {
+    switch (element.kind) {
+        case "stack":
+            return Math.max(...element.elements.map(numberOfElements));
+        default:
+            return element.elements
+                .map(group => group.elements.length)
+                .reduce((sum, add) => sum + add, 0);
+    }
 }
 
 export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
     LayerOrStack<N & LayerPosition, G> {
     if (elements.kind === 'stack') {
-        let fullWidth = Math.max(...elements.elements.map(numberOfElements));
+        let fullWidth = numberOfElements(elements);
 
         return Object.assign(elements, {
             elements: elements.elements.map((groups, layerIndex) =>
