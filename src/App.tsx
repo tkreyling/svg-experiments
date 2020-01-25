@@ -135,8 +135,6 @@ function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & Laye
     }
 }
 
-type LayerOrStack<N, G> = Layer<N, G> | Stack<N, G>
-
 function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): number {
     switch (element.kind) {
         case "stack":
@@ -148,8 +146,8 @@ function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): 
     }
 }
 
-export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
-    LayerOrStack<N & LayerPosition, G> {
+export function addLayerPositionToNode<N, G>(elements: Layer<N, G> | Stack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
+    Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
     if (elements.kind === 'stack') {
         let fullWidth = numberOfElements(elements);
 
