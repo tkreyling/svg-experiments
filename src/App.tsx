@@ -82,11 +82,11 @@ export function width(elements: Stack<unknown, unknown> | Layer<unknown, unknown
         return Math.max(...elements.elements.map(width));
     } else {
         return elements.elements
-            .map((group, index) => {
+            .map(group => {
                 let n = group.elements.length;
-                let spaceBetweenGroups = (index > 0) ? HORIZONTAL_SPACING : 0;
-                return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE + spaceBetweenGroups;
+                return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE;
             })
+            .map((width, index) => width + (index > 0 ? HORIZONTAL_SPACING : 0))
             .reduce((sum, add) => sum + add, 0);
     }
 }
