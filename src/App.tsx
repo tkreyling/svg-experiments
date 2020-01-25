@@ -200,41 +200,46 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
     Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     return {
-        stack: addCoordinatesToNode(graph.stack, heightOfAllEdges),
+        stack: addCoordinatesToNode(graph.stack, heightOfAllEdges) as Stack<N & LayerPosition & Coordinates, G>,
         edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
     }
 }
 
 export function addCoordinatesToNode<N, G>(
-    stack: Stack<N & LayerPosition, G>,
-    heightOfEdges: number[]
-): Stack<N & LayerPosition & Coordinates, G> {
-    
-    let fullWidth = width(stack);
-    return {
-        kind: 'stack',
-        elements: stack.elements.map((elements, layerIndex) => {
-            let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-            return addCoordinatesToNodeForGroups(elements, fullWidth, additionalEdgeHeight)
-        })
-    };
-}
+    element: Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G>,
+    heightOfEdges: number[],
+    fullWidth: number = 0,
+    additionalEdgeHeight: number = 0
+): Layer<N & LayerPosition & Coordinates, G> | Stack<N & LayerPosition & Coordinates, G> {
 
-export function addCoordinatesToNodeForGroups<N, G>(layer: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
-    Layer<N & LayerPosition & Coordinates, G> {
-    let offsetToCenter = (fullWidth - width(layer)) / 2;
-    return {
-        kind: layer.kind,
-        elements: layer.elements.map((group, groupIndex) => {
-            return Object.assign(group, {
-                elements: group.elements.map(element =>
-                    Object.assign(element, {
-                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
-                        y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
-                    }))
-            });
-        })
-    };
+    switch (element.kind) {
+        case "stack": {
+            let fullWidth = width(element);
+            return {
+                kind: 'stack',
+                elements: element.elements.map((elements, layerIndex) => {
+                    let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
+                    return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight) as
+                        Layer<N & LayerPosition & Coordinates, G>
+                })
+            };
+        }
+        default: {
+            let offsetToCenter = (fullWidth - width(element)) / 2;
+            return {
+                kind: element.kind,
+                elements: element.elements.map((group, groupIndex) => {
+                    return Object.assign(group, {
+                        elements: group.elements.map(element =>
+                            Object.assign(element, {
+                                x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                                y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+                            }))
+                    });
+                })
+            };
+        }
+    }
 }
 
 function addLayerPositionToEdgeG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):

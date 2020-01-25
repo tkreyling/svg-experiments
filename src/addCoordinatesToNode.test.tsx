@@ -8,7 +8,7 @@ import {
     MARGIN_SIDE,
     MARGIN_TOP,
     VERTICAL_SPACING,
-    addCoordinatesToNodeForGroups,
+    addCoordinatesToNode,
     width,
     Layer,
     LayerPosition
@@ -16,7 +16,7 @@ import {
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<LayerPosition, unknown> = {kind: 'layer', elements: []};
-    expect(addCoordinatesToNodeForGroups(layer, width(layer), 0))
+    expect(addCoordinatesToNode(layer, [], width(layer), 0))
         .toStrictEqual({kind: 'layer', elements: []})
 });
 
@@ -28,7 +28,7 @@ test('one element is layouted to the origin', () => {
             ]
         }]
     };
-    expect(addCoordinatesToNodeForGroups(elements, width(elements), 0))
+    expect(addCoordinatesToNode(elements, [], width(elements), 0))
         .toStrictEqual({
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', elements: [
@@ -53,7 +53,7 @@ test('one element in the second layer keeps space for the two borders between th
             ]
         }]
     };
-    expect(addCoordinatesToNodeForGroups(elements, width(elements), 0))
+    expect(addCoordinatesToNode(elements, [], width(elements), 0))
         .toStrictEqual({
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', elements: [
@@ -79,7 +79,7 @@ test('two elements are layouted right beside each other', () => {
             ]
         }]
     };
-    expect(addCoordinatesToNodeForGroups(elements, width(elements), 0))
+    expect(addCoordinatesToNode(elements, [], width(elements), 0))
         .toStrictEqual({
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', elements: [
@@ -116,7 +116,7 @@ test('two elements in two groups have an additional spacing for the two group bo
             ]
         }]
     };
-    expect(addCoordinatesToNodeForGroups(elements, width(elements), 0))
+    expect(addCoordinatesToNode(elements, [], width(elements), 0))
         .toStrictEqual({
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', elements: [
