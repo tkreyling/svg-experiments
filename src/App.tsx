@@ -137,14 +137,16 @@ function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & Laye
 
 type LayerOrStack<N, G> = Layer<N, G> | Stack<N, G>
 
+function numberOfElements<N, G>(elements: Layer<N, G>): number {
+    return elements.elements
+        .map(group => group.elements.length)
+        .reduce((sum, add) => sum + add, 0);
+}
+
 export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
     LayerOrStack<N & LayerPosition, G> {
     if (elements.kind === 'stack') {
-        let fullWidth = Math.max(...elements.elements.map(layer => {
-            return layer.elements
-                .map(group => group.elements.length)
-                .reduce((sum, add) => sum + add, 0);
-        }));
+        let fullWidth = Math.max(...elements.elements.map(numberOfElements));
 
         return Object.assign(elements, {
             elements: elements.elements.map((groups, layerIndex) =>
@@ -152,9 +154,7 @@ export function addLayerPositionToNode<N, G>(elements: LayerOrStack<N, G>, fullW
             )
         });
     } else {
-        let layerWidth = elements.elements
-            .map(group => group.elements.length)
-            .reduce((sum, add) => sum + add, 0);
+        let layerWidth = numberOfElements(elements);
         let layerOffset = (fullWidth - layerWidth) / 2;
 
         let resultElements: (Group<N & LayerPosition> & G)[] = [];
