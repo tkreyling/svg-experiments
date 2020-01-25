@@ -205,8 +205,11 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
     }
 }
 
-export function addCoordinatesToNode<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: number[]):
-    Stack<N & LayerPosition & Coordinates, G> {
+export function addCoordinatesToNode<N, G>(
+    stack: Stack<N & LayerPosition, G>,
+    heightOfEdges: number[]
+): Stack<N & LayerPosition & Coordinates, G> {
+    
     let fullWidth = width(stack);
     return {
         kind: 'stack',
