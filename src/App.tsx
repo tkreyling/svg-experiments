@@ -154,41 +154,45 @@ export function addLayerPositionToNode<N, G>(
     accumulator: { index: number } = {index: 0}
 ): Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
 
-    if (element.kind === 'stack') {
-        let fullWidth = numberOfElements(element);
+    switch (element.kind) {
+        case "stack": {
+            let fullWidth = numberOfElements(element);
 
-        return Object.assign(element, {
-            elements: element.elements.map((groups, layerIndex) =>
-                addLayerPositionToNode(groups, fullWidth, layerIndex) as Layer<N & LayerPosition, G>
-            )
-        });
-    } else if (element.kind === 'layer') {
-        let layerWidth = numberOfElements(element);
-        let layerOffset = (fullWidth - layerWidth) / 2;
+            return Object.assign(element, {
+                elements: element.elements.map((groups, layerIndex) =>
+                    addLayerPositionToNode(groups, fullWidth, layerIndex) as Layer<N & LayerPosition, G>
+                )
+            });
+        }
+        case "layer": {
+            let layerWidth = numberOfElements(element);
+            let layerOffset = (fullWidth - layerWidth) / 2;
 
-        let resultElements: (Group<N & LayerPosition> & G)[] = [];
-        let accumulator = {index: 0};
-        element.elements.forEach(group => {
-            let resultGroup = addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
-            resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
-        });
+            let resultElements: (Group<N & LayerPosition> & G)[] = [];
+            let accumulator = {index: 0};
+            element.elements.forEach(group => {
+                let resultGroup = addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
+                resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
+            });
 
-        return Object.assign(element, {
-            elements: resultElements
-        });
-    } else {
-        return Object.assign(element, {
-            elements: element.elements.map(element => {
-                let resultElement = Object.assign(element, {
-                    key: layerIndex + "_" + accumulator.index,
-                    index: accumulator.index,
-                    relativePosition: layerOffset + accumulator.index,
-                    layerIndex: layerIndex
-                });
-                accumulator.index++;
-                return resultElement;
-            })
-        });
+            return Object.assign(element, {
+                elements: resultElements
+            });
+        }
+        default: {
+            return Object.assign(element, {
+                elements: element.elements.map(element => {
+                    let resultElement = Object.assign(element, {
+                        key: layerIndex + "_" + accumulator.index,
+                        index: accumulator.index,
+                        relativePosition: layerOffset + accumulator.index,
+                        layerIndex: layerIndex
+                    });
+                    accumulator.index++;
+                    return resultElement;
+                })
+            });
+        }
     }
 }
 
