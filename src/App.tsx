@@ -146,6 +146,21 @@ function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): 
     }
 }
 
+function addLayerPositionToNodeForGroup<N, G>(group: Group<N> & G, layerIndex: number, accumulator: { index: number }, layerOffset: number) {
+    return Object.assign(group, {
+        elements: group.elements.map(element => {
+            let resultElement = Object.assign(element, {
+                key: layerIndex + "_" + accumulator.index,
+                index: accumulator.index,
+                relativePosition: layerOffset + accumulator.index,
+                layerIndex: layerIndex
+            });
+            accumulator.index++;
+            return resultElement;
+        })
+    });
+}
+
 export function addLayerPositionToNode<N, G>(elements: Layer<N, G> | Stack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
     Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
     if (elements.kind === 'stack') {
@@ -161,20 +176,9 @@ export function addLayerPositionToNode<N, G>(elements: Layer<N, G> | Stack<N, G>
         let layerOffset = (fullWidth - layerWidth) / 2;
 
         let resultElements: (Group<N & LayerPosition> & G)[] = [];
-        let index = 0;
+        let accumulator = {index: 0};
         elements.elements.forEach(group => {
-            let resultGroup = Object.assign(group, {
-                elements: group.elements.map(element => {
-                    let resultElement = Object.assign(element, {
-                        key: layerIndex + "_" + index,
-                        index: index,
-                        relativePosition: layerOffset + index,
-                        layerIndex: layerIndex
-                    });
-                    index++;
-                    return resultElement;
-                })
-            });
+            let resultGroup = addLayerPositionToNodeForGroup(group, layerIndex, accumulator, layerOffset);
             resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
         });
 
@@ -268,10 +272,10 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
         let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).relativePosition <= getUpperNode(edge).relativePosition);
         let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).relativePosition > getUpperNode(edge).relativePosition);
 
-        sameLayerBefore.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
-        otherLayerBefore.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
-        otherLayerAfter.sort((edge1, edge2) =>  getLowerNode(edge2).index - getLowerNode(edge1).index);
-        sameLayerAfter.sort((edge1, edge2) =>  getLowerNode(edge1).index - getLowerNode(edge2).index);
+        sameLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
+        otherLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
+        otherLayerAfter.sort((edge1, edge2) => getLowerNode(edge2).index - getLowerNode(edge1).index);
+        sameLayerAfter.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
@@ -333,7 +337,7 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
 
     edges.forEach(edge => {
         addEdgeEnd(edge.from, edge.to, index => Object.assign(edge, {fromIndex: index}));
-        addEdgeEnd(edge.to, edge.from, index=> Object.assign(edge, {toIndex: index}));
+        addEdgeEnd(edge.to, edge.from, index => Object.assign(edge, {toIndex: index}));
     });
 
     Array.from(groupedByNodeAndSide.values()).forEach(({edgeEnds, node, side}) => {
@@ -424,7 +428,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
                   width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
                   fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
 
-            <text x={node.x + TEXT_PADDING } y={node.y + ELEMENT_HEIGHT / 2} fill="black"
+            <text x={node.x + TEXT_PADDING} y={node.y + ELEMENT_HEIGHT / 2} fill="black"
                   clipPath={"url(#clip-element-text-" + node.key + ")"}>{node.name}
             </text>
 
@@ -524,7 +528,7 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, u
 }
 
 let graphAsString =
-`var stack = stringsToNodes([
+    `var stack = stringsToNodes([
     [
         {name: "group 1", elements: [
             "element 11", 
