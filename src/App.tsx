@@ -146,44 +146,48 @@ function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): 
     }
 }
 
-function addLayerPositionToNodeForGroup<N, G>(group: Group<N> & G, layerIndex: number, layerOffset: number, accumulator: { index: number }) {
-    return Object.assign(group, {
-        elements: group.elements.map(element => {
-            let resultElement = Object.assign(element, {
-                key: layerIndex + "_" + accumulator.index,
-                index: accumulator.index,
-                relativePosition: layerOffset + accumulator.index,
-                layerIndex: layerIndex
-            });
-            accumulator.index++;
-            return resultElement;
-        })
-    });
-}
+export function addLayerPositionToNode<N, G>(
+    element: Group<N> | Layer<N, G> | Stack<N, G>,
+    fullWidth: number = 0,
+    layerIndex: number = 0,
+    layerOffset: number = 0,
+    accumulator: { index: number } = {index: 0}
+): Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
 
-export function addLayerPositionToNode<N, G>(elements: Layer<N, G> | Stack<N, G>, fullWidth: number = 0, layerIndex: number = 0):
-    Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
-    if (elements.kind === 'stack') {
-        let fullWidth = numberOfElements(elements);
+    if (element.kind === 'stack') {
+        let fullWidth = numberOfElements(element);
 
-        return Object.assign(elements, {
-            elements: elements.elements.map((groups, layerIndex) =>
+        return Object.assign(element, {
+            elements: element.elements.map((groups, layerIndex) =>
                 addLayerPositionToNode(groups, fullWidth, layerIndex) as Layer<N & LayerPosition, G>
             )
         });
-    } else {
-        let layerWidth = numberOfElements(elements);
+    } else if (element.kind === 'layer') {
+        let layerWidth = numberOfElements(element);
         let layerOffset = (fullWidth - layerWidth) / 2;
 
         let resultElements: (Group<N & LayerPosition> & G)[] = [];
         let accumulator = {index: 0};
-        elements.elements.forEach(group => {
-            let resultGroup = addLayerPositionToNodeForGroup(group, layerIndex, layerOffset, accumulator);
+        element.elements.forEach(group => {
+            let resultGroup = addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
             resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
         });
 
-        return Object.assign(elements, {
+        return Object.assign(element, {
             elements: resultElements
+        });
+    } else {
+        return Object.assign(element, {
+            elements: element.elements.map(element => {
+                let resultElement = Object.assign(element, {
+                    key: layerIndex + "_" + accumulator.index,
+                    index: accumulator.index,
+                    relativePosition: layerOffset + accumulator.index,
+                    layerIndex: layerIndex
+                });
+                accumulator.index++;
+                return resultElement;
+            })
         });
     }
 }
