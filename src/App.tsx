@@ -200,24 +200,24 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
     Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     return {
-        stack: layout(graph.stack, heightOfAllEdges),
+        stack: addCoordinatesToNode(graph.stack, heightOfAllEdges),
         edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
     }
 }
 
-export function layout<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: number[]):
+export function addCoordinatesToNode<N, G>(stack: Stack<N & LayerPosition, G>, heightOfEdges: number[]):
     Stack<N & LayerPosition & Coordinates, G> {
     let fullWidth = width(stack);
     return {
         kind: 'stack',
         elements: stack.elements.map((elements, layerIndex) => {
             let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-            return layoutHorizontally(elements, fullWidth, additionalEdgeHeight)
+            return addCoordinatesToNodeForGroups(elements, fullWidth, additionalEdgeHeight)
         })
     };
 }
 
-export function layoutHorizontally<N, G>(layer: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
+export function addCoordinatesToNodeForGroups<N, G>(layer: Layer<N & LayerPosition, G>, fullWidth: number, additionalEdgeHeight: number):
     Layer<N & LayerPosition & Coordinates, G> {
     let offsetToCenter = (fullWidth - width(layer)) / 2;
     return {
