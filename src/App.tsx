@@ -146,7 +146,7 @@ function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): 
     }
 }
 
-function addLayerPositionToNodeForGroup<N, G>(group: Group<N> & G, layerIndex: number, accumulator: { index: number }, layerOffset: number) {
+function addLayerPositionToNodeForGroup<N, G>(group: Group<N> & G, layerIndex: number, layerOffset: number, accumulator: { index: number }) {
     return Object.assign(group, {
         elements: group.elements.map(element => {
             let resultElement = Object.assign(element, {
@@ -178,7 +178,7 @@ export function addLayerPositionToNode<N, G>(elements: Layer<N, G> | Stack<N, G>
         let resultElements: (Group<N & LayerPosition> & G)[] = [];
         let accumulator = {index: 0};
         elements.elements.forEach(group => {
-            let resultGroup = addLayerPositionToNodeForGroup(group, layerIndex, accumulator, layerOffset);
+            let resultGroup = addLayerPositionToNodeForGroup(group, layerIndex, layerOffset, accumulator);
             resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
         });
 
