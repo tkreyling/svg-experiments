@@ -217,24 +217,22 @@ export function addCoordinatesToNode<N, G>(
     switch (element.kind) {
         case "stack": {
             let fullWidth = width(element);
-            return {
-                kind: 'stack',
+            return Object.assign(element, {
                 elements: element.elements.map((elements, layerIndex) => {
                     let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
                     return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight) as
                         Layer<N & LayerPosition & Coordinates, G>
                 })
-            };
+            });
         }
         case "layer": {
             let offsetToCenter = (fullWidth - width(element)) / 2;
-            return {
-                kind: element.kind,
+            return Object.assign(element, {
                 elements: element.elements.map((elements, groupIndex) => {
                     return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as
                         Group<N & LayerPosition & Coordinates> & G;
                 })
-            };
+            });
         }
         default: {
             return Object.assign(element, {
