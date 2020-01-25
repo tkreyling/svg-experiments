@@ -172,7 +172,7 @@ export function addLayerPositionToNode<N, G>(
             let accumulator = {index: 0};
             element.elements.forEach(group => {
                 let resultGroup = addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
-                resultElements.push(resultGroup as unknown as (Group<N & LayerPosition> & G));
+                resultElements.push(resultGroup as (Group<N & LayerPosition> & G));
             });
 
             return Object.assign(element, {
