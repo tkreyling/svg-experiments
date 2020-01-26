@@ -217,21 +217,21 @@ function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends Layer
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
-    element: Group<N> | Layer<N, G> | Stack<N, G>,
+    element: N | Group<N> | Layer<N, G> | Stack<N, G>,
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0,
     groupIndex: number = 0,
     offsetToCenter: number = 0
-): Group<N & Coordinates> | Layer<N & Coordinates, G> | Stack<N & Coordinates, G> {
+): (N & Coordinates) | Group<N & Coordinates> | Layer<N & Coordinates, G> | Stack<N & Coordinates, G> {
 
     switch (element.kind) {
         case "stack": {
             let fullWidth = width(element);
             return Object.assign(element, {
-                elements: element.elements.map((elements, layerIndex) => {
+                elements: element.elements.map((layer, layerIndex) => {
                     let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-                    return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight) as
+                    return addCoordinatesToNode(layer, heightOfEdges, fullWidth, additionalEdgeHeight) as
                         Layer<N & LayerPosition & Coordinates, G>
                 })
             });
@@ -239,19 +239,23 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
         case "layer": {
             let offsetToCenter = (fullWidth - width(element)) / 2;
             return Object.assign(element, {
-                elements: element.elements.map((elements, groupIndex) => {
-                    return addCoordinatesToNode(elements, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as
+                elements: element.elements.map((group, groupIndex) => {
+                    return addCoordinatesToNode(group, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as
                         Group<N & LayerPosition & Coordinates> & G;
                 })
             });
         }
-        default: {
+        case "group": {
             return Object.assign(element, {
-                elements: element.elements.map(node =>
-                    Object.assign(node, {
-                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + node.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
-                        y: MARGIN_TOP + GROUP_MARGIN_TOP + node.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
-                    }))
+                elements: element.elements.map(node => {
+                    return addCoordinatesToNode(node, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as N & Coordinates;
+                })
+            });
+        }
+        case "node": {
+            return Object.assign(element, {
+                x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
         }
     }
