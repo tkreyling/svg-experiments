@@ -5,7 +5,7 @@ test('one string results in one node', () => {
 
     let expected: Stack<Node, unknown> = {
         kind: 'stack', elements: [
-            {kind: 'layer', elements: [{name: "group 1", kind: 'group', elements: [{name: "node"}]}]}
+            {kind: 'layer', elements: [{name: "group 1", kind: 'group', elements: [{name: "node", kind: 'node'}]}]}
         ]
     };
     expect(stringsToNodes(input)).toStrictEqual(expected);
@@ -19,7 +19,12 @@ test('empty array element result in undefined node', () => {
         kind: 'stack', elements: [
             {
                 kind: 'layer',
-                elements: [{name: "group 1", kind: 'group', elements: [{name: "a"}, undefined, {name: "b"}]}]
+                elements: [{
+                    name: "group 1", kind: 'group',
+                    elements: [
+                        {name: "a", kind: 'node'}, undefined, {name: "b", kind: 'node'}
+                    ]
+                }]
             }
         ]
     };
@@ -30,14 +35,14 @@ test('an element with symbol is passed through', () => {
     let input: Group<string | Node>[][] = [[{
         name: "group 1",
         kind: 'group',
-        elements: [{name: "node", symbol: "component"}]
+        elements: [{name: "node", kind: 'node', symbol: "component"}]
     }]];
 
     let expected: Stack<Node, unknown> = {
         kind: 'stack', elements: [
             {
                 kind: 'layer',
-                elements: [{name: "group 1", kind: 'group', elements: [{name: "node", symbol: "component"}]}]
+                elements: [{name: "group 1", kind: 'group', elements: [{name: "node", kind: 'node', symbol: "component"}]}]
             }
         ]
     };

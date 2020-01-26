@@ -56,7 +56,10 @@ test('returns valid graph', () => {
             kind: 'layer',
             elements: [{
                 kind: 'group', name: 'group 1',
-                elements: [{name: "element 1"}, {name: "element 2"}]
+                elements: [
+                    {kind: 'node', name: "element 1"}, 
+                    {kind: 'node', name: "element 2"}
+                ]
             }]
         }]
     };
@@ -73,7 +76,10 @@ test('returns valid graph', () => {
                 kind: 'layer',
                 elements: [{
                     kind: 'group', name: 'group 1',
-                    elements: [{name: "element 1"}, {name: "element 2"}]
+                    elements: [
+                        {kind: 'node', name: "element 1"},
+                        {kind: 'node', name: "element 2"}
+                    ]
                 }]
             }]
         },

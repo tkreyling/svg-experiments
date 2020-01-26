@@ -22,6 +22,7 @@ export type GroupPosition = {
 type Symbols = "component"
 
 export type Node = {
+    kind: 'node'
     name: string
     symbol?: Symbols
 }
@@ -535,9 +536,14 @@ export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, u
                         name: group.name,
                         elements: group.elements.map(element => {
                             if (typeof element === 'string') {
-                                return {name: element}
+                                return {
+                                    kind: 'node',
+                                    name: element
+                                }
                             } else {
-                                return element
+                                return Object.assign(element, {
+                                    kind: 'node'
+                                });
                             }
                         })
                     }
