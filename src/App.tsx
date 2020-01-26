@@ -133,25 +133,27 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
     })
 }
 
-function addLayerPositionToNodeG<N, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
+function addLayerPositionToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
     return {
         stack: addLayerPositionToNode(graph.stack) as Stack<N & LayerPosition, G>,
         edges: graph.edges as unknown as (Edge<N & LayerPosition> & E)[]
     }
 }
 
-function numberOfElements<N, G>(element: Group<N> | Layer<N, G> | Stack<N, G>): number {
+function numberOfElements<N extends Node, G>(element: Node | Group<N> | Layer<N, G> | Stack<N, G>): number {
     switch (element.kind) {
         case "stack":
             return Math.max(...element.elements.map(numberOfElements));
         case "layer":
             return element.elements.map(numberOfElements).reduce((sum, add) => sum + add, 0);
-        default:
-            return element.elements.length;
+        case "group":
+            return element.elements.map(numberOfElements).reduce((sum, add) => sum + add, 0);
+        case "node":
+            return 1;
     }
 }
 
-export function addLayerPositionToNode<N, G>(
+export function addLayerPositionToNode<N extends Node, G>(
     element: Group<N> | Layer<N, G> | Stack<N, G>,
     fullWidth: number = 0,
     layerIndex: number = 0,
