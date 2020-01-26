@@ -78,19 +78,23 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function width(element: Stack<unknown, unknown> | Layer<unknown, unknown> | Group<unknown>): number {
+export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node>): number {
     switch (element.kind) {
         case "stack":
             return Math.max(...element.elements.map(width));
-        case "group": {
-            let n = element.elements.length;
-            return n * ELEMENT_WIDTH + (n - 1) * HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE;
-        }
-        default:
+        case "layer":
             return element.elements
                 .map(width)
                 .map((width, index) => width + (index > 0 ? HORIZONTAL_SPACING : 0))
                 .reduce((sum, add) => sum + add, 0);
+        case "group": {
+            return element.elements
+                .map(width)
+                .map((width, index) => width + (index > 0 ? HORIZONTAL_SPACING : 0))
+                .reduce((sum, add) => sum + add, 0) + 2 * GROUP_MARGIN_SIDE;
+        }
+        case "node":
+            return ELEMENT_WIDTH;
     }
 }
 
@@ -197,7 +201,7 @@ export function addLayerPositionToNode<N, G>(
     }
 }
 
-function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition, G>(graph: Graph<N, E, G>):
+function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(graph: Graph<N, E, G>):
     Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     return {
@@ -206,14 +210,14 @@ function addCoordinatesToNodeG<N extends LayerPosition, E extends LayerPosition,
     }
 }
 
-export function addCoordinatesToNode<N, G>(
-    element: Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G>,
+export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
+    element: Group<N> | Layer<N, G> | Stack<N, G>,
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0,
     groupIndex: number = 0,
     offsetToCenter: number = 0
-): Group<N & LayerPosition & Coordinates> | Layer<N & LayerPosition & Coordinates, G> | Stack<N & LayerPosition & Coordinates, G> {
+): Group<N & Coordinates> | Layer<N & Coordinates, G> | Stack<N & Coordinates, G> {
 
     switch (element.kind) {
         case "stack": {

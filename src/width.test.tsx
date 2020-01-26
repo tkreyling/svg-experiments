@@ -3,6 +3,7 @@ import {
   ELEMENT_WIDTH,
   HORIZONTAL_SPACING,
   GROUP_MARGIN_SIDE,
+  Node,
   Layer,
   Stack
 } from "./App";
@@ -13,29 +14,29 @@ test('no element has no width', () => {
 });
 
 test('one element has the general fixed width', () => {
-    let elements: Layer<unknown, unknown> = {
+    let elements: Layer<Node, unknown> = {
         kind: 'layer',
-        elements: [{name: "group 1", kind: 'group', elements: ["element"]}]
+        elements: [{name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}]}]
     };
     expect(width(elements))
         .toBe(ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
 test('two elements have the width of both of them and a additional spacing', () => {
-  let elements: Layer<unknown, unknown> = {
+  let elements: Layer<Node, unknown> = {
     kind: 'layer',
-    elements: [{name: "group 1", kind: 'group', elements: ["element", "element"]}]
+    elements: [{name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}, {kind: "node", name: "element"}]}]
   };
   expect(width(elements))
         .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
 test('two elements in two groups have the width of both of them and a additional spacing', () => {
-  let elements: Layer<unknown, unknown> = {
+  let elements: Layer<Node, unknown> = {
     kind: 'layer',
     elements: [
-      {name: "group 1", kind: 'group', elements: ["element"]},
-      {name: "group 2", kind: 'group', elements: ["element"]}
+      {name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}]},
+      {name: "group 2", kind: 'group', elements: [{kind: "node", name: "element"}]}
     ]
   };
   expect(width(elements))
@@ -43,12 +44,12 @@ test('two elements in two groups have the width of both of them and a additional
 });
 
 test('three elements in three groups have the width of both of them and two additional spacings', () => {
-  let elements: Layer<unknown, unknown> = {
+  let elements: Layer<Node, unknown> = {
     kind: 'layer',
     elements: [
-      {name: "group 1", kind: 'group', elements: ["element"]},
-      {name: "group 2", kind: 'group', elements: ["element"]},
-      {name: "group 3", kind: 'group', elements: ["element"]}
+      {name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}]},
+      {name: "group 2", kind: 'group', elements: [{kind: "node", name: "element"}]},
+      {name: "group 3", kind: 'group', elements: [{kind: "node", name: "element"}]}
     ]
   };
   expect(width(elements))
@@ -56,24 +57,24 @@ test('three elements in three groups have the width of both of them and two addi
 });
 
 test('three elements have the width of them three of them and two additional spacings', () => {
-  let elements: Layer<unknown, unknown> = {
+  let elements: Layer<Node, unknown> = {
     kind: 'layer',
-    elements: [{name: "group 1", kind: 'group', elements: ["element", "element", "element"]}]
+    elements: [{name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}, {kind: "node", name: "element"}, {kind: "node", name: "element"}]}]
   };
   expect(width(elements))
         .toBe(ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + HORIZONTAL_SPACING + ELEMENT_WIDTH + GROUP_MARGIN_SIDE * 2)
 });
 
 test('for multiple layer the width of a layer is the max width of all layers', () => {
-  let elements: Stack<unknown, unknown> = {
+  let elements: Stack<Node, unknown> = {
     kind: 'stack', elements: [
       {
         kind: 'layer',
-        elements: [{name: "group 1", kind: 'group', elements: ["element", "element", "element"]}]
+        elements: [{name: "group 1", kind: 'group', elements: [{kind: "node", name: "element"}, {kind: "node", name: "element"}, {kind: "node", name: "element"}]}]
       },
       {
         kind: 'layer',
-        elements: [{name: "group 2", kind: 'group', elements: ["element", "element"]}]
+        elements: [{name: "group 2", kind: 'group', elements: [{kind: "node", name: "element"}, {kind: "node", name: "element"}]}]
       }
     ]
   };
