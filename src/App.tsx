@@ -154,12 +154,12 @@ function numberOfElements<N extends Node, G>(element: Node | Group<N> | Layer<N,
 }
 
 export function addLayerPositionToNode<N extends Node, G>(
-    element: Group<N> | Layer<N, G> | Stack<N, G>,
+    element: N | Group<N> | Layer<N, G> | Stack<N, G>,
     fullWidth: number = 0,
     layerIndex: number = 0,
     layerOffset: number = 0,
     accumulator: { index: number } = {index: 0}
-): Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
+): N | Group<N & LayerPosition> | Layer<N & LayerPosition, G> | Stack<N & LayerPosition, G> {
 
     switch (element.kind) {
         case "stack": {
@@ -186,19 +186,23 @@ export function addLayerPositionToNode<N extends Node, G>(
                 elements: resultElements
             });
         }
-        default: {
+        case "group": {
             return Object.assign(element, {
-                elements: element.elements.map(element => {
-                    let resultElement = Object.assign(element, {
-                        key: layerIndex + "_" + accumulator.index,
-                        index: accumulator.index,
-                        relativePosition: layerOffset + accumulator.index,
-                        layerIndex: layerIndex
-                    });
-                    accumulator.index++;
-                    return resultElement;
+                elements: element.elements.map(node => {
+                    let resultNode = addLayerPositionToNode(node, fullWidth, layerIndex, layerOffset, accumulator);
+                    return resultNode as N & LayerPosition;
                 })
             });
+        }
+        case "node": {
+            let resultElement = Object.assign(element, {
+                key: layerIndex + "_" + accumulator.index,
+                index: accumulator.index,
+                relativePosition: layerOffset + accumulator.index,
+                layerIndex: layerIndex
+            });
+            accumulator.index++;
+            return resultElement;
         }
     }
 }
