@@ -231,7 +231,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
             return;
         }
         case "layer": {
-            accumulator.x = (fullWidth - width(element)) / 2;
+            accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
             element.elements.forEach(group => {
                 addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
@@ -247,9 +247,10 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
         }
         case "node": {
             Object.assign(element, {
-                x: MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + accumulator.x,
+                x: accumulator.x,
                 y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
+            accumulator.x += ELEMENT_WIDTH + HORIZONTAL_SPACING;
             return;
         }
     }
