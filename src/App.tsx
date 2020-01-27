@@ -210,12 +210,13 @@ export function addLayerPositionToNode<N extends Node, G>(
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(graph: Graph<N, E, G>):
     Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, heightOfAllEdges);
+    addCoordinatesToNode(graph.stack, {x: 0}, heightOfAllEdges);
     return graph as unknown as Graph<N & Coordinates, E, G>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
     element: N | Group<N> | Layer<N, G> | Stack<N, G>,
+    accumulator: { x: number },
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0,
@@ -227,20 +228,20 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
             let fullWidth = width(element);
             element.elements.forEach((layer, layerIndex) => {
                 let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-                addCoordinatesToNode(layer, heightOfEdges, fullWidth, additionalEdgeHeight);
+                addCoordinatesToNode(layer, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
             return;
         }
         case "layer": {
             let offsetToCenter = (fullWidth - width(element)) / 2;
             element.elements.forEach((group, groupIndex) => {
-                addCoordinatesToNode(group, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
+                addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
             });
             return;
         }
         case "group": {
             element.elements.forEach(node => {
-                addCoordinatesToNode(node, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
+                addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
             });
             return;
         }

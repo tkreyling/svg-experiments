@@ -18,7 +18,7 @@ import {
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, unknown> = {kind: 'layer', elements: []};
 
-    addCoordinatesToNode(layer, [], width(layer), 0);
+    addCoordinatesToNode(layer, {x: 0}, [], width(layer), 0);
 
     expect(layer).toStrictEqual({kind: 'layer', elements: []});
 });
@@ -32,7 +32,7 @@ test('one element is layouted to the origin', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0}, [], width(elements), 0);
 
     expect(elements).toStrictEqual({
         kind: 'layer', elements: [{
@@ -61,7 +61,7 @@ test('one element in the second layer keeps space for the two borders between th
         }]
     };
 
-    addCoordinatesToNode(elements, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0}, [], width(elements), 0);
 
     expect(elements).toStrictEqual({
         kind: 'layer', elements: [{
@@ -91,7 +91,7 @@ test('two elements are layouted right beside each other', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0}, [], width(elements), 0);
 
     expect(elements).toStrictEqual({
         kind: 'layer', elements: [{
@@ -134,7 +134,7 @@ test('two elements in two groups have an additional spacing for the two group bo
         }]
     };
 
-    addCoordinatesToNode(elements, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0}, [], width(elements), 0);
 
     expect(elements).toStrictEqual({
         kind: 'layer', elements: [{
