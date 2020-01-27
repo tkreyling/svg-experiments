@@ -220,8 +220,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0,
-    groupIndex: number = 0,
-    offsetToCenter: number = 0
+    groupIndex: number = 0
 ) {
     switch (element.kind) {
         case "stack": {
@@ -233,21 +232,21 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
             return;
         }
         case "layer": {
-            let offsetToCenter = (fullWidth - width(element)) / 2;
+            accumulator.x = (fullWidth - width(element)) / 2;
             element.elements.forEach((group, groupIndex) => {
-                addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
+                addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex);
             });
             return;
         }
         case "group": {
             element.elements.forEach(node => {
-                addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
+                addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex);
             });
             return;
         }
         case "node": {
             Object.assign(element, {
-                x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
+                x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + accumulator.x,
                 y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
             return;
