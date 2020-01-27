@@ -210,10 +210,8 @@ export function addLayerPositionToNode<N extends Node, G>(
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(graph: Graph<N, E, G>):
     Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    return {
-        stack: addCoordinatesToNode(graph.stack, heightOfAllEdges) as Stack<N & LayerPosition & Coordinates, G>,
-        edges: graph.edges as unknown as (Edge<N & Coordinates> & E)[]
-    }
+    addCoordinatesToNode(graph.stack, heightOfAllEdges);
+    return graph as unknown as Graph<N & Coordinates, E, G>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
@@ -223,40 +221,35 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
     additionalEdgeHeight: number = 0,
     groupIndex: number = 0,
     offsetToCenter: number = 0
-): (N & Coordinates) | Group<N & Coordinates> | Layer<N & Coordinates, G> | Stack<N & Coordinates, G> {
-
+) {
     switch (element.kind) {
         case "stack": {
             let fullWidth = width(element);
-            return Object.assign(element, {
-                elements: element.elements.map((layer, layerIndex) => {
-                    let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-                    return addCoordinatesToNode(layer, heightOfEdges, fullWidth, additionalEdgeHeight) as
-                        Layer<N & LayerPosition & Coordinates, G>
-                })
+            element.elements.forEach((layer, layerIndex) => {
+                let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
+                addCoordinatesToNode(layer, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
+            return;
         }
         case "layer": {
             let offsetToCenter = (fullWidth - width(element)) / 2;
-            return Object.assign(element, {
-                elements: element.elements.map((group, groupIndex) => {
-                    return addCoordinatesToNode(group, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as
-                        Group<N & LayerPosition & Coordinates> & G;
-                })
+            element.elements.forEach((group, groupIndex) => {
+                addCoordinatesToNode(group, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
             });
+            return;
         }
         case "group": {
-            return Object.assign(element, {
-                elements: element.elements.map(node => {
-                    return addCoordinatesToNode(node, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter) as N & Coordinates;
-                })
+            element.elements.forEach(node => {
+                addCoordinatesToNode(node, heightOfEdges, fullWidth, additionalEdgeHeight, groupIndex, offsetToCenter);
             });
+            return;
         }
         case "node": {
-            return Object.assign(element, {
+            Object.assign(element, {
                 x: MARGIN_SIDE + GROUP_MARGIN_SIDE + groupIndex * 2 * GROUP_MARGIN_SIDE + element.index * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + offsetToCenter,
                 y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
+            return;
         }
     }
 }
