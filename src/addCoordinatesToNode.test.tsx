@@ -121,6 +121,47 @@ test('two elements are layouted right beside each other', () => {
     });
 });
 
+test('width of node is adjusted by size property', () => {
+    let elements: Layer<Node & LayerPosition, unknown> = {
+        kind: 'layer', elements: [{
+            name: "group 1", kind: 'group', elements: [
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0, size: 1.2},
+                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0, relativePosition: 1}
+            ]
+        }]
+    };
+
+    addCoordinatesToNode(elements, {x: 0}, [], width(elements), 0);
+
+    expect(elements).toStrictEqual({
+        kind: 'layer', elements: [{
+            name: "group 1", kind: 'group', elements: [
+                {
+                    kind: "node",
+                    name: "node 1",
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    key: "0_0",
+                    index: 0,
+                    layerIndex: 0,
+                    relativePosition: 0,
+                    size: 1.2
+                },
+                {
+                    kind: "node",
+                    name: "node 2",
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH * 1.2 + HORIZONTAL_SPACING,
+                    y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    key: "0_1",
+                    index: 1,
+                    layerIndex: 0,
+                    relativePosition: 1
+                }
+            ]
+        }]
+    });
+});
+
 test('two elements in two groups have an additional spacing for the two group borders', () => {
     let elements: Layer<Node & LayerPosition, unknown> = {
         kind: 'layer', elements: [{

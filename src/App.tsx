@@ -25,6 +25,7 @@ export type Node = {
     kind: 'node'
     name: string
     symbol?: Symbols
+    size?: number
 }
 
 export type Edge<T> = {
@@ -94,7 +95,7 @@ export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown
                 .reduce((sum, add) => sum + add, 0) + 2 * GROUP_MARGIN_SIDE;
         }
         case "node":
-            return ELEMENT_WIDTH;
+            return ELEMENT_WIDTH * (element.size || 1);
     }
 }
 
@@ -250,7 +251,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
                 x: accumulator.x,
                 y: MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
-            accumulator.x += ELEMENT_WIDTH + HORIZONTAL_SPACING;
+            accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
         }
     }
@@ -451,11 +452,12 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
 
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     let isComponent = node.symbol === "component";
+    let rectWidth = ELEMENT_WIDTH * (node.size || 1);
     return (
         <g key={node.key}>
             <rect data-testid="rect"
                   x={node.x} y={node.y}
-                  width={ELEMENT_WIDTH} height={ELEMENT_HEIGHT}
+                  width={rectWidth} height={ELEMENT_HEIGHT}
                   fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
 
             <text x={node.x + TEXT_PADDING} y={node.y + ELEMENT_HEIGHT / 2} fill="black"
@@ -465,7 +467,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
             <clipPath id={"clip-element-text-" + node.key}>
                 <rect
                     x={node.x + TEXT_PADDING} y={node.y}
-                    width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (isComponent ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                    width={rectWidth - 2 * TEXT_PADDING - (isComponent ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
                     height={ELEMENT_HEIGHT}/>
             </clipPath>
 
@@ -577,7 +579,10 @@ let graphAsString =
         {name: "group 4", elements: ["element 3"]}
     ],
     [
-        {name: "group 5", elements: ["element 1", "element 2", "element 3", "element with changed name", "element 5"]}
+        {name: "group 5", elements: [
+            "element 1", "element 2", "element 3", 
+            {name: "element with changed name", size: 1.5}, 
+            {name: "element 5", size: 0.7}]}
     ]
 ]);
 var layers = stack.elements;
