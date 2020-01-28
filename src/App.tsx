@@ -46,7 +46,7 @@ type NumberOfEdges = {
 export type Group<N> = {
     kind: 'group'
     name: string
-    elements: N[]
+    elements: (Group<N> | N)[]
 }
 
 export type Layer<N, G> = {
@@ -482,8 +482,9 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Coordinates> & GroupPosition> = group => {
-    let firstNode = group.elements[0];
+const Group: React.FC<Group<Node & Coordinates> & GroupPosition> = group => {
+    let nodes = group.elements.filter(element => element.kind === "node") as (Node & Coordinates)[];
+    let firstNode = nodes[0];
     let n = group.elements.length;
 
     let x = firstNode.x - GROUP_MARGIN_SIDE;
@@ -535,30 +536,34 @@ export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & 
     );
 };
 
+function convertStringsToNodes(group: Group<string | Node>): Group<Node> {
+    return {
+        kind: 'group',
+        name: group.name,
+        elements: group.elements.map(element => {
+            if (typeof element === 'string') {
+                return {
+                    kind: 'node',
+                    name: element
+                }
+            } else if ("elements" in element) {
+                return convertStringsToNodes(element);
+            } else {
+                return Object.assign(element, {
+                    kind: 'node'
+                });
+            }
+        })
+    }
+}
+
 export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, unknown> {
     return {
         kind: 'stack',
         elements: strings.map(layer => {
             return {
                 kind: 'layer',
-                elements: layer.map(group => {
-                    return {
-                        kind: 'group',
-                        name: group.name,
-                        elements: group.elements.map(element => {
-                            if (typeof element === 'string') {
-                                return {
-                                    kind: 'node',
-                                    name: element
-                                }
-                            } else {
-                                return Object.assign(element, {
-                                    kind: 'node'
-                                });
-                            }
-                        })
-                    }
-                })
+                elements: layer.map(convertStringsToNodes)
             }
         })
     };
@@ -621,6 +626,17 @@ graph
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
+export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N> | N): N[] {
+    switch (element.kind) {
+        case "stack":
+            return element.elements.flatMap(layer => layer.elements).flatMap(allNodes);
+        case "group":
+            return element.elements.flatMap(allNodes);
+        case "node":
+            return [element];
+    }
+}
+
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
@@ -635,7 +651,7 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
 
             return (
                 <svg viewBox={"0 0 " + overallWidth + " " + height}>
-                    {graph.stack.elements.flatMap(layer => layer.elements).flatMap(group => group.elements).map(Rect)}
+                    {allNodes(graph.stack).map(Rect)}
                     {graph.stack.elements.flatMap(layer => layer.elements).map(Group)}
                     {graph.edges.map(Path)}
                 </svg>
