@@ -452,12 +452,11 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
 
 export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     let isComponent = node.symbol === "component";
-    let rectWidth = ELEMENT_WIDTH * (node.size || 1);
     return (
         <g key={node.key}>
             <rect data-testid="rect"
                   x={node.x} y={node.y}
-                  width={rectWidth} height={ELEMENT_HEIGHT}
+                  width={width(node)} height={ELEMENT_HEIGHT}
                   fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
 
             <text x={node.x + TEXT_PADDING} y={node.y + ELEMENT_HEIGHT / 2} fill="black"
@@ -467,14 +466,14 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
             <clipPath id={"clip-element-text-" + node.key}>
                 <rect
                     x={node.x + TEXT_PADDING} y={node.y}
-                    width={rectWidth - 2 * TEXT_PADDING - (isComponent ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                    width={width(node) - 2 * TEXT_PADDING - (isComponent ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
                     height={ELEMENT_HEIGHT}/>
             </clipPath>
 
             {isComponent ?
                 <ComponentSymbol
                     symbolKey={node.key + "CS"}
-                    x={node.x + rectWidth - SYMBOL_WIDTH - SYMBOL_SPACING}
+                    x={node.x + width(node) - SYMBOL_WIDTH - SYMBOL_SPACING}
                     y={node.y + SYMBOL_SPACING}
                     width={SYMBOL_WIDTH}/>
                 : ""}
@@ -512,14 +511,14 @@ const Group: React.FC<Group<Node & Coordinates> & GroupPosition> = group => {
     );
 };
 
-export const Path: React.FC<Edge<LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
+export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNodeOnLowerSide = edge.from.layerIndex <= edge.to.layerIndex;
-    let fromNodeCenteringOffset = (ELEMENT_WIDTH - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let fromNodeCenteringOffset = (width(edge.from) - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
     let fromNodeX = edge.from.x + fromNodeCenteringOffset + edge.fromIndex * EDGE_SPACING;
     let fromNodeY = edge.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
     let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + GROUP_MARGIN_BOTTOM + edge.index * EDGE_SPACING;
     let toNodeOnLowerSide = edge.from.layerIndex >= edge.to.layerIndex;
-    let toNodeCenteringOffset = (ELEMENT_WIDTH - ((toNodeOnLowerSide ? edge.to.lowerSideEdges : edge.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let toNodeCenteringOffset = (width(edge.to) - ((toNodeOnLowerSide ? edge.to.lowerSideEdges : edge.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
     let toNodeX = edge.to.x + toNodeCenteringOffset + edge.toIndex * EDGE_SPACING;
     let toNodeY = edge.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
     return (
