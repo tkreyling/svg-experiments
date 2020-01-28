@@ -574,7 +574,7 @@ let graphAsString =
     [
         {name: "group 1", elements: [
             "element 11", 
-            {name: "element 2", symbol: "component"}, 
+            {name: "element 2", size: 1.5, symbol: "component"}, 
             {name: "an element with long text", symbol: "component"}            
         ]},
         {name: "group 2", elements: ["element 4"]}
