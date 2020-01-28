@@ -511,22 +511,27 @@ const Group: React.FC<Group<Node & Coordinates> & GroupPosition> = group => {
     );
 };
 
+function edgeEndCoordinates<N extends Node & LayerPosition & Coordinates & NumberOfEdges>(
+    node: N, edgeIndex: number, otherNode: N
+) {
+    let onLowerSide = node.layerIndex <= otherNode.layerIndex;
+    let nodeCenteringOffset = (width(node) - ((onLowerSide ? node.lowerSideEdges : node.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    return {
+        x: node.x + nodeCenteringOffset + edgeIndex * EDGE_SPACING,
+        y: node.y + (onLowerSide ? ELEMENT_HEIGHT : 0)
+    };
+}
+
 export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
-    let fromNodeOnLowerSide = edge.from.layerIndex <= edge.to.layerIndex;
-    let fromNodeCenteringOffset = (width(edge.from) - ((fromNodeOnLowerSide ? edge.from.lowerSideEdges : edge.from.upperSideEdges) - 1) * EDGE_SPACING) / 2;
-    let fromNodeX = edge.from.x + fromNodeCenteringOffset + edge.fromIndex * EDGE_SPACING;
-    let fromNodeY = edge.from.y + (fromNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
+    let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + GROUP_MARGIN_BOTTOM + edge.index * EDGE_SPACING;
-    let toNodeOnLowerSide = edge.from.layerIndex >= edge.to.layerIndex;
-    let toNodeCenteringOffset = (width(edge.to) - ((toNodeOnLowerSide ? edge.to.lowerSideEdges : edge.to.upperSideEdges) - 1) * EDGE_SPACING) / 2;
-    let toNodeX = edge.to.x + toNodeCenteringOffset + edge.toIndex * EDGE_SPACING;
-    let toNodeY = edge.to.y + (toNodeOnLowerSide ? ELEMENT_HEIGHT : 0);
+    let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
     return (
         <path key={edge.key} d={
-            "M " + fromNodeX + " " + fromNodeY + " " +
-            "L " + fromNodeX + " " + upperNodeEdgesY + " " +
-            "L " + toNodeX + " " + upperNodeEdgesY + " " +
-            "L " + toNodeX + " " + toNodeY
+            "M " + fromNode.x + " " + fromNode.y + " " +
+            "L " + fromNode.x + " " + upperNodeEdgesY + " " +
+            "L " + toNode.x + " " + upperNodeEdgesY + " " +
+            "L " + toNode.x + " " + toNode.y
         }
               stroke="black"
               strokeWidth={STROKE_WIDTH}
