@@ -474,7 +474,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
             {isComponent ?
                 <ComponentSymbol
                     symbolKey={node.key + "CS"}
-                    x={node.x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
+                    x={node.x + rectWidth - SYMBOL_WIDTH - SYMBOL_SPACING}
                     y={node.y + SYMBOL_SPACING}
                     width={SYMBOL_WIDTH}/>
                 : ""}
