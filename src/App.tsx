@@ -206,15 +206,15 @@ export function addLayerPositionToNode<N extends Node, G>(
     }
 }
 
-function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(
+function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
-): Graph<N & Coordinates, E, G> {
+): Graph<N & Coordinates, E, G & Coordinates> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     addCoordinatesToNode(graph.stack, {x: 0}, heightOfAllEdges);
-    return graph as unknown as Graph<N & Coordinates, E, G>;
+    return graph as unknown as Graph<N & Coordinates, E, G & Coordinates>;
 }
 
-export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
+export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
     accumulator: { x: number },
     heightOfEdges: number[],
@@ -238,6 +238,11 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
             return;
         }
         case "group": {
+            Object.assign(element, {
+                x: accumulator.x,
+                y: MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+            });
+
             accumulator.x += GROUP_MARGIN_SIDE;
             element.elements.forEach(node => {
                 addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
