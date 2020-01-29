@@ -463,27 +463,22 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Node & Coordinates, GroupPosition> & GroupPosition> = group => {
-    let nodes = group.elements.filter(element => element.kind === "node") as (Node & Coordinates)[];
-    let firstNode = nodes[0];
-
-    let x = firstNode.x - GROUP_MARGIN_SIDE;
-    let y = firstNode.y - GROUP_MARGIN_TOP;
+const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates> = group => {
     return (
         <g key={group.key}>
             <rect
-                x={x} y={y}
+                x={group.x} y={group.y}
                 width={width(group)}
                 height={ELEMENT_HEIGHT + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
-            <text x={x + GROUP_MARGIN_SIDE} y={y + ELEMENT_HEIGHT / 2} fill="black"
+            <text x={group.x + GROUP_MARGIN_SIDE} y={group.y + ELEMENT_HEIGHT / 2} fill="black"
                   clipPath={"url(#clip-element-text-" + group.key + ")"}>{group.name}
             </text>
 
             <clipPath id={"clip-element-text-" + group.key}>
                 <rect
-                    x={x + GROUP_MARGIN_SIDE} y={y}
+                    x={group.x + GROUP_MARGIN_SIDE} y={group.y}
                     width={width(group) - 2 * GROUP_MARGIN_SIDE}
                     height={ELEMENT_HEIGHT}/>
             </clipPath>
