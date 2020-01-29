@@ -43,15 +43,15 @@ type NumberOfEdges = {
     lowerSideEdges: number
 }
 
-export type Group<N> = {
+export type Group<N, G> = {
     kind: 'group'
     name: string
-    elements: (Group<N> | N)[]
+    elements: ((Group<N, G> & G) | N)[]
 }
 
 export type Layer<N, G> = {
     kind: 'layer'
-    elements: (Group<N> & G)[]
+    elements: (Group<N, G> & G)[]
 }
 
 export type Stack<N, G> = {
@@ -79,7 +79,7 @@ export const TEXT_PADDING = 5;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
 
-export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node>): number {
+export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {
         case "stack":
             return Math.max(...element.elements.map(width));
@@ -134,12 +134,14 @@ export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], nu
     })
 }
 
-function addLayerPositionToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>): Graph<N & LayerPosition, E, G> {
+function addLayerPositionToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>):
+    Graph<N & LayerPosition, E, G & GroupPosition>
+{
     addLayerPositionToNode(graph.stack);
-    return graph as unknown as Graph<N & LayerPosition, E, G>;
+    return graph as unknown as Graph<N & LayerPosition, E, G & GroupPosition>;
 }
 
-function numberOfElements<N extends Node, G>(element: Node | Group<N> | Layer<N, G> | Stack<N, G>): number {
+function numberOfElements<N extends Node, G>(element: Node | Group<N, G> | Layer<N, G> | Stack<N, G>): number {
     switch (element.kind) {
         case "stack":
             return Math.max(...element.elements.map(numberOfElements));
@@ -153,11 +155,11 @@ function numberOfElements<N extends Node, G>(element: Node | Group<N> | Layer<N,
 }
 
 export function addLayerPositionToNode<N extends Node, G>(
-    element: N | Group<N> | Layer<N, G> | Stack<N, G>,
+    element: N | Group<N, G> | Layer<N, G> | Stack<N, G>,
     fullWidth: number = 0,
     layerIndex: number = 0,
     layerOffset: number = 0,
-    accumulator: { index: number } = {index: 0}
+    accumulator: { index: number, groupIndex: number } = {index: 0, groupIndex: 0}
 ) {
     switch (element.kind) {
         case "stack": {
@@ -171,7 +173,7 @@ export function addLayerPositionToNode<N extends Node, G>(
         case "layer": {
             let layerWidth = numberOfElements(element);
             let layerOffset = (fullWidth - layerWidth) / 2;
-            let accumulator = {index: 0};
+            let accumulator = {index: 0, groupIndex: 0};
 
             element.elements.forEach(group => {
                 addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
@@ -179,6 +181,13 @@ export function addLayerPositionToNode<N extends Node, G>(
             return;
         }
         case "group": {
+            Object.assign(element, {
+                key: "G_" + layerIndex + "_" + accumulator.groupIndex,
+                index: accumulator.groupIndex,
+                layerIndex: layerIndex
+            });
+            accumulator.groupIndex++;
+
             element.elements.forEach(node => {
                 addLayerPositionToNode(node, fullWidth, layerIndex, layerOffset, accumulator);
             });
@@ -197,15 +206,16 @@ export function addLayerPositionToNode<N extends Node, G>(
     }
 }
 
-function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(graph: Graph<N, E, G>):
-    Graph<N & Coordinates, E, G> {
+function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(
+    graph: Graph<N, E, G>
+): Graph<N & Coordinates, E, G> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     addCoordinatesToNode(graph.stack, {x: 0}, heightOfAllEdges);
     return graph as unknown as Graph<N & Coordinates, E, G>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G>(
-    element: N | Group<N> | Layer<N, G> | Stack<N, G>,
+    element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
     accumulator: { x: number },
     heightOfEdges: number[],
     fullWidth: number = 0,
@@ -386,28 +396,6 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
     });
 }
 
-function addPositionToGroupG<N, E, G>(graph: Graph<N, E, G>): Graph<N, E, G & GroupPosition> {
-    return {
-        stack: addPositionToGroup(graph.stack),
-        edges: graph.edges
-    }
-}
-
-export function addPositionToGroup<N, G>(stack: Stack<N, G>): Stack<N, G & GroupPosition> {
-    return {
-        kind: 'stack',
-        elements: stack.elements.map((layer, layerIndex) => ({
-            kind: layer.kind,
-            elements: layer.elements.map((group, groupIndex) =>
-                Object.assign(group, {
-                    key: "G_" + layerIndex + "_" + groupIndex,
-                    index: groupIndex,
-                    layerIndex: layerIndex
-                }))
-        }))
-    };
-}
-
 type Symbol = {
     x: number
     y: number
@@ -470,7 +458,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Node & Coordinates> & GroupPosition> = group => {
+const Group: React.FC<Group<Node & Coordinates, GroupPosition> & GroupPosition> = group => {
     let nodes = group.elements.filter(element => element.kind === "node") as (Node & Coordinates)[];
     let firstNode = nodes[0];
 
@@ -527,7 +515,7 @@ export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & NumberOfEd
     );
 };
 
-function convertStringsToNodes(group: Group<string | Node>): Group<Node> {
+function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node, unknown> {
     return {
         kind: 'group',
         name: group.name,
@@ -548,7 +536,7 @@ function convertStringsToNodes(group: Group<string | Node>): Group<Node> {
     }
 }
 
-export function stringsToNodes(strings: Group<string | Node>[][]): Stack<Node, unknown> {
+export function stringsToNodes(strings: Group<string | Node, unknown>[][]): Stack<Node, unknown> {
     return {
         kind: 'stack',
         elements: strings.map(layer => {
@@ -617,7 +605,7 @@ graph
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
-export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N> | N): N[] {
+export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N, G> | N): N[] {
     switch (element.kind) {
         case "stack":
             return element.elements.flatMap(layer => layer.elements).flatMap(allNodes);
@@ -634,7 +622,6 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
         .map(addLayerPositionToEdgeG)
         .map(addCoordinatesToNodeG)
         .map(addConnectionIndexAndNumberOfEdgesG)
-        .map(addPositionToGroupG)
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
             let overallWidth = width(graph.stack) + 2 * MARGIN_SIDE;
