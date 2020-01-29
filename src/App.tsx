@@ -583,7 +583,7 @@ let graphAsString =
     ],
     [
         {name: "group 3", elements: ["element 1", "element 2"]},
-        {name: "group 4", elements: ["element 3"]}
+        {name: "group 4", elements: [{name: "group 6", elements: ["element 4"]}, "element 3"]}
     ],
     [
         {name: "group 5", elements: [
@@ -596,9 +596,9 @@ var layers = stack.elements;
 
 var edges = [
     {from: layers[0].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
-    {from: layers[0].elements[0].elements[2], to: layers[1].elements[1].elements[0]},
+    {from: layers[0].elements[0].elements[2], to: layers[1].elements[1].elements[0].elements[0]},
     {from: layers[0].elements[1].elements[0], to: layers[1].elements[0].elements[1]},
-    {from: layers[1].elements[1].elements[0], to: layers[2].elements[0].elements[2]},
+    {from: layers[1].elements[1].elements[0].elements[0], to: layers[2].elements[0].elements[2]},
     {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[4]},
     {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[3]},
     {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[2]},
@@ -614,7 +614,7 @@ var edges = [
     {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
     {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
     {from: layers[1].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
-    {from: layers[1].elements[0].elements[1], to: layers[1].elements[1].elements[0]}
+    {from: layers[1].elements[0].elements[1], to: layers[1].elements[1].elements[0].elements[0]}
 ];
 
 var graph = {
