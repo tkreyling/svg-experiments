@@ -32,22 +32,6 @@ test('reports missing property edges', () => {
     expect(parseGraph(text)).toStrictEqual("Property edges is missing in graph object!");
 });
 
-test('reports undefined nodes', () => {
-    let text = `
-    var stack = {elements: [
-        {elements: [
-            {elements: [{name: "element 1"},, {name: "element 2"}]}
-        ]}
-    ]};
-    var g = {
-        stack: stack,
-        edges: []
-    };
-    g
-    `;
-    expect(parseGraph(text)).toStrictEqual("Every node must be defined!");
-});
-
 test('returns valid graph', () => {
     let text = `
     var stack = {

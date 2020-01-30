@@ -516,6 +516,11 @@ export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & NumberOfEd
 };
 
 function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node, unknown> {
+    // It is necessary to go through the array by index,
+    // because the array operations `every`, `map` and `flat` bypass empty array elements.
+    for (let i = 0; i < group.elements.length; i++) {
+        if (group.elements[i] === undefined) throw new Error("Empty array elements are not allowed.");
+    }
     return {
         kind: 'group',
         name: group.name,
@@ -554,6 +559,8 @@ export type IndexPair = {
 }
 
 function indexToReference<N, G>(stack: Stack<N, G>, index: number[]): any {
+    // It is necessary to go through the array by index,
+    // because the array operations `every`, `map` and `flat` bypass empty array elements.
     for (let i = 0; i < index.length; i++) {
         if (index[i] === undefined) throw new Error("Empty array elements are not allowed.");
     }
@@ -675,21 +682,6 @@ export function parseGraph(text: string): Graph<Node, unknown, unknown> | string
 
         if (graph.stack === undefined) return "Property layers is missing in graph object!";
         if (graph.edges === undefined) return "Property edges is missing in graph object!";
-
-        let layers = graph.stack.elements;
-        let aNodeIsUndefined = false;
-        // It is necessary to go through the nested arrays by index,
-        // because the array operations `every`, `map` and `flat` bypass empty array elements.
-        for (let layerIndex = 0; layerIndex < layers.length; layerIndex++) {
-            let groups = layers[layerIndex].elements;
-            for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-                let elements = groups[groupIndex].elements;
-                for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
-                    if (elements[elementIndex] === undefined) aNodeIsUndefined = true;
-                }
-            }
-        }
-        if (aNodeIsUndefined) return "Every node must be defined!";
 
         if (!graph.edges.every((edge: Edge<Node>) => edge.from !== undefined))
             return "Property from must be defined on every edge!";
