@@ -548,6 +548,31 @@ export function stringsToNodes(strings: Group<string | Node, unknown>[][]): Stac
     };
 }
 
+export type IndexPair = {
+    from: number[]
+    to: number[]
+}
+
+function indexToReference<N, G>(stack: Stack<N, G>, index: number[]): any {
+    let element: any = stack;
+    index.forEach(i => {
+        if (element.elements[i] === undefined) throw new Error("Indices must refer to a node that does not exist");
+        element = element.elements[i];
+    });
+    return element;
+}
+
+function indexPairToReference<N, G>(stack: Stack<N, G>, indexPair: IndexPair): Edge<N> {
+    return {
+        from: indexToReference(stack, indexPair.from),
+        to: indexToReference(stack, indexPair.to)
+    };
+}
+
+export function indicesToReferences<N, G>(stack: Stack<N, G>, indexPairs: IndexPair[]): Edge<N>[] {
+    return indexPairs.map(indexPair => indexPairToReference(stack, indexPair));
+}
+
 let graphAsString =
     `var stack = stringsToNodes([
     [
@@ -569,30 +594,30 @@ let graphAsString =
             {name: "element 5", size: 0.7}]}
     ]
 ]);
-var layers = stack.elements;
 
-var edges = [
-    {from: layers[0].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
-    {from: layers[0].elements[0].elements[2], to: layers[1].elements[1].elements[0].elements[0]},
-    {from: layers[0].elements[1].elements[0], to: layers[1].elements[0].elements[1]},
-    {from: layers[1].elements[1].elements[0].elements[0], to: layers[2].elements[0].elements[2]},
-    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[4]},
-    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[3]},
-    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[2]},
-    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[1]},
-    {from: layers[1].elements[0].elements[1], to: layers[2].elements[0].elements[0]},
-    {from: layers[2].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
-    {from: layers[2].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
-    {from: layers[2].elements[0].elements[0], to: layers[2].elements[0].elements[3]},
-    {from: layers[2].elements[0].elements[1], to: layers[2].elements[0].elements[3]},
-    {from: layers[2].elements[0].elements[4], to: layers[2].elements[0].elements[3]},
-    {from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[2]},
-    {from: layers[0].elements[0].elements[0], to: layers[0].elements[0].elements[1]},
-    {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
-    {from: layers[0].elements[0].elements[0], to: layers[1].elements[0].elements[0]},
-    {from: layers[1].elements[0].elements[1], to: layers[1].elements[0].elements[0]},
-    {from: layers[1].elements[0].elements[1], to: layers[1].elements[1].elements[0].elements[0]}
+var edgeIndices = [
+    {from: [0, 0, 1],    to: [1, 0, 0]},
+    {from: [0, 0, 2],    to: [1, 1, 0, 0]},
+    {from: [0, 1, 0],    to: [1, 0, 1]},
+    {from: [1, 1, 0, 0], to: [2, 0, 2]},
+    {from: [1, 0, 1],    to: [2, 0, 4]},
+    {from: [1, 0, 1],    to: [2, 0, 3]},
+    {from: [1, 0, 1],    to: [2, 0, 2]},
+    {from: [1, 0, 1],    to: [2, 0, 1]},
+    {from: [1, 0, 1],    to: [2, 0, 0]},
+    {from: [2, 0, 0],    to: [1, 0, 0]},
+    {from: [2, 0, 1],    to: [1, 0, 0]},
+    {from: [2, 0, 0],    to: [2, 0, 3]},
+    {from: [2, 0, 1],    to: [2, 0, 3]},
+    {from: [2, 0, 4],    to: [2, 0, 3]},
+    {from: [0, 0, 0],    to: [0, 0, 2]},
+    {from: [0, 0, 0],    to: [0, 0, 1]},
+    {from: [0, 0, 0],    to: [1, 0, 0]},
+    {from: [0, 0, 0],    to: [1, 0, 0]},
+    {from: [1, 0, 1],    to: [1, 0, 0]},
+    {from: [1, 0, 1],    to: [1, 1, 0, 0]}
 ];
+var edges = indicesToReferences(stack, edgeIndices);
 
 var graph = {
     stack: stack,
