@@ -21,6 +21,25 @@ test('no nodes, some indices result in an error', () => {
     }
 });
 
+test('indices array with empty array element results in an error', () => {
+    let elements: Stack<Node, unknown> = {kind: 'stack', elements:  [{
+            kind: 'layer', elements: [
+                {
+                    kind: 'group', name: "group 1", elements: [
+                        {kind: "node", name: "node 1"}, {kind: "node", name: "node 2"}]
+                }]
+        }]};
+    // noinspection JSConsecutiveCommasInArrayLiteral
+    let edgeIndices: IndexPair[] = [{from: [0,, 0] as any, to: [0, 0, 1]}];
+
+    try {
+        indicesToReferences(elements, edgeIndices);
+        fail("Exception must be thrown");
+    } catch (e) {
+        expect(e.message).toStrictEqual("Empty array elements are not allowed.");
+    }
+});
+
 test('two nodes and a matching index pair result in an edge', () => {
     let elements: Stack<Node, unknown> = {kind: 'stack', elements:  [{
         kind: 'layer', elements: [

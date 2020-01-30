@@ -554,6 +554,10 @@ export type IndexPair = {
 }
 
 function indexToReference<N, G>(stack: Stack<N, G>, index: number[]): any {
+    for (let i = 0; i < index.length; i++) {
+        if (index[i] === undefined) throw new Error("Empty array elements are not allowed.");
+    }
+
     let element: any = stack;
     index.forEach(i => {
         if (element.elements[i] === undefined) throw new Error("Indices must refer to a node that does not exist");
