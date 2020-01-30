@@ -1,7 +1,7 @@
 import {Node, Group, stringsToNodes, Stack} from "./App";
 
 test('one string results in one node', () => {
-    let input: Group<string | Node>[][] = [[{name: "group 1", kind: 'group', elements: ["node"]}]];
+    let input: Group<string | Node, unknown>[][] = [[{name: "group 1", kind: 'group', elements: ["node"]}]];
 
     let expected: Stack<Node, unknown> = {
         kind: 'stack', elements: [
@@ -13,7 +13,7 @@ test('one string results in one node', () => {
 
 test('empty array element result in undefined node', () => {
     // noinspection JSConsecutiveCommasInArrayLiteral
-    let input: Group<string | Node>[][] = [[{name: "group 1", kind: 'group', elements: ["a", , "b"] as any}]];
+    let input: Group<string | Node, unknown>[][] = [[{name: "group 1", kind: 'group', elements: ["a", , "b"] as any}]];
 
     let expected: Stack<Node | undefined, unknown> = {
         kind: 'stack', elements: [
@@ -32,7 +32,7 @@ test('empty array element result in undefined node', () => {
 });
 
 test('an element with symbol is passed through', () => {
-    let input: Group<string | Node>[][] = [[{
+    let input: Group<string | Node, unknown>[][] = [[{
         name: "group 1",
         kind: 'group',
         elements: [{name: "node", kind: 'node', symbol: "component"}]
