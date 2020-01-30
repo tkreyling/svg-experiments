@@ -652,6 +652,17 @@ export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N, G
     }
 }
 
+function allGroups<N extends Node, G, E>(element: Stack<N, G> | (Group<N, G> & G) | N): (Group<N, G> & G)[] {
+    switch (element.kind) {
+        case "stack":
+            return element.elements.flatMap(layer => layer.elements).flatMap(allGroups);
+        case "group":
+            return [element].concat(element.elements.flatMap(allGroups));
+        case "node":
+            return [];
+    }
+}
+
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
@@ -666,7 +677,7 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
             return (
                 <svg viewBox={"0 0 " + overallWidth + " " + height}>
                     {allNodes(graph.stack).map(Rect)}
-                    {graph.stack.elements.flatMap(layer => layer.elements).map(Group)}
+                    {allGroups(graph.stack).map(Group)}
                     {graph.edges.map(Path)}
                 </svg>
             );
