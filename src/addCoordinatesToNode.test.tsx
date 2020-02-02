@@ -9,10 +9,11 @@ import {
     GROUP_MARGIN_SIDE,
     GROUP_MARGIN_TOP,
     Node,
-    Coordinates,
-    Height,
     LayerPosition,
+    Coordinates,
+    LayerDimensions,
     GroupPosition,
+    Height,
     Stack,
     Layer,
     addCoordinatesToNode,
@@ -22,7 +23,7 @@ import {
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
 
-    addCoordinatesToNode(layer, {x: 0, y: 0, nodeY: 0, groupHeight: 0}, [], width(layer), 0);
+    addCoordinatesToNode(layer, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(layer), 0);
 
     expect(layer).toStrictEqual({kind: 'layer', elements: []});
 });
@@ -36,9 +37,9 @@ test('one element is layouted to the origin', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -51,6 +52,7 @@ test('one element is layouted to the origin', () => {
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_0",
                     index: 0,
                     layerIndex: 0,
@@ -79,9 +81,9 @@ test('one element in the second layer keeps space for the two borders between th
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: 0, nodeY: 0, groupHeight: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Stack<Node & LayerPosition & Coordinates, GroupPosition & Coordinates & Height> = {
+    let expected: Stack<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1",
@@ -95,6 +97,7 @@ test('one element in the second layer keeps space for the two borders between th
                         name: "node 1",
                         x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                         y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                        belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                         key: "0_0",
                         index: 0,
                         layerIndex: 0,
@@ -115,6 +118,7 @@ test('one element in the second layer keeps space for the two borders between th
                         name: "node 2",
                         x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                         y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING + GROUP_MARGIN_TOP,
+                        belowLayerY: MARGIN_TOP + (GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING) * 2,
                         key: "1_0",
                         index: 0,
                         layerIndex: 1,
@@ -137,9 +141,9 @@ test('two elements are layouted right beside each other', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -152,6 +156,7 @@ test('two elements are layouted right beside each other', () => {
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_0",
                     index: 0,
                     layerIndex: 0,
@@ -162,6 +167,7 @@ test('two elements are layouted right beside each other', () => {
                     name: "node 2",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_1",
                     index: 1,
                     layerIndex: 0,
@@ -183,9 +189,9 @@ test('width of node is adjusted by size property', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -198,6 +204,7 @@ test('width of node is adjusted by size property', () => {
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_0",
                     index: 0,
                     layerIndex: 0,
@@ -209,6 +216,7 @@ test('width of node is adjusted by size property', () => {
                     name: "node 2",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH * 1.2 + HORIZONTAL_SPACING,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_1",
                     index: 1,
                     layerIndex: 0,
@@ -233,9 +241,9 @@ test('two elements in two groups have an additional spacing for the two group bo
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -248,6 +256,7 @@ test('two elements in two groups have an additional spacing for the two group bo
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_0",
                     index: 0,
                     layerIndex: 0,
@@ -266,6 +275,7 @@ test('two elements in two groups have an additional spacing for the two group bo
                     name: "node 2",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE,
                     y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                    belowLayerY: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING,
                     key: "0_1",
                     index: 1,
                     layerIndex: 0,

@@ -10,6 +10,10 @@ export type Height = {
     height: number
 }
 
+export type LayerDimensions = {
+    belowLayerY: number
+}
+
 export type LayerPosition = {
     key: string
     index: number
@@ -234,15 +238,15 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
 
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
-): Graph<N & Coordinates, E, G & Coordinates & Height> {
+): Graph<N & Coordinates & LayerDimensions, E, G & Coordinates & Height> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0, groupHeight: 0}, heightOfAllEdges);
-    return graph as unknown as Graph<N & Coordinates, E, G & Coordinates & Height>;
+    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0 }, heightOfAllEdges);
+    return graph as unknown as Graph<N & Coordinates & LayerDimensions, E, G & Coordinates & Height>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
-    accumulator: { x: number, y: number, nodeY: number, groupHeight: number },
+    accumulator: { x: number, y: number, nodeY: number, groupHeight: number, belowLayerY: number },
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0
@@ -261,6 +265,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
             accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
             accumulator.nodeY = accumulator.y + groupNestingLevel(element) * GROUP_MARGIN_TOP;
             accumulator.groupHeight = groupNestingLevel(element) * (GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + ELEMENT_HEIGHT;
+            accumulator.belowLayerY = accumulator.y + heightOfNodes(element) + additionalEdgeHeight;
             element.elements.forEach(group => {
                 addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
@@ -288,7 +293,8 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "node": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.nodeY + additionalEdgeHeight
+                y: accumulator.nodeY + additionalEdgeHeight,
+                belowLayerY: accumulator.belowLayerY
             });
             accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
@@ -532,9 +538,9 @@ function edgeEndCoordinates<N extends Node & LayerPosition & Coordinates & Numbe
     };
 }
 
-export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
+export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
-    let upperNodeEdgesY = getUpperNode(edge).y + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + GROUP_MARGIN_BOTTOM + edge.index * EDGE_SPACING;
+    let upperNodeEdgesY = getUpperNode(edge).belowLayerY - VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
     return (
         <path key={edge.key} d={
