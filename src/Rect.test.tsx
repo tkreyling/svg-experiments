@@ -2,6 +2,7 @@ import {Coordinates, LayerPosition, Node, Rect} from "./App";
 
 test('coordinates are just passed through', () => {
   let props: Node & LayerPosition & Coordinates = {
+    kind: "node",
     x: 10,
     y: 10,
     name: "element 1",
