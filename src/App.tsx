@@ -6,6 +6,10 @@ export type Coordinates = {
     y: number
 }
 
+export type Height = {
+    height: number
+}
+
 export type LayerPosition = {
     key: string
     index: number
@@ -230,15 +234,15 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
 
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
-): Graph<N & Coordinates, E, G & Coordinates> {
+): Graph<N & Coordinates, E, G & Coordinates & Height> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0}, heightOfAllEdges);
-    return graph as unknown as Graph<N & Coordinates, E, G & Coordinates>;
+    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0, groupHeight: 0}, heightOfAllEdges);
+    return graph as unknown as Graph<N & Coordinates, E, G & Coordinates & Height>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
-    accumulator: { x: number, y: number, nodeY: number },
+    accumulator: { x: number, y: number, nodeY: number, groupHeight: number },
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0
@@ -256,6 +260,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "layer": {
             accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
             accumulator.nodeY = accumulator.y + groupNestingLevel(element) * GROUP_MARGIN_TOP;
+            accumulator.groupHeight = groupNestingLevel(element) * (GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + ELEMENT_HEIGHT;
             element.elements.forEach(group => {
                 addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
@@ -265,16 +270,19 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "group": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + additionalEdgeHeight
+                y: accumulator.y + additionalEdgeHeight,
+                height: accumulator.groupHeight
             });
 
             accumulator.x += GROUP_MARGIN_SIDE;
             accumulator.y += GROUP_MARGIN_TOP;
+            accumulator.groupHeight -= GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM;
             element.elements.forEach(node => {
                 addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
             accumulator.x += GROUP_MARGIN_SIDE;
             accumulator.y -= GROUP_MARGIN_TOP;
+            accumulator.groupHeight += GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM;
             return;
         }
         case "node": {
@@ -490,13 +498,13 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates> = group => {
+const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates & Height> = group => {
     return (
         <g key={group.key}>
             <rect
                 x={group.x} y={group.y}
                 width={width(group)}
-                height={heightOfNodes(group)}
+                height={group.height}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text x={group.x + GROUP_MARGIN_SIDE} y={group.y + ELEMENT_HEIGHT / 2} fill="black"
