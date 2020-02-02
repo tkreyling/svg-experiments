@@ -234,6 +234,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
 ) {
     switch (element.kind) {
         case "stack": {
+            accumulator.y += MARGIN_TOP;
             let fullWidth = width(element);
             element.elements.forEach((layer, layerIndex) => {
                 let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
@@ -252,7 +253,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "group": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + MARGIN_TOP + additionalEdgeHeight
+                y: accumulator.y + additionalEdgeHeight
             });
 
             accumulator.x += GROUP_MARGIN_SIDE;
@@ -267,7 +268,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "node": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + MARGIN_TOP + additionalEdgeHeight
+                y: accumulator.y + additionalEdgeHeight
             });
             accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
