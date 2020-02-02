@@ -104,10 +104,9 @@ function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node, unknow
         case "stack":
             return element.elements
                 .map(heightOfNodes)
-                .map(height => height + VERTICAL_SPACING)
                 .reduce((sum, add) => sum + add, 0);
         case "layer":
-            return Math.max(...element.elements.map(heightOfNodes));
+            return Math.max(...element.elements.map(heightOfNodes)) + VERTICAL_SPACING;
         case "group": {
             return GROUP_MARGIN_TOP + Math.max(...element.elements.map(heightOfNodes)) + GROUP_MARGIN_BOTTOM;
         }
@@ -247,12 +246,13 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
             element.elements.forEach(group => {
                 addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
+            accumulator.y += heightOfNodes(element);
             return;
         }
         case "group": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+                y: accumulator.y + MARGIN_TOP + additionalEdgeHeight
             });
 
             accumulator.x += GROUP_MARGIN_SIDE;
@@ -267,7 +267,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "node": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+                y: accumulator.y + MARGIN_TOP + additionalEdgeHeight
             });
             accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;

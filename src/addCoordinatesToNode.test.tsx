@@ -1,19 +1,20 @@
 import {
-    addCoordinatesToNode,
-    Coordinates,
+    MARGIN_SIDE,
+    MARGIN_TOP,
+    HORIZONTAL_SPACING,
+    VERTICAL_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     GROUP_MARGIN_BOTTOM,
     GROUP_MARGIN_SIDE,
     GROUP_MARGIN_TOP,
-    GroupPosition,
-    HORIZONTAL_SPACING,
-    Layer,
-    LayerPosition,
-    MARGIN_SIDE,
-    MARGIN_TOP,
     Node,
-    VERTICAL_SPACING,
+    Coordinates,
+    LayerPosition,
+    GroupPosition,
+    Stack,
+    Layer,
+    addCoordinatesToNode,
     width
 } from "./App";
 
@@ -60,34 +61,63 @@ test('one element is layouted to the origin', () => {
 });
 
 test('one element in the second layer keeps space for the two borders between the layers', () => {
-    let elements: Layer<Node & LayerPosition, GroupPosition> = {
-        kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 1, relativePosition: 0}
-            ]
+    let elements: Stack<Node & LayerPosition, GroupPosition> = {
+        kind: 'stack', elements: [{
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 1", key: "0_0", index: 0, layerIndex: 0, elements: [
+                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0}
+                ]
+            }]
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 2", key: "1_0", index: 0, layerIndex: 1, elements: [
+                    {kind: "node", name: "node 2", key: "1_0", index: 0, layerIndex: 1, relativePosition: 0}
+                ]
+            }]
         }]
     };
 
     addCoordinatesToNode(elements, {x: 0, y: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
-        kind: 'layer', elements: [{
-            name: "group 1", kind: 'group',
-            key: "0_0", index: 0, layerIndex: 0,
-            x: MARGIN_SIDE,
-            y: MARGIN_TOP,
-            elements: [
-                {
-                    kind: "node",
-                    name: "node 1",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING + GROUP_MARGIN_TOP,
-                    key: "0_0",
-                    index: 0,
-                    layerIndex: 1,
-                    relativePosition: 0
-                }
-            ]
+    let expected: Stack<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
+        kind: 'stack', elements: [{
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 1",
+                key: "0_0", index: 0, layerIndex: 0,
+                x: MARGIN_SIDE,
+                y: MARGIN_TOP,
+                elements: [
+                    {
+                        kind: "node",
+                        name: "node 1",
+                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                        y: MARGIN_TOP + GROUP_MARGIN_TOP,
+                        key: "0_0",
+                        index: 0,
+                        layerIndex: 0,
+                        relativePosition: 0
+                    }
+                ]
+            }]
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 2",
+                key: "1_0", index: 0, layerIndex: 1,
+                x: MARGIN_SIDE,
+                y: MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING + GROUP_MARGIN_TOP,
+                elements: [
+                    {
+                        kind: "node",
+                        name: "node 2",
+                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
+                        y: MARGIN_TOP + GROUP_MARGIN_TOP + ELEMENT_HEIGHT + GROUP_MARGIN_BOTTOM + VERTICAL_SPACING + GROUP_MARGIN_TOP,
+                        key: "1_0",
+                        index: 0,
+                        layerIndex: 1,
+                        relativePosition: 0
+                    }
+                ]
+            }]
         }]
     };
     expect(elements).toStrictEqual(expected);
