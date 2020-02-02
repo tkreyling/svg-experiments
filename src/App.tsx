@@ -222,7 +222,7 @@ function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends Layer
     graph: Graph<N, E, G>
 ): Graph<N & Coordinates, E, G & Coordinates> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, {x: 0, y:0}, heightOfAllEdges);
+    addCoordinatesToNode(graph.stack, {x: 0, y: 0}, heightOfAllEdges);
     return graph as unknown as Graph<N & Coordinates, E, G & Coordinates>;
 }
 
@@ -256,16 +256,18 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
             });
 
             accumulator.x += GROUP_MARGIN_SIDE;
+            accumulator.y += GROUP_MARGIN_TOP;
             element.elements.forEach(node => {
                 addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
             accumulator.x += GROUP_MARGIN_SIDE;
+            accumulator.y -= GROUP_MARGIN_TOP;
             return;
         }
         case "node": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + MARGIN_TOP + GROUP_MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
+                y: accumulator.y + MARGIN_TOP + element.layerIndex * (ELEMENT_HEIGHT + VERTICAL_SPACING + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + additionalEdgeHeight
             });
             accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
