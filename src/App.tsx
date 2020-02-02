@@ -99,9 +99,21 @@ export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown
     }
 }
 
-function heightOfNodes(stack: Stack<unknown, unknown>) {
-    let n = stack.elements.length;
-    return n * ELEMENT_HEIGHT + n * VERTICAL_SPACING + n * GROUP_MARGIN_TOP + n * GROUP_MARGIN_BOTTOM;
+function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
+    switch (element.kind) {
+        case "stack":
+            return element.elements
+                .map(heightOfNodes)
+                .map(height => height + VERTICAL_SPACING)
+                .reduce((sum, add) => sum + add, 0);
+        case "layer":
+            return Math.max(...element.elements.map(heightOfNodes));
+        case "group": {
+            return GROUP_MARGIN_TOP + Math.max(...element.elements.map(heightOfNodes)) + GROUP_MARGIN_BOTTOM;
+        }
+        case "node":
+            return ELEMENT_HEIGHT;
+    }
 }
 
 function fromIsUpper<T extends LayerPosition>(edge: Edge<T>) {
