@@ -21,7 +21,7 @@ import {
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
 
-    addCoordinatesToNode(layer, {x: 0, y: 0}, [], width(layer), 0);
+    addCoordinatesToNode(layer, {x: 0, y: 0, nodeY: 0}, [], width(layer), 0);
 
     expect(layer).toStrictEqual({kind: 'layer', elements: []});
 });
@@ -35,7 +35,7 @@ test('one element is layouted to the origin', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0}, [], width(elements), 0);
 
     let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
         kind: 'layer', elements: [{
@@ -77,7 +77,7 @@ test('one element in the second layer keeps space for the two borders between th
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: 0}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: 0, nodeY: 0}, [], width(elements), 0);
 
     let expected: Stack<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
         kind: 'stack', elements: [{
@@ -133,7 +133,7 @@ test('two elements are layouted right beside each other', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0}, [], width(elements), 0);
 
     let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
         kind: 'layer', elements: [{
@@ -178,7 +178,7 @@ test('width of node is adjusted by size property', () => {
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0}, [], width(elements), 0);
 
     let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
         kind: 'layer', elements: [{
@@ -227,7 +227,7 @@ test('two elements in two groups have an additional spacing for the two group bo
         }]
     };
 
-    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP}, [], width(elements), 0);
+    addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0}, [], width(elements), 0);
 
     let expected: Layer<Node & LayerPosition & Coordinates, GroupPosition & Coordinates> = {
         kind: 'layer', elements: [{

@@ -217,17 +217,28 @@ export function addLayerPositionToNode<N extends Node, G>(
     }
 }
 
+function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, unknown>): number {
+    switch (element.kind) {
+        case "layer":
+            return Math.max(...element.elements.map(groupNestingLevel));
+        case "group":
+            return Math.max(...element.elements.map(groupNestingLevel)) + 1;
+        case "node":
+            return 0;
+    }
+}
+
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
 ): Graph<N & Coordinates, E, G & Coordinates> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, {x: 0, y: 0}, heightOfAllEdges);
+    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0}, heightOfAllEdges);
     return graph as unknown as Graph<N & Coordinates, E, G & Coordinates>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
-    accumulator: { x: number, y: number },
+    accumulator: { x: number, y: number, nodeY: number },
     heightOfEdges: number[],
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0
@@ -244,6 +255,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         }
         case "layer": {
             accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
+            accumulator.nodeY = accumulator.y + groupNestingLevel(element) * GROUP_MARGIN_TOP;
             element.elements.forEach(group => {
                 addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
             });
@@ -268,7 +280,7 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
         case "node": {
             Object.assign(element, {
                 x: accumulator.x,
-                y: accumulator.y + additionalEdgeHeight
+                y: accumulator.nodeY + additionalEdgeHeight
             });
             accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
