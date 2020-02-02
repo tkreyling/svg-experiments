@@ -496,7 +496,7 @@ const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates> = grou
             <rect
                 x={group.x} y={group.y}
                 width={width(group)}
-                height={ELEMENT_HEIGHT + GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM}
+                height={heightOfNodes(group)}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text x={group.x + GROUP_MARGIN_SIDE} y={group.y + ELEMENT_HEIGHT / 2} fill="black"
