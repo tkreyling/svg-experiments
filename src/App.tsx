@@ -239,17 +239,6 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
     }
 }
 
-export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
-    element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
-    accumulator: { x: number, y: number, nodeY: number, groupHeight: number, belowLayerY: number },
-    heightOfEdges: number[],
-    fullWidth: number = 0,
-    additionalEdgeHeight: number = 0
-) {
-    addXToNode(element, accumulator, fullWidth);
-    addYToNode(element, accumulator, heightOfEdges, additionalEdgeHeight);
-}
-
 function addXToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
 ): Graph<N & X, E, G & X> {
