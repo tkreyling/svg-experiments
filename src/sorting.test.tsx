@@ -1,4 +1,4 @@
-import {and, ascending, descending} from "./App";
+import {and, ascending, descending} from "./sorting";
 
 test('sorts ascending', () => {
     let elements = [{x: 5}, {x: 2}];
