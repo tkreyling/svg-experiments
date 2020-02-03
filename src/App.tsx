@@ -239,14 +239,6 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
     }
 }
 
-function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
-    graph: Graph<N, E, G>
-): Graph<N & X & Y & LayerDimensions, E, G & X & Y & Height> {
-    let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-    addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0 }, heightOfAllEdges);
-    return graph as unknown as Graph<N & X & Y & LayerDimensions, E, G & X & Y & Height>;
-}
-
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
     accumulator: { x: number, y: number, nodeY: number, groupHeight: number, belowLayerY: number },
@@ -254,52 +246,112 @@ export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends
     fullWidth: number = 0,
     additionalEdgeHeight: number = 0
 ) {
+    addXToNode(element, accumulator, fullWidth);
+    addYToNode(element, accumulator, heightOfEdges, additionalEdgeHeight);
+}
+
+function addXToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
+    graph: Graph<N, E, G>
+): Graph<N & X, E, G & X> {
+    addXToNode(graph.stack, {x: 0 });
+    return graph as unknown as Graph<N & X, E, G & X>;
+}
+
+export function addXToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
+    element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
+    accumulator: { x: number },
+    fullWidth: number = 0
+) {
     switch (element.kind) {
         case "stack": {
-            accumulator.y += MARGIN_TOP;
             let fullWidth = width(element);
-            element.elements.forEach((layer, layerIndex) => {
-                let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
-                addCoordinatesToNode(layer, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
+            element.elements.forEach(layer => {
+                addXToNode(layer, accumulator, fullWidth);
             });
             return;
         }
         case "layer": {
             accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
+            element.elements.forEach(group => {
+                addXToNode(group, accumulator, fullWidth);
+            });
+            return;
+        }
+        case "group": {
+            Object.assign(element, {
+                x: accumulator.x
+            });
+
+            accumulator.x += GROUP_MARGIN_SIDE;
+            element.elements.forEach(node => {
+                addXToNode(node, accumulator, fullWidth);
+            });
+            accumulator.x += GROUP_MARGIN_SIDE;
+            return;
+        }
+        case "node": {
+            Object.assign(element, {
+                x: accumulator.x
+            });
+            accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
+            return;
+        }
+    }
+}
+
+function addYToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(
+    graph: Graph<N, E, G>
+): Graph<N & Y & LayerDimensions, E, G & Y & Height> {
+    let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
+    addYToNode(graph.stack, {y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0 }, heightOfAllEdges);
+    return graph as unknown as Graph<N & Y & LayerDimensions, E, G & Y & Height>;
+}
+
+export function addYToNode<N extends Node, G>(
+    element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
+    accumulator: { y: number, nodeY: number, groupHeight: number, belowLayerY: number },
+    heightOfEdges: number[],
+    additionalEdgeHeight: number = 0
+) {
+    switch (element.kind) {
+        case "stack": {
+            accumulator.y += MARGIN_TOP;
+            element.elements.forEach((layer, layerIndex) => {
+                let additionalEdgeHeight = heightOfEdges.slice(0, layerIndex).reduce((sum, add) => sum + add, 0);
+                addYToNode(layer, accumulator, heightOfEdges, additionalEdgeHeight);
+            });
+            return;
+        }
+        case "layer": {
             accumulator.nodeY = accumulator.y + groupNestingLevel(element) * GROUP_MARGIN_TOP;
             accumulator.groupHeight = groupNestingLevel(element) * (GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM) + ELEMENT_HEIGHT;
             accumulator.belowLayerY = accumulator.y + heightOfNodes(element) + additionalEdgeHeight;
             element.elements.forEach(group => {
-                addCoordinatesToNode(group, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
+                addYToNode(group, accumulator, heightOfEdges, additionalEdgeHeight);
             });
             accumulator.y += heightOfNodes(element);
             return;
         }
         case "group": {
             Object.assign(element, {
-                x: accumulator.x,
                 y: accumulator.y + additionalEdgeHeight,
                 height: accumulator.groupHeight
             });
 
-            accumulator.x += GROUP_MARGIN_SIDE;
             accumulator.y += GROUP_MARGIN_TOP;
             accumulator.groupHeight -= GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM;
             element.elements.forEach(node => {
-                addCoordinatesToNode(node, accumulator, heightOfEdges, fullWidth, additionalEdgeHeight);
+                addYToNode(node, accumulator, heightOfEdges, additionalEdgeHeight);
             });
-            accumulator.x += GROUP_MARGIN_SIDE;
             accumulator.y -= GROUP_MARGIN_TOP;
             accumulator.groupHeight += GROUP_MARGIN_TOP + GROUP_MARGIN_BOTTOM;
             return;
         }
         case "node": {
             Object.assign(element, {
-                x: accumulator.x,
                 y: accumulator.nodeY + additionalEdgeHeight,
                 belowLayerY: accumulator.belowLayerY
             });
-            accumulator.x += ELEMENT_WIDTH * (element.size || 1) + HORIZONTAL_SPACING;
             return;
         }
     }
@@ -711,7 +763,8 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
         .map(addLayerPositionToEdgeG)
-        .map(addCoordinatesToNodeG)
+        .map(addXToNodeG)
+        .map(addYToNodeG)
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
