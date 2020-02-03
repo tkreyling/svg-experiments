@@ -387,10 +387,10 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition & X>[]) {
         let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
         let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
 
-        sameLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
-        otherLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
-        otherLayerAfter.sort((edge1, edge2) => getLowerNode(edge2).index - getLowerNode(edge1).index);
-        sameLayerAfter.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
+        sameLayerBefore.sort(ascending(edge => getLowerNode(edge).index));
+        otherLayerBefore.sort(ascending(edge => getLowerNode(edge).index));
+        otherLayerAfter.sort(descending(edge => getLowerNode(edge).index));
+        sameLayerAfter.sort(ascending(edge => getLowerNode(edge).index));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
@@ -478,9 +478,9 @@ export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[])
         let after = sameLayer.filter(edgeEnd => edgeEnd.reverseNode.index >= node.index);
         let otherLayer = edgeEnds.filter(edgeEnd => edgeEnd.reverseNode.layerIndex !== node.layerIndex);
 
-        before.sort((edgeEnd1, edgeEnd2) => edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index);
-        otherLayer.sort((edgeEnd1, edgeEnd2) => edgeEnd1.reverseNode.index - edgeEnd2.reverseNode.index);
-        after.sort((edgeEnd1, edgeEnd2) => edgeEnd2.reverseNode.index - edgeEnd1.reverseNode.index);
+        before.sort(descending(e => e.reverseNode.index));
+        otherLayer.sort(ascending(e => e.reverseNode.index));
+        after.sort(descending(e => e.reverseNode.index));
 
         let all = before.concat(otherLayer).concat(after);
         all.forEach((edgeEnd, index) => {
