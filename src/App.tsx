@@ -20,7 +20,6 @@ export type LayerDimensions = {
 export type LayerPosition = {
     key: string
     index: number
-    relativePosition: number
     layerIndex: number
 }
 
@@ -219,7 +218,6 @@ export function addLayerPositionToNode<N extends Node, G>(
             Object.assign(element, {
                 key: layerIndex + "_" + accumulator.index,
                 index: accumulator.index,
-                relativePosition: layerOffset + accumulator.index,
                 layerIndex: layerIndex
             });
             accumulator.index++;

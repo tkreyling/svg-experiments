@@ -16,7 +16,7 @@ test('one node in one layer ', () => {
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1", key: "G_0_0", index: 0, layerIndex: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0, relativePosition: 0, layerIndex: 0}
+                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
                 ]
             }]
         }]};
@@ -39,8 +39,8 @@ test('two nodes in one layer', () => {
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', key: "G_0_0", index: 0, layerIndex: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0, relativePosition: 0, layerIndex: 0},
-                    {kind: "node", name: "node 2", key: "0_1", index: 1, relativePosition: 1, layerIndex: 0}
+                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0},
+                    {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
                 ]
             }]
         }]
@@ -66,13 +66,13 @@ test('two nodes in one layer in two groups', () => {
                 name: "group 1",
                 kind: 'group',
                 key: "G_0_0", index: 0, layerIndex: 0,
-                elements: [{kind: "node", name: "node 1", key: "0_0", index: 0, relativePosition: 0, layerIndex: 0}]
+                elements: [{kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}]
             },
             {
                 name: "group 2",
                 kind: 'group',
                 key: "G_0_1", index: 1, layerIndex: 0,
-                elements: [{kind: "node", name: "node 2", key: "0_1", index: 1, relativePosition: 1, layerIndex: 0}]
+                elements: [{kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}]
             }
         ]
     }]};
@@ -95,9 +95,9 @@ test('three nodes in one layer ', () => {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "G_0_0", index: 0, layerIndex: 0,
                 elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, relativePosition: 0, layerIndex: 0},
-                {kind: "node", name: "node 2", key: "0_1", index: 1, relativePosition: 1, layerIndex: 0},
-                {kind: "node", name: "node 3", key: "0_2", index: 2, relativePosition: 2, layerIndex: 0}
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0},
+                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0},
+                {kind: "node", name: "node 3", key: "0_2", index: 2, layerIndex: 0}
             ]
         }]
     }]};
@@ -117,15 +117,15 @@ test('two nodes and one node in two layers ', () => {
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', key: "G_0_0", index: 0, layerIndex: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0, relativePosition: 0, layerIndex: 0},
-                    {kind: "node", name: "node 2", key: "0_1", index: 1, relativePosition: 1, layerIndex: 0}
+                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0},
+                    {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
                 ]
             }]
         }, {
             kind: 'layer', elements: [{
                 name: "group 2", kind: 'group', key: "G_1_0", index: 0, layerIndex: 1,
                 elements: [
-                    {kind: "node", name: "node 3", key: "1_0", index: 0, relativePosition: 0.5, layerIndex: 1}
+                    {kind: "node", name: "node 3", key: "1_0", index: 0, layerIndex: 1}
                 ]
             }]
         }]
