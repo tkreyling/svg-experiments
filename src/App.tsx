@@ -239,7 +239,7 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
     }
 }
 
-function addXToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
+function addXToNodeG<N extends (Node & LayerPosition), E, G extends GroupPosition>(
     graph: Graph<N, E, G>
 ): Graph<N & X, E, G & X> {
     addXToNode(graph.stack, {x: 0 });
@@ -751,8 +751,8 @@ function allGroups<N extends Node, G, E>(element: Stack<N, G> | (Group<N, G> & G
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerPositionToNodeG)
-        .map(addLayerPositionToEdgeG)
         .map(addXToNodeG)
+        .map(addLayerPositionToEdgeG)
         .map(addYToNodeG)
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(graph => {
