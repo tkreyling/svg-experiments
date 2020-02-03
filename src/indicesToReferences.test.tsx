@@ -1,4 +1,5 @@
-import {indicesToReferences, Node, Stack, IndexPair, Edge} from "./App";
+import {Node, Stack, Edge} from "./App";
+import {IndexPair, indicesToReferences} from "./indicesToReferences";
 
 test('no nodes, no indices result in no edges', () => {
     let elements: Stack<Node, unknown> = {kind: 'stack', elements: []};
