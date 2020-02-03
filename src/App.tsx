@@ -169,42 +169,23 @@ function addLayerPositionToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>):
     return graph as unknown as Graph<N & LayerPosition, E, G & GroupPosition>;
 }
 
-function numberOfElements<N extends Node, G>(element: Node | Group<N, G> | Layer<N, G> | Stack<N, G>): number {
-    switch (element.kind) {
-        case "stack":
-            return Math.max(...element.elements.map(numberOfElements));
-        case "layer":
-            return element.elements.map(numberOfElements).reduce((sum, add) => sum + add, 0);
-        case "group":
-            return element.elements.map(numberOfElements).reduce((sum, add) => sum + add, 0);
-        case "node":
-            return 1;
-    }
-}
-
 export function addLayerPositionToNode<N extends Node, G>(
     element: N | Group<N, G> | Layer<N, G> | Stack<N, G>,
-    fullWidth: number = 0,
     layerIndex: number = 0,
-    layerOffset: number = 0,
     accumulator: { index: number, groupIndex: number } = {index: 0, groupIndex: 0}
 ) {
     switch (element.kind) {
         case "stack": {
-            let fullWidth = numberOfElements(element);
-
             element.elements.forEach((groups, layerIndex) => {
-                addLayerPositionToNode(groups, fullWidth, layerIndex);
+                addLayerPositionToNode(groups, layerIndex);
             });
             return;
         }
         case "layer": {
-            let layerWidth = numberOfElements(element);
-            let layerOffset = (fullWidth - layerWidth) / 2;
             let accumulator = {index: 0, groupIndex: 0};
 
             element.elements.forEach(group => {
-                addLayerPositionToNode(group, fullWidth, layerIndex, layerOffset, accumulator);
+                addLayerPositionToNode(group, layerIndex, accumulator);
             });
             return;
         }
@@ -217,7 +198,7 @@ export function addLayerPositionToNode<N extends Node, G>(
             accumulator.groupIndex++;
 
             element.elements.forEach(node => {
-                addLayerPositionToNode(node, fullWidth, layerIndex, layerOffset, accumulator);
+                addLayerPositionToNode(node, layerIndex, accumulator);
             });
             return;
         }
