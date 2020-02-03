@@ -1,4 +1,5 @@
-import {addLayerPositionToEdge, Edge, EdgeIndex, LayerPosition, X} from "./App";
+import {Edge, EdgeIndex, LayerPosition, X} from "./App";
+import {addLayerPositionToEdge} from "./addLayerPositionToEdge";
 
 test('no edges need no layer positioning', () => {
     addLayerPositionToEdge([]);
