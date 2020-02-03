@@ -347,10 +347,7 @@ export function addYToNode<N extends Node, G>(
 function addLayerPositionToEdgeG<N extends LayerPosition & X, E, G>(graph: Graph<N, E, G>):
     Graph<N, E & LayerPosition, G> {
     addLayerPositionToEdge(graph.edges);
-    return {
-        stack: graph.stack,
-        edges: graph.edges as unknown as (Edge<N> & E & LayerPosition)[]
-    }
+    return graph as unknown as Graph<N, E & LayerPosition, G>;
 }
 
 export function addLayerPositionToEdge(edges: Edge<LayerPosition & X>[]) {
@@ -418,10 +415,7 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition & X>[]) {
 function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):
     Graph<N & NumberOfEdges, E & ConnectionIndex, G> {
     addConnectionIndexAndNumberOfEdges(graph.edges);
-    return {
-        stack: graph.stack as unknown as Stack<N & NumberOfEdges, G>,
-        edges: graph.edges as unknown as (Edge<N & NumberOfEdges> & E & ConnectionIndex)[]
-    }
+    return graph as unknown as Graph<N & NumberOfEdges, E & ConnectionIndex, G>;
 }
 
 export function addConnectionIndexAndNumberOfEdges(edges: Edge<LayerPosition>[]) {
