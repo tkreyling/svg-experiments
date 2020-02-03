@@ -1,23 +1,24 @@
 import {
-    MARGIN_SIDE,
-    MARGIN_TOP,
-    HORIZONTAL_SPACING,
-    VERTICAL_SPACING,
+    addCoordinatesToNode,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     GROUP_MARGIN_BOTTOM,
     GROUP_MARGIN_SIDE,
     GROUP_MARGIN_TOP,
-    Node,
-    LayerPosition,
-    Coordinates,
-    LayerDimensions,
     GroupPosition,
     Height,
-    Stack,
+    HORIZONTAL_SPACING,
     Layer,
-    addCoordinatesToNode,
-    width
+    LayerDimensions,
+    LayerPosition,
+    MARGIN_SIDE,
+    MARGIN_TOP,
+    Node,
+    Stack,
+    VERTICAL_SPACING,
+    width,
+    X,
+    Y
 } from "./App";
 
 test('no element results in no layouted elements', () => {
@@ -39,7 +40,7 @@ test('one element is layouted to the origin', () => {
 
     addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & X & Y & LayerDimensions, GroupPosition & X & Y & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -83,7 +84,7 @@ test('one element in the second layer keeps space for the two borders between th
 
     addCoordinatesToNode(elements, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Stack<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
+    let expected: Stack<Node & LayerPosition & X & Y & LayerDimensions, GroupPosition & X & Y & Height> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1",
@@ -143,7 +144,7 @@ test('two elements are layouted right beside each other', () => {
 
     addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & X & Y & LayerDimensions, GroupPosition & X & Y & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -191,7 +192,7 @@ test('width of node is adjusted by size property', () => {
 
     addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & X & Y & LayerDimensions, GroupPosition & X & Y & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,
@@ -243,7 +244,7 @@ test('two elements in two groups have an additional spacing for the two group bo
 
     addCoordinatesToNode(elements, {x: 0, y: MARGIN_TOP, nodeY: 0, groupHeight: 0, belowLayerY: 0}, [], width(elements), 0);
 
-    let expected: Layer<Node & LayerPosition & Coordinates & LayerDimensions, GroupPosition & Coordinates & Height> = {
+    let expected: Layer<Node & LayerPosition & X & Y & LayerDimensions, GroupPosition & X & Y & Height> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
             key: "0_0", index: 0, layerIndex: 0,

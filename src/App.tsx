@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import './App.css';
 
-export type Coordinates = {
+export type X = {
     x: number
+}
+
+export type Y = {
     y: number
 }
 
@@ -238,10 +241,10 @@ function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, un
 
 function addCoordinatesToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G extends GroupPosition>(
     graph: Graph<N, E, G>
-): Graph<N & Coordinates & LayerDimensions, E, G & Coordinates & Height> {
+): Graph<N & X & Y & LayerDimensions, E, G & X & Y & Height> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
     addCoordinatesToNode(graph.stack, {x: 0, y: 0, nodeY: 0, groupHeight: 0, belowLayerY: 0 }, heightOfAllEdges);
-    return graph as unknown as Graph<N & Coordinates & LayerDimensions, E, G & Coordinates & Height>;
+    return graph as unknown as Graph<N & X & Y & LayerDimensions, E, G & X & Y & Height>;
 }
 
 export function addCoordinatesToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
@@ -473,7 +476,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
     );
 };
 
-export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
+export const Rect: React.FC<Node & LayerPosition & X & Y> = node => {
     let isComponent = node.symbol === "component";
     return (
         <g key={node.key}>
@@ -504,7 +507,7 @@ export const Rect: React.FC<Node & LayerPosition & Coordinates> = node => {
     );
 };
 
-const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates & Height> = group => {
+const Group: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
     return (
         <g key={group.key}>
             <rect
@@ -527,7 +530,7 @@ const Group: React.FC<Group<Node, unknown> & GroupPosition & Coordinates & Heigh
     );
 };
 
-function edgeEndCoordinates<N extends Node & LayerPosition & Coordinates & NumberOfEdges>(
+function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
 ) {
     let onLowerSide = node.layerIndex <= otherNode.layerIndex;
@@ -538,7 +541,7 @@ function edgeEndCoordinates<N extends Node & LayerPosition & Coordinates & Numbe
     };
 }
 
-export const Path: React.FC<Edge<Node & LayerPosition & Coordinates & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
+export const Path: React.FC<Edge<Node & LayerPosition & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getUpperNode(edge).belowLayerY - VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
