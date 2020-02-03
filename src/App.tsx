@@ -43,6 +43,10 @@ export type Edge<T> = {
     to: T
 }
 
+export type EdgeIndex = {
+    edgeIndex: number
+}
+
 type ConnectionIndex = {
     fromIndex: number
     toIndex: number
@@ -351,20 +355,22 @@ function addLayerPositionToEdgeG<N extends LayerPosition & X, E, G>(graph: Graph
 }
 
 export function addLayerPositionToEdge(edges: Edge<LayerPosition & X>[]) {
-    let groupedByLayerIndex = new Map<number, Edge<LayerPosition & X>[]>();
+    let groupedByLayerIndex = new Map<number, (Edge<LayerPosition & X> & EdgeIndex)[]>();
 
-    edges.forEach(edge => {
-        let key = getUpperNode(edge).layerIndex;
-        let edges = groupedByLayerIndex.get(key) || [];
-        edges.push(edge);
-        groupedByLayerIndex.set(key, edges);
-    });
+    edges
+        .map((edge, index) => Object.assign(edge, {edgeIndex: index}))
+        .forEach(edge => {
+            let key = getUpperNode(edge).layerIndex;
+            let edges = groupedByLayerIndex.get(key) || [];
+            edges.push(edge);
+            groupedByLayerIndex.set(key, edges);
+        });
 
     Array.from(groupedByLayerIndex.values()).forEach(addLayerPositionToEdgeForLayer);
 }
 
-function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition & X>[]) {
-    let groupedByUpperNode = new Map<string, Edge<LayerPosition & X>[]>();
+function addLayerPositionToEdgeForLayer(edges: (Edge<LayerPosition & X> & EdgeIndex)[]) {
+    let groupedByUpperNode = new Map<string, (Edge<LayerPosition & X> & EdgeIndex)[]>();
 
     edges.forEach(edge => {
         let key = getUpperNode(edge).key;
@@ -387,10 +393,10 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition & X>[]) {
         let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
         let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
 
-        sameLayerBefore.sort(ascending(edge => getLowerNode(edge).index));
-        otherLayerBefore.sort(ascending(edge => getLowerNode(edge).index));
-        otherLayerAfter.sort(descending(edge => getLowerNode(edge).index));
-        sameLayerAfter.sort(ascending(edge => getLowerNode(edge).index));
+        sameLayerBefore.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
+        otherLayerBefore.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
+        otherLayerAfter.sort(and(descending(edge => getLowerNode(edge).index), descending(edge => edge.edgeIndex)));
+        sameLayerAfter.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
