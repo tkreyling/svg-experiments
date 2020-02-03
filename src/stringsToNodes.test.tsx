@@ -1,4 +1,5 @@
-import {Node, Group, stringsToNodes, Stack} from "./App";
+import {Node, Group, Stack} from "./App";
+import {stringsToNodes} from "./stringsToNodes";
 
 test('one string results in one node', () => {
     let input: Group<string | Node, unknown>[][] = [[{name: "group 1", kind: 'group', elements: ["node"]}]];

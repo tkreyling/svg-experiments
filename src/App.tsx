@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {and, ascending, descending} from "./sorting";
 import {indicesToReferences as indicesToReferencesImport} from "./indicesToReferences";
+import {stringsToNodes as stringsToNodesImport} from "./stringsToNodes";
 
 export type X = {
     x: number
@@ -600,44 +601,6 @@ export const Path: React.FC<Edge<Node & LayerPosition & X & Y & LayerDimensions 
     );
 };
 
-function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node, unknown> {
-    // It is necessary to go through the array by index,
-    // because the array operations `every`, `map` and `flat` bypass empty array elements.
-    for (let i = 0; i < group.elements.length; i++) {
-        if (group.elements[i] === undefined) throw new Error("Empty array elements are not allowed.");
-    }
-    return {
-        kind: 'group',
-        name: group.name,
-        elements: group.elements.map(element => {
-            if (typeof element === 'string') {
-                return {
-                    kind: 'node',
-                    name: element
-                }
-            } else if ("elements" in element) {
-                return convertStringsToNodes(element);
-            } else {
-                return Object.assign(element, {
-                    kind: 'node'
-                });
-            }
-        })
-    }
-}
-
-export function stringsToNodes(strings: Group<string | Node, unknown>[][]): Stack<Node, unknown> {
-    return {
-        kind: 'stack',
-        elements: strings.map(layer => {
-            return {
-                kind: 'layer',
-                elements: layer.map(convertStringsToNodes)
-            }
-        })
-    };
-}
-
 let graphAsString =
     `var stack = stringsToNodes([
     [
@@ -694,6 +657,9 @@ graph
 
 // noinspection JSUnusedLocalSymbols
 const indicesToReferences = indicesToReferencesImport;
+
+// noinspection JSUnusedLocalSymbols
+const stringsToNodes = stringsToNodesImport;
 
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
