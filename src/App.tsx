@@ -346,7 +346,7 @@ export function addYToNode<N extends Node, G>(
     }
 }
 
-function addLayerPositionToEdgeG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):
+function addLayerPositionToEdgeG<N extends LayerPosition & X, E, G>(graph: Graph<N, E, G>):
     Graph<N, E & LayerPosition, G> {
     addLayerPositionToEdge(graph.edges);
     return {
@@ -355,8 +355,8 @@ function addLayerPositionToEdgeG<N extends LayerPosition, E, G>(graph: Graph<N, 
     }
 }
 
-export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
-    let groupedByLayerIndex = new Map<number, Edge<LayerPosition>[]>();
+export function addLayerPositionToEdge(edges: Edge<LayerPosition & X>[]) {
+    let groupedByLayerIndex = new Map<number, Edge<LayerPosition & X>[]>();
 
     edges.forEach(edge => {
         let key = getUpperNode(edge).layerIndex;
@@ -368,8 +368,8 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition>[]) {
     Array.from(groupedByLayerIndex.values()).forEach(addLayerPositionToEdgeForLayer);
 }
 
-function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
-    let groupedByUpperNode = new Map<string, Edge<LayerPosition>[]>();
+function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition & X>[]) {
+    let groupedByUpperNode = new Map<string, Edge<LayerPosition & X>[]>();
 
     edges.forEach(edge => {
         let key = getUpperNode(edge).key;
@@ -389,8 +389,8 @@ function addLayerPositionToEdgeForLayer(edges: Edge<LayerPosition>[]) {
         let sameLayerBefore = sameLayer.filter(edge => getLowerNode(edge).index <= getUpperNode(edge).index);
         let sameLayerAfter = sameLayer.filter(edge => getLowerNode(edge).index > getUpperNode(edge).index);
         let otherLayer = edges.filter(edge => getLowerNode(edge).layerIndex !== getUpperNode(edge).layerIndex);
-        let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).relativePosition <= getUpperNode(edge).relativePosition);
-        let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).relativePosition > getUpperNode(edge).relativePosition);
+        let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
+        let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
 
         sameLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
         otherLayerBefore.sort((edge1, edge2) => getLowerNode(edge1).index - getLowerNode(edge2).index);
