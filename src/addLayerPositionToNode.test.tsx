@@ -1,4 +1,5 @@
-import {addLayerPositionToNode, GroupPosition, LayerPosition, Node, Stack} from "./App";
+import {GroupPosition, LayerPosition, Node, Stack} from "./App";
+import {addLayerPositionToNode} from "./addLayerPositionToNode";
 
 test('no nodes need no layer positioning', () => {
     addLayerPositionToNode({kind: 'stack', elements: []});
