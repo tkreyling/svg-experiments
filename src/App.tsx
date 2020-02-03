@@ -416,6 +416,10 @@ export function ascending<T>(property: (obj: T) => number) {
     return (o1: T, o2: T) => property(o1) - property(o2);
 }
 
+export function descending<T>(property: (obj: T) => number) {
+    return (o1: T, o2: T) => property(o2) - property(o1);
+}
+
 export function and<T>(...sortFunctions: ((o1: T, o2: T) => number)[]) {
     return (o1: T, o2: T) => {
         let i = 0;

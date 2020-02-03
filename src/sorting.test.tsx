@@ -1,4 +1,4 @@
-import {and, ascending} from "./App";
+import {and, ascending, descending} from "./App";
 
 test('sorts ascending', () => {
     let elements = [{x: 5}, {x: 2}];
@@ -6,6 +6,14 @@ test('sorts ascending', () => {
     elements.sort(ascending(e => e.x));
 
     expect(elements).toStrictEqual([{x: 2}, {x: 5}]);
+});
+
+test('sorts descending', () => {
+    let elements = [{x: 2}, {x: 5}];
+
+    elements.sort(descending(e => e.x));
+
+    expect(elements).toStrictEqual([{x: 5}, {x: 2}]);
 });
 
 test('sorts first by x then by y', () => {
