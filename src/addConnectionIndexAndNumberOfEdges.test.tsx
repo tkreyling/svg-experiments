@@ -1,4 +1,4 @@
-import {addConnectionIndexAndNumberOfEdges} from "./App";
+import {addConnectionIndexAndNumberOfEdges} from "./addConnectionIndexAndNumberOfEdges";
 
 test('no edges need no connection index', () => {
     addConnectionIndexAndNumberOfEdges([]);
