@@ -7,6 +7,7 @@ import {addLayerPositionToEdgeG} from "./addLayerPositionToEdge";
 import {addConnectionIndexAndNumberOfEdgesG} from "./addConnectionIndexAndNumberOfEdges";
 import {addXToNodeG} from "./addXToNode";
 import {addYToNodeG, heightOfNodes} from "./addYToNode";
+import {allNodes} from "./allNodes";
 
 export type X = {
     x: number
@@ -326,17 +327,6 @@ const stringsToNodes = stringsToNodesImport;
 
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
-
-export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N, G> | N): N[] {
-    switch (element.kind) {
-        case "stack":
-            return element.elements.flatMap(layer => layer.elements).flatMap(allNodes);
-        case "group":
-            return element.elements.flatMap(allNodes);
-        case "node":
-            return [element];
-    }
-}
 
 function allGroups<N extends Node, G, E>(element: Stack<N, G> | (Group<N, G> & G) | N): (Group<N, G> & G)[] {
     switch (element.kind) {
