@@ -8,10 +8,10 @@ import {
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
     TEXT_PADDING,
-    width,
     X,
     Y
 } from "./App";
+import {width} from "./width";
 
 export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
     let isComponent = node.symbol === "component";

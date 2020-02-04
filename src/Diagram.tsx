@@ -6,11 +6,12 @@ import {addYToNodeG, heightOfNodes} from "./addYToNode";
 import {addConnectionIndexAndNumberOfEdgesG} from "./addConnectionIndexAndNumberOfEdges";
 import {allNodes} from "./allNodes";
 import {allGroups} from "./allGroups";
-import {Graph, MARGIN_SIDE, MARGIN_TOP, Node, width} from "./App";
+import {Graph, MARGIN_SIDE, MARGIN_TOP, Node} from "./App";
 import {heightOfEdges} from "./heightOfEdges";
 import {NodeShape} from "./NodeShape";
 import {GroupShape} from "./GroupShape";
 import {EdgeShape} from "./EdgeShape";
+import {width} from "./width";
 
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]

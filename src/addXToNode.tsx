@@ -10,9 +10,9 @@ import {
     MARGIN_SIDE,
     Node,
     Stack,
-    width,
     X
 } from "./App";
+import {width} from "./width";
 
 export function addXToNodeG<N extends (Node & LayerPosition), E, G extends GroupPosition>(
     graph: Graph<N, E, G>

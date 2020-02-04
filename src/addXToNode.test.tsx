@@ -8,10 +8,10 @@ import {
     MARGIN_SIDE,
     Node,
     Stack,
-    width,
     X
 } from "./App";
 import {addXToNode} from "./addXToNode";
+import {width} from "./width";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};

@@ -1,5 +1,4 @@
 import {
-  width,
   ELEMENT_WIDTH,
   HORIZONTAL_SPACING,
   GROUP_MARGIN_SIDE,
@@ -7,6 +6,7 @@ import {
   Layer,
   Stack
 } from "./App";
+import {width} from "./width";
 
 test('no element has no width', () => {
     expect(width({kind: 'layer', elements: []}))

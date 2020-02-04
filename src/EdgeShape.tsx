@@ -11,10 +11,10 @@ import {
     NumberOfEdges,
     STROKE_WIDTH,
     VERTICAL_SPACING,
-    width,
     X,
     Y
 } from "./App";
+import {width} from "./width";
 
 function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
