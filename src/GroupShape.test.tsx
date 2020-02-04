@@ -1,4 +1,5 @@
-import {Group, GroupPosition, GroupShape, Height, Node, X, Y} from "./App";
+import {Group, GroupPosition, Height, Node, X, Y} from "./App";
+import {GroupShape} from "./GroupShape";
 
 test('coordinates are just passed through', () => {
   let props: Group<Node, unknown> & GroupPosition & X & Y & Height = {
