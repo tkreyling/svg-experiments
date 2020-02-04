@@ -1,5 +1,4 @@
 import {
-    addYToNode,
     ELEMENT_HEIGHT,
     GROUP_MARGIN_BOTTOM,
     GROUP_MARGIN_TOP,
@@ -14,6 +13,7 @@ import {
     VERTICAL_SPACING,
     Y
 } from "./App";
+import {addYToNode} from "./addYToNode";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
