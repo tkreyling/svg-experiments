@@ -1,5 +1,4 @@
 import {
-    addXToNode,
     ELEMENT_WIDTH,
     GROUP_MARGIN_SIDE,
     GroupPosition,
@@ -12,6 +11,7 @@ import {
     width,
     X
 } from "./App";
+import {addXToNode} from "./addXToNode";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
