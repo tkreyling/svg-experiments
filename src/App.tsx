@@ -328,7 +328,7 @@ const stringsToNodes = stringsToNodesImport;
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
-function allGroups<N extends Node, G, E>(element: Stack<N, G> | (Group<N, G> & G) | N): (Group<N, G> & G)[] {
+export function allGroups<N extends Node, G, E>(element: Stack<N, G> | (Group<N, G> & G) | N): (Group<N, G> & G)[] {
     switch (element.kind) {
         case "stack":
             return element.elements.flatMap(layer => layer.elements).flatMap(allGroups);
