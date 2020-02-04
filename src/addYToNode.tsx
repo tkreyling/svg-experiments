@@ -5,7 +5,6 @@ import {
     GROUP_MARGIN_BOTTOM,
     GROUP_MARGIN_TOP,
     Height,
-    heightOfEdges,
     Layer,
     LayerDimensions,
     LayerPosition,
@@ -15,6 +14,7 @@ import {
     VERTICAL_SPACING,
     Y
 } from "./App";
+import {heightOfEdges} from "./heightOfEdges";
 
 export function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {
