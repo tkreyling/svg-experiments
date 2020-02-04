@@ -193,7 +193,7 @@ export const Rect: React.FC<Node & LayerPosition & X & Y> = node => {
     );
 };
 
-export const Group: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
+export const GroupShape: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
     return (
         <g key={group.key}>
             <rect
