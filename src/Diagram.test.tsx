@@ -1,7 +1,8 @@
 import React from 'react';
 import {render} from '@testing-library/react';
-import {Diagram, Stack, Node} from './App';
+import {Stack, Node} from './App';
 import {stringsToNodes} from "./stringsToNodes";
+import {Diagram} from "./Diagram";
 
 test('renders 7 rectangles', () => {
     const stack: Stack<Node, unknown> = stringsToNodes([

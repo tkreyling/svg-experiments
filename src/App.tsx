@@ -2,13 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {indicesToReferences as indicesToReferencesImport} from "./indicesToReferences";
 import {stringsToNodes as stringsToNodesImport} from "./stringsToNodes";
-import {addLayerPositionToNodeG} from "./addLayerPositionToNode";
-import {addLayerPositionToEdgeG} from "./addLayerPositionToEdge";
-import {addConnectionIndexAndNumberOfEdgesG} from "./addConnectionIndexAndNumberOfEdges";
-import {addXToNodeG} from "./addXToNode";
-import {addYToNodeG, heightOfNodes} from "./addYToNode";
-import {allNodes} from "./allNodes";
-import {allGroups} from "./allGroups";
+import {Diagram} from "./Diagram";
 
 export type X = {
     x: number
@@ -214,7 +208,7 @@ export const Rect: React.FC<Node & LayerPosition & X & Y> = node => {
     );
 };
 
-const Group: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
+export const Group: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
     return (
         <g key={group.key}>
             <rect
@@ -328,28 +322,6 @@ const stringsToNodes = stringsToNodesImport;
 
 // eslint-disable-next-line
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
-
-export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
-    return [graph]
-        .map(addLayerPositionToNodeG)
-        .map(addXToNodeG)
-        .map(addLayerPositionToEdgeG)
-        .map(addYToNodeG)
-        .map(addConnectionIndexAndNumberOfEdgesG)
-        .map(graph => {
-            let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
-            let overallWidth = width(graph.stack) + 2 * MARGIN_SIDE;
-            let height = heightOfNodes(graph.stack) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
-
-            return (
-                <svg viewBox={"0 0 " + overallWidth + " " + height}>
-                    {allNodes(graph.stack).map(Rect)}
-                    {allGroups(graph.stack).map(Group)}
-                    {graph.edges.map(Path)}
-                </svg>
-            );
-        })[0];
-};
 
 export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {
     try {
