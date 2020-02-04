@@ -162,7 +162,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
     );
 };
 
-export const Rect: React.FC<Node & LayerPosition & X & Y> = node => {
+export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
     let isComponent = node.symbol === "component";
     return (
         <g key={node.key}>

@@ -1,4 +1,4 @@
-import {LayerPosition, Node, Rect, X, Y} from "./App";
+import {LayerPosition, Node, NodeShape, X, Y} from "./App";
 
 test('coordinates are just passed through', () => {
   let props: Node & LayerPosition & X & Y = {
@@ -12,7 +12,7 @@ test('coordinates are just passed through', () => {
     layerIndex: 0
   };
 
-  let actual = Rect(props);
+  let actual = NodeShape(props);
 
   let rect = actual?.props["children"][0];
   expect(rect?.props["x"]).toBe(10);

@@ -6,7 +6,7 @@ import {addYToNodeG, heightOfNodes} from "./addYToNode";
 import {addConnectionIndexAndNumberOfEdgesG} from "./addConnectionIndexAndNumberOfEdges";
 import {allNodes} from "./allNodes";
 import {allGroups} from "./allGroups";
-import {Graph, GroupShape, MARGIN_SIDE, MARGIN_TOP, Node, Path, Rect, width} from "./App";
+import {Graph, GroupShape, MARGIN_SIDE, MARGIN_TOP, Node, Path, NodeShape, width} from "./App";
 import {heightOfEdges} from "./heightOfEdges";
 
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
@@ -23,7 +23,7 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
 
             return (
                 <svg viewBox={"0 0 " + overallWidth + " " + height}>
-                    {allNodes(graph.stack).map(Rect)}
+                    {allNodes(graph.stack).map(NodeShape)}
                     {allGroups(graph.stack).map(GroupShape)}
                     {graph.edges.map(Path)}
                 </svg>
