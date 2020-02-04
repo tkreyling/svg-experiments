@@ -1,4 +1,5 @@
-import {LayerPosition, Node, NodeShape, X, Y} from "./App";
+import {LayerPosition, Node, X, Y} from "./App";
+import {NodeShape} from "./NodeShape";
 
 test('coordinates are just passed through', () => {
   let props: Node & LayerPosition & X & Y = {
@@ -8,7 +9,6 @@ test('coordinates are just passed through', () => {
     name: "element 1",
     key: "0_0",
     index: 0,
-    relativePosition: 0,
     layerIndex: 0
   };
 
