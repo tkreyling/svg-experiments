@@ -25,7 +25,7 @@ test('one element is layouted to the origin', () => {
     let elements: Layer<Node & LayerPosition, GroupPosition> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0}
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
             ]
         }]
     };
@@ -44,8 +44,7 @@ test('one element is layouted to the origin', () => {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     key: "0_0",
                     index: 0,
-                    layerIndex: 0,
-                    relativePosition: 0
+                    layerIndex: 0
                 }
             ]
         }]
@@ -58,13 +57,13 @@ test('one element in the second layer keeps space for the two borders between th
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1", key: "0_0", index: 0, layerIndex: 0, elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0}
+                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
                 ]
             }]
         }, {
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 2", key: "1_0", index: 0, layerIndex: 1, elements: [
-                    {kind: "node", name: "node 2", key: "1_0", index: 0, layerIndex: 1, relativePosition: 0}
+                    {kind: "node", name: "node 2", key: "1_0", index: 0, layerIndex: 1}
                 ]
             }]
         }]
@@ -85,8 +84,7 @@ test('one element in the second layer keeps space for the two borders between th
                         x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                         key: "0_0",
                         index: 0,
-                        layerIndex: 0,
-                        relativePosition: 0
+                        layerIndex: 0
                     }
                 ]
             }]
@@ -102,8 +100,7 @@ test('one element in the second layer keeps space for the two borders between th
                         x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                         key: "1_0",
                         index: 0,
-                        layerIndex: 1,
-                        relativePosition: 0
+                        layerIndex: 1
                     }
                 ]
             }]
@@ -116,8 +113,8 @@ test('two elements are layouted right beside each other', () => {
     let elements: Layer<Node & LayerPosition, GroupPosition> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0},
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0, relativePosition: 1}
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0},
+                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
             ]
         }]
     };
@@ -136,8 +133,7 @@ test('two elements are layouted right beside each other', () => {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     key: "0_0",
                     index: 0,
-                    layerIndex: 0,
-                    relativePosition: 0
+                    layerIndex: 0
                 },
                 {
                     kind: "node",
@@ -145,8 +141,7 @@ test('two elements are layouted right beside each other', () => {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
                     key: "0_1",
                     index: 1,
-                    layerIndex: 0,
-                    relativePosition: 1
+                    layerIndex: 0
                 }
             ]
         }]
@@ -158,8 +153,8 @@ test('width of node is adjusted by size property', () => {
     let elements: Layer<Node & LayerPosition, GroupPosition> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0, size: 1.2},
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0, relativePosition: 1}
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, size: 1.2},
+                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
             ]
         }]
     };
@@ -179,7 +174,6 @@ test('width of node is adjusted by size property', () => {
                     key: "0_0",
                     index: 0,
                     layerIndex: 0,
-                    relativePosition: 0,
                     size: 1.2
                 },
                 {
@@ -188,8 +182,7 @@ test('width of node is adjusted by size property', () => {
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH * 1.2 + HORIZONTAL_SPACING,
                     key: "0_1",
                     index: 1,
-                    layerIndex: 0,
-                    relativePosition: 1
+                    layerIndex: 0
                 }
             ]
         }]
@@ -201,11 +194,11 @@ test('two elements in two groups have an additional spacing for the two group bo
     let elements: Layer<Node & LayerPosition, GroupPosition> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, relativePosition: 0}
+                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
             ]
         }, {
             name: "group 2", kind: 'group', key: "0_1", index: 1, layerIndex: 0, elements: [
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0, relativePosition: 0}
+                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
             ]
         }]
     };
@@ -224,8 +217,7 @@ test('two elements in two groups have an additional spacing for the two group bo
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
                     key: "0_0",
                     index: 0,
-                    layerIndex: 0,
-                    relativePosition: 0
+                    layerIndex: 0
                 }
             ]
         }, {
@@ -239,8 +231,7 @@ test('two elements in two groups have an additional spacing for the two group bo
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE,
                     key: "0_1",
                     index: 1,
-                    layerIndex: 0,
-                    relativePosition: 0
+                    layerIndex: 0
                 }
             ]
         }]
