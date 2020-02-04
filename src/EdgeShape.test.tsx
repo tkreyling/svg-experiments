@@ -1,4 +1,5 @@
-import {ConnectionIndex, Edge, EdgeShape, LayerDimensions, LayerPosition, Node, NumberOfEdges, X, Y} from "./App";
+import {ConnectionIndex, Edge, LayerDimensions, LayerPosition, Node, NumberOfEdges, X, Y} from "./App";
+import {EdgeShape} from "./EdgeShape";
 
 test('coordinates are just passed through', () => {
     let edge: Edge<Node & LayerPosition & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex = {
