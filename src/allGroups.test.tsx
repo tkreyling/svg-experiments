@@ -1,4 +1,5 @@
-import {allGroups, Group, Node, Stack} from "./App";
+import {Group, Node, Stack} from "./App";
+import {allGroups} from "./allGroups";
 
 test('an empty stack has no groups', () => {
     let elements: Stack<Node, unknown> = {kind: 'stack', elements: []};
