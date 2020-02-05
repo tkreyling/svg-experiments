@@ -1,4 +1,4 @@
-import {Edge, Graph, Node} from "./App";
+import {Edge, Graph, Node} from "./graphModel";
 
 export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {
     try {

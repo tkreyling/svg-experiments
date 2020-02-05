@@ -1,15 +1,6 @@
-import {
-    GroupPosition,
-    Height,
-    Layer,
-    LayerDimensions,
-    LayerPosition,
-    Node,
-    Stack,
-    Y
-} from "./App";
 import {addYToNode} from "./addYToNode";
 import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
+import {GroupPosition, Height, Layer, LayerDimensions, LayerPosition, Node, Stack, Y} from "./graphModel";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};

@@ -1,5 +1,5 @@
-import {Edge, EdgeIndex, LayerPosition, X} from "./App";
 import {addLayerPositionToEdge} from "./addLayerPositionToEdge";
+import {Edge, EdgeIndex, LayerPosition, X} from "./graphModel";
 
 test('no edges need no layer positioning', () => {
     addLayerPositionToEdge([]);

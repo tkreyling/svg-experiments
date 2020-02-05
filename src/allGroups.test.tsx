@@ -1,5 +1,5 @@
-import {Group, Node, Stack} from "./App";
 import {allGroups} from "./allGroups";
+import {Group, Node, Stack} from "./graphModel";
 
 test('an empty stack has no groups', () => {
     let elements: Stack<Node, unknown> = {kind: 'stack', elements: []};

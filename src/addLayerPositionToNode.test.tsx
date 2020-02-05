@@ -1,5 +1,5 @@
-import {GroupPosition, LayerPosition, Node, Stack} from "./App";
 import {addLayerPositionToNode} from "./addLayerPositionToNode";
+import {GroupPosition, LayerPosition, Node, Stack} from "./graphModel";
 
 test('no nodes need no layer positioning', () => {
     addLayerPositionToNode({kind: 'stack', elements: []});

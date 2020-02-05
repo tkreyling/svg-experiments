@@ -1,5 +1,5 @@
-import {Node, Stack} from "./App";
 import {allNodes} from "./allNodes";
+import {Node, Stack} from "./graphModel";
 
 test('an empty stack has no nodes', () => {
     let elements: Stack<Node, unknown> = {kind: 'stack', elements: []};

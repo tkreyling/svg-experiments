@@ -1,4 +1,4 @@
-import {Group, Node, Stack} from "./App";
+import {Group, Node, Stack} from "./graphModel";
 
 function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node, unknown> {
     // It is necessary to go through the array by index,

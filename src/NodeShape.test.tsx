@@ -1,5 +1,5 @@
-import {LayerPosition, Node, X, Y} from "./App";
 import {NodeShape} from "./NodeShape";
+import {LayerPosition, Node, X, Y} from "./graphModel";
 
 test('coordinates are just passed through', () => {
   let props: Node & LayerPosition & X & Y = {

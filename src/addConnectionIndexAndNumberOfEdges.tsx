@@ -1,5 +1,5 @@
 import {ascending, descending} from "./sorting";
-import {ConnectionIndex, Edge, Graph, LayerPosition, NumberOfEdges} from "./App";
+import {ConnectionIndex, Edge, Graph, LayerPosition, NumberOfEdges} from "./graphModel";
 
 export function addConnectionIndexAndNumberOfEdgesG<N extends LayerPosition, E, G>(graph: Graph<N, E, G>):
     Graph<N & NumberOfEdges, E & ConnectionIndex, G> {

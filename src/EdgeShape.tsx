@@ -1,4 +1,6 @@
 import React from "react";
+import {width} from "./width";
+import {EDGE_SPACING, ELEMENT_HEIGHT, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
 import {
     ConnectionIndex,
     Edge,
@@ -6,12 +8,9 @@ import {
     LayerDimensions,
     LayerPosition,
     Node,
-    NumberOfEdges,
-    X,
+    NumberOfEdges, X,
     Y
-} from "./App";
-import {width} from "./width";
-import {EDGE_SPACING, ELEMENT_HEIGHT, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
+} from "./graphModel";
 
 function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N

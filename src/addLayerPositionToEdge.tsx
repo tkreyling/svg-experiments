@@ -1,5 +1,5 @@
 import {and, ascending, descending} from "./sorting";
-import {Edge, EdgeIndex, getLowerNode, getUpperNode, Graph, LayerPosition, X} from "./App";
+import {Edge, EdgeIndex, getLowerNode, getUpperNode, Graph, LayerPosition, X} from "./graphModel";
 
 export function addLayerPositionToEdgeG<N extends LayerPosition & X, E, G>(graph: Graph<N, E, G>):
     Graph<N, E & LayerPosition, G> {

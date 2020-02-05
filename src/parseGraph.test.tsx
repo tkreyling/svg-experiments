@@ -1,5 +1,5 @@
-import {Graph, Node} from "./App";
 import {parseGraph} from "./parseGraph";
+import {Graph, Node} from "./graphModel";
 
 test('reports unexpected token \;', () => {
     expect(parseGraph("var g = {;")).toStrictEqual("Unexpected token ';'");

@@ -1,4 +1,4 @@
-import {Graph, Group, GroupPosition, Layer, LayerPosition, Node, Stack} from "./App";
+import {Graph, Group, GroupPosition, Layer, LayerPosition, Node, Stack} from "./graphModel";
 
 export function addLayerPositionToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>):
     Graph<N & LayerPosition, E, G & GroupPosition> {

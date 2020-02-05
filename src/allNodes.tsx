@@ -1,4 +1,4 @@
-import {Group, Node, Stack} from "./App";
+import {Group, Node, Stack} from "./graphModel";
 
 export function allNodes<N extends Node, G, E>(element: Stack<N, G> | Group<N, G> | N): N[] {
     switch (element.kind) {

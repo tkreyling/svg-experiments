@@ -1,4 +1,4 @@
-import {Edge, Stack} from "./App";
+import {Edge, Stack} from "./graphModel";
 
 export type IndexPair = {
     from: number[]

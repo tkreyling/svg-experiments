@@ -1,7 +1,7 @@
 import React from "react";
-import {Group, GroupPosition, Height, Node, X, Y} from "./App";
 import {width} from "./width";
 import {ELEMENT_HEIGHT, GROUP_MARGIN_SIDE, STROKE_WIDTH} from "./styling";
+import {Group, GroupPosition, Height, Node, X, Y} from "./graphModel";
 
 export const GroupShape: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
     return (

@@ -1,5 +1,5 @@
-import {Node, Group, Stack} from "./App";
 import {stringsToNodes} from "./stringsToNodes";
+import {Group, Node, Stack} from "./graphModel";
 
 test('one string results in one node', () => {
     let input: Group<string | Node, unknown>[][] = [[{name: "group 1", kind: 'group', elements: ["node"]}]];
