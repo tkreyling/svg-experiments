@@ -1,18 +1,15 @@
 import {
-    ELEMENT_WIDTH,
     Graph,
     Group,
-    GROUP_MARGIN_SIDE,
     GroupPosition,
-    HORIZONTAL_SPACING,
     Layer,
     LayerPosition,
-    MARGIN_SIDE,
     Node,
     Stack,
     X
 } from "./App";
 import {width} from "./width";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
 
 export function addXToNodeG<N extends (Node & LayerPosition), E, G extends GroupPosition>(
     graph: Graph<N, E, G>

@@ -1,6 +1,7 @@
 import React from "react";
-import {ELEMENT_HEIGHT, Group, GROUP_MARGIN_SIDE, GroupPosition, Height, Node, STROKE_WIDTH, X, Y} from "./App";
+import {Group, GroupPosition, Height, Node, X, Y} from "./App";
 import {width} from "./width";
+import {ELEMENT_HEIGHT, GROUP_MARGIN_SIDE, STROKE_WIDTH} from "./styling";
 
 export const GroupShape: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
     return (

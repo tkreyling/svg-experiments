@@ -2,19 +2,16 @@ import React from "react";
 import {
     ConnectionIndex,
     Edge,
-    EDGE_SPACING,
-    ELEMENT_HEIGHT,
     getUpperNode,
     LayerDimensions,
     LayerPosition,
     Node,
     NumberOfEdges,
-    STROKE_WIDTH,
-    VERTICAL_SPACING,
     X,
     Y
 } from "./App";
 import {width} from "./width";
+import {EDGE_SPACING, ELEMENT_HEIGHT, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
 
 function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N

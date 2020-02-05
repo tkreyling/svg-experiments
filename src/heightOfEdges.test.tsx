@@ -1,5 +1,5 @@
-import {EDGE_SPACING} from "./App";
 import {heightOfEdges} from "./heightOfEdges";
+import {EDGE_SPACING} from "./styling";
 
 test('no edges need no additional space after a layer', () => {
     expect(heightOfEdges([], 1))

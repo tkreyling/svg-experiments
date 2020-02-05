@@ -1,0 +1,14 @@
+export const MARGIN_TOP = 5;
+export const MARGIN_SIDE = 5;
+export const ELEMENT_WIDTH = 150;
+export const ELEMENT_HEIGHT = 40;
+export const SYMBOL_WIDTH = 12;
+export const SYMBOL_SPACING = 3;
+export const GROUP_MARGIN_TOP = 30;
+export const GROUP_MARGIN_BOTTOM = 10;
+export const GROUP_MARGIN_SIDE = 10;
+export const HORIZONTAL_SPACING = 10;
+export const VERTICAL_SPACING = 20;
+export const TEXT_PADDING = 5;
+export const EDGE_SPACING = 10;
+export const STROKE_WIDTH = 0.5;

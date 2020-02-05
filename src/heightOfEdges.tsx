@@ -1,4 +1,5 @@
-import {Edge, EDGE_SPACING, getUpperNode, LayerPosition} from "./App";
+import {Edge, getUpperNode, LayerPosition} from "./App";
+import {EDGE_SPACING} from "./styling";
 
 export function heightOfEdges(edges: (Edge<LayerPosition> & LayerPosition)[], numberOfLayers: number): number[] {
     let groupedByLayerIndex = new Map<number, (Edge<LayerPosition> & LayerPosition)[]>();

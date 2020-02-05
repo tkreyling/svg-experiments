@@ -1,20 +1,16 @@
 import {
-    ELEMENT_HEIGHT,
     Graph,
     Group,
-    GROUP_MARGIN_BOTTOM,
-    GROUP_MARGIN_TOP,
     Height,
     Layer,
     LayerDimensions,
     LayerPosition,
-    MARGIN_TOP,
     Node,
     Stack,
-    VERTICAL_SPACING,
     Y
 } from "./App";
 import {heightOfEdges} from "./heightOfEdges";
+import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
 
 export function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {

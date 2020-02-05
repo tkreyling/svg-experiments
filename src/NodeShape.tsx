@@ -1,17 +1,13 @@
 import React from "react";
 import {
     ComponentSymbol,
-    ELEMENT_HEIGHT,
     LayerPosition,
     Node,
-    STROKE_WIDTH,
-    SYMBOL_SPACING,
-    SYMBOL_WIDTH,
-    TEXT_PADDING,
     X,
     Y
 } from "./App";
 import {width} from "./width";
+import {ELEMENT_HEIGHT, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
 
 export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
     let isComponent = node.symbol === "component";

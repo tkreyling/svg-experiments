@@ -1,17 +1,14 @@
 import {
-    ELEMENT_WIDTH,
-    GROUP_MARGIN_SIDE,
     GroupPosition,
-    HORIZONTAL_SPACING,
     Layer,
     LayerPosition,
-    MARGIN_SIDE,
     Node,
     Stack,
     X
 } from "./App";
 import {addXToNode} from "./addXToNode";
 import {width} from "./width";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};

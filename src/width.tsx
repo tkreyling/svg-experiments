@@ -1,4 +1,5 @@
-import {ELEMENT_WIDTH, Group, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, Layer, Node, Stack} from "./App";
+import {Group, Layer, Node, Stack} from "./App";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING} from "./styling";
 
 export function width(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {

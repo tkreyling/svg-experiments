@@ -1,19 +1,15 @@
 import {
-    ELEMENT_HEIGHT,
-    GROUP_MARGIN_BOTTOM,
-    GROUP_MARGIN_TOP,
     GroupPosition,
     Height,
     Layer,
     LayerDimensions,
     LayerPosition,
-    MARGIN_TOP,
     Node,
     Stack,
-    VERTICAL_SPACING,
     Y
 } from "./App";
 import {addYToNode} from "./addYToNode";
+import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
 
 test('no element results in no layouted elements', () => {
     let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
