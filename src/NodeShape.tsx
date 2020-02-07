@@ -1,10 +1,8 @@
 import React from "react";
-import {
-    ComponentSymbol
-} from "./App";
 import {width} from "./width";
 import {ELEMENT_HEIGHT, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
 import {LayerPosition, Node, X, Y} from "./graphModel";
+import {ComponentSymbol} from "./Symbols";
 
 export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
     let isComponent = node.symbol === "component";

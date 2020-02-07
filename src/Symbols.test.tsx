@@ -1,4 +1,4 @@
-import {ComponentSymbol, Symbol} from "./App";
+import {ComponentSymbol, Symbol} from "./Symbols";
 
 test('coordinates are just passed through', () => {
   let props: Symbol = {
