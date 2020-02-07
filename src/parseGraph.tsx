@@ -1,4 +1,12 @@
 import {Edge, Graph, Node} from "./graphModel";
+import {indicesToReferences as indicesToReferencesImport} from "./indicesToReferences";
+import {stringsToNodes as stringsToNodesImport} from "./stringsToNodes";
+
+// noinspection JSUnusedLocalSymbols
+const indicesToReferences = indicesToReferencesImport;
+
+// noinspection JSUnusedLocalSymbols
+const stringsToNodes = stringsToNodesImport;
 
 export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {
     try {
