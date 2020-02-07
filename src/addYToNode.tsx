@@ -14,6 +14,7 @@ export function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node,
             return GROUP_MARGIN_TOP + Math.max(...element.elements.map(heightOfNodes)) + GROUP_MARGIN_BOTTOM;
         }
         case "node":
+            if (element.isPlaceholder) return 0;
             return ELEMENT_HEIGHT;
     }
 }

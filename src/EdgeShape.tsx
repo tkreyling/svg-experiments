@@ -1,6 +1,6 @@
 import React from "react";
 import {width} from "./width";
-import {EDGE_SPACING, ELEMENT_HEIGHT, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
+import {EDGE_SPACING, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
 import {
     ConnectionIndex,
     Edge,
@@ -11,6 +11,7 @@ import {
     NumberOfEdges, X,
     Y
 } from "./graphModel";
+import {heightOfNodes} from "./addYToNode";
 
 function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
@@ -19,7 +20,7 @@ function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdg
     let nodeCenteringOffset = (width(node) - ((onLowerSide ? node.lowerSideEdges : node.upperSideEdges) - 1) * EDGE_SPACING) / 2;
     return {
         x: node.x + nodeCenteringOffset + edgeIndex * EDGE_SPACING,
-        y: node.y + (onLowerSide ? ELEMENT_HEIGHT : 0)
+        y: node.y + (onLowerSide ? heightOfNodes(node) : 0)
     };
 }
 
