@@ -49,7 +49,7 @@ export type Group<N, G> = {
 }
 export type Layer<N, G> = {
     kind: 'layer'
-    elements: (Group<N, G> & G)[]
+    elements: ((Group<N, G> & G) | N)[]
 }
 export type Stack<N, G> = {
     kind: 'stack'

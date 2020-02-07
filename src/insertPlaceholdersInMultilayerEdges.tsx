@@ -1,4 +1,4 @@
-import {Graph, LayerIndex, Node} from "./graphModel";
+import {Graph, Layer, LayerIndex, Node} from "./graphModel";
 
 export function insertPlaceholdersInMultilayerEdges(graph: Graph<Node & LayerIndex, unknown, LayerIndex>): Graph<Node & LayerIndex, unknown, LayerIndex> {
     return {
@@ -20,7 +20,8 @@ export function insertPlaceholdersInMultilayerEdges(graph: Graph<Node & LayerInd
                         isPlaceholder: true,
                         layerIndex: i
                     };
-                    graph.stack.elements[i].elements[0].elements.splice(0, 0, placeholder);
+                    let layer: Layer<Node & LayerIndex, LayerIndex> = graph.stack.elements[i];
+                    layer.elements.splice(0, 0, placeholder);
                     newEdges.push({from: last, to: placeholder});
                     last = placeholder;
                 }
