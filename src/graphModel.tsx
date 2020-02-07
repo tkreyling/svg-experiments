@@ -18,11 +18,7 @@ export type IndexAndKey = {
     index: number
 }
 export type LayerPosition = LayerIndex & IndexAndKey
-export type GroupPosition = {
-    key: string
-    index: number
-    layerIndex: number
-}
+export type GroupPosition = LayerIndex & IndexAndKey
 type Symbols = "component"
 export type Node = {
     kind: 'node'

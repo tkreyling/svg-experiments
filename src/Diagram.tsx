@@ -1,5 +1,5 @@
 import React from "react";
-import {addLayerPositionToNodeG} from "./addLayerPositionToNode";
+import {addIndexAndKeyToNodeG} from "./addIndexAndKeyToNode";
 import {addXToNodeG} from "./addXToNode";
 import {addLayerPositionToEdgeG} from "./addLayerPositionToEdge";
 import {addYToNodeG, heightOfNodes} from "./addYToNode";
@@ -13,10 +13,12 @@ import {EdgeShape} from "./EdgeShape";
 import {width} from "./width";
 import {MARGIN_SIDE, MARGIN_TOP} from "./styling";
 import {Graph, Node} from "./graphModel";
+import {addLayerIndexToNodeG} from "./addLayerIndexToNode";
 
 export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
-        .map(addLayerPositionToNodeG)
+        .map(addLayerIndexToNodeG)
+        .map(addIndexAndKeyToNodeG)
         .map(addXToNodeG)
         .map(addLayerPositionToEdgeG)
         .map(addYToNodeG)
