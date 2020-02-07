@@ -7,7 +7,7 @@ import {parseGraph} from "./parseGraph";
 import {STROKE_WIDTH} from "./styling";
 import {Graph, Node} from "./graphModel";
 
-type Symbol = {
+export type Symbol = {
     x: number
     y: number
     width: number
