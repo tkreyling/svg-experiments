@@ -55,6 +55,8 @@ var edgeIndices = [
     {from: [1, 1, 1],    to: [2, 0, 2]},
     {from: [0, 1, 0],    to: [1, 1, 2]},
     {from: [1, 0, 1],    to: [1, 0, 0]},
+    {from: [0, 0, 0],    to: [2, 0, 0]},
+    {from: [0, 0, 0],    to: [2, 0, 1]},
     {from: [1, 0, 1],    to: [1, 1, 0, 0]}
 ];
 var edges = indicesToReferences(stack, edgeIndices);
