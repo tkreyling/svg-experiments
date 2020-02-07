@@ -10,11 +10,14 @@ export type Height = {
 export type LayerDimensions = {
     belowLayerY: number
 }
-export type LayerPosition = {
-    key: string
-    index: number
+export type LayerIndex = {
     layerIndex: number
 }
+export type IndexAndKey = {
+    key: string
+    index: number
+}
+export type LayerPosition = LayerIndex & IndexAndKey
 export type GroupPosition = {
     key: string
     index: number
