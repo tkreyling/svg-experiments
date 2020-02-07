@@ -26,6 +26,7 @@ export type Node = {
     name: string
     symbol?: Symbols
     size?: number
+    isPlaceholder?: boolean
 }
 export type Edge<T> = {
     from: T

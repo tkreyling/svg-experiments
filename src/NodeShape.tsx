@@ -5,6 +5,8 @@ import {LayerPosition, Node, X, Y} from "./graphModel";
 import {ComponentSymbol} from "./Symbols";
 
 export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
+    if (node.isPlaceholder) return null;
+
     let isComponent = node.symbol === "component";
     return (
         <g key={node.key}>

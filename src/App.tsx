@@ -20,7 +20,7 @@ let graphAsString =
         {name: "group 3", elements: ["element 1", "element 2"]},
         {name: "group 4", elements: [
             {name: "group 6", elements: ["element 4"]}, 
-            {name: "placeholder", size: 0.3}, 
+            {name: "placeholder", size: 0.3, isPlaceholder: true}, 
             "element 3"
         ]}
     ],
