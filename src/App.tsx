@@ -18,7 +18,11 @@ let graphAsString =
     ],
     [
         {name: "group 3", elements: ["element 1", "element 2"]},
-        {name: "group 4", elements: [{name: "group 6", elements: ["element 4"]}, "element 3"]}
+        {name: "group 4", elements: [
+            {name: "group 6", elements: ["element 4"]}, 
+            {name: "placeholder", size: 0.3}, 
+            "element 3"
+        ]}
     ],
     [
         {name: "group 5", elements: [
@@ -47,6 +51,9 @@ var edgeIndices = [
     {from: [0, 0, 0],    to: [0, 0, 1]},
     {from: [0, 0, 0],    to: [1, 0, 0]},
     {from: [0, 0, 0],    to: [1, 0, 0]},
+    {from: [0, 1, 0],    to: [1, 1, 1]},
+    {from: [1, 1, 1],    to: [2, 0, 2]},
+    {from: [0, 1, 0],    to: [1, 1, 2]},
     {from: [1, 0, 1],    to: [1, 0, 0]},
     {from: [1, 0, 1],    to: [1, 1, 0, 0]}
 ];
