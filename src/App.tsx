@@ -35,6 +35,7 @@ let graphAsString =
 ]);
 
 var edgeIndices = [
+    {from: [0, 0, 0],    to: [1, 3]},
     {from: [0, 0, 1],    to: [1, 0, 0]},
     {from: [0, 0, 2],    to: [1, 1, 0, 0]},
     {from: [0, 1, 0],    to: [1, 0, 1]},
