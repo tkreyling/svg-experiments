@@ -35,6 +35,18 @@ test('a string in a layer array is a node', () => {
     expect(stringsToNodes(input)).toStrictEqual(expected);
 });
 
+test('a node in a layer array is a node', () => {
+    let input: (string | Node | Group<string | Node, unknown>)[][] =
+        [[{name: "node", kind: 'node', symbol: "component"}, {name: "group 1", kind: 'group', elements: ["node"]}]];
+
+    let expected: Stack<Node, unknown> = {
+        kind: 'stack', elements: [
+            {kind: 'layer', elements: [{name: "node", kind: 'node', symbol: "component"}, {name: "group 1", kind: 'group', elements: [{name: "node", kind: 'node'}]}]}
+        ]
+    };
+    expect(stringsToNodes(input)).toStrictEqual(expected);
+});
+
 test('an element with symbol is passed through', () => {
     let input: Group<string | Node, unknown>[][] = [[{
         name: "group 1",
