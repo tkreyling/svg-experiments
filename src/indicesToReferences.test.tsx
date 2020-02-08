@@ -18,7 +18,7 @@ test('no nodes, some indices result in an error', () => {
         indicesToReferences(elements, edgeIndices);
         fail("Exception must be thrown");
     } catch (e) {
-        expect(e.message).toStrictEqual("Indices must refer to a node that does not exist");
+        expect(e.message).toStrictEqual("Indices must refer to a node that does exist");
     }
 });
 

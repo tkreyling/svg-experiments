@@ -14,7 +14,7 @@ function indexToReference<N, G>(stack: Stack<N, G>, index: number[]): any {
 
     let element: any = stack;
     index.forEach(i => {
-        if (element.elements[i] === undefined) throw new Error("Indices must refer to a node that does not exist");
+        if (element.elements[i] === undefined) throw new Error("Indices must refer to a node that does exist");
         element = element.elements[i];
     });
     return element;
