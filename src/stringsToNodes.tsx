@@ -15,20 +15,7 @@ function convertStringsToNodes(element: (string | Node | Group<string | Node, un
         return {
             kind: 'group',
             name: element.name,
-            elements: element.elements.map(nestedElement => {
-                if (typeof nestedElement === 'string') {
-                    return {
-                        kind: 'node',
-                        name: nestedElement
-                    }
-                } else if ("elements" in nestedElement) {
-                    return convertStringsToNodes(nestedElement);
-                } else {
-                    return Object.assign(nestedElement, {
-                        kind: 'node'
-                    });
-                }
-            })
+            elements: element.elements.map(convertStringsToNodes)
         }
     } else {
         return Object.assign(element, {
