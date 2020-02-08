@@ -22,7 +22,8 @@ let graphAsString =
             {name: "group 6", elements: ["element 4"]}, 
             {name: "placeholder", size: 0.3, isPlaceholder: true}, 
             "element 3"
-        ]}
+        ]},
+        "node on top level"
     ],
     [
         {name: "group 5", elements: [

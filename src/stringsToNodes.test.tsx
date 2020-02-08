@@ -24,6 +24,17 @@ test('empty array element result in undefined node', () => {
     }
 });
 
+test('a string in a layer array is a node', () => {
+    let input: (string | Group<string | Node, unknown>)[][] = [["node", {name: "group 1", kind: 'group', elements: ["node"]}]];
+
+    let expected: Stack<Node, unknown> = {
+        kind: 'stack', elements: [
+            {kind: 'layer', elements: [{name: "node", kind: 'node'}, {name: "group 1", kind: 'group', elements: [{name: "node", kind: 'node'}]}]}
+        ]
+    };
+    expect(stringsToNodes(input)).toStrictEqual(expected);
+});
+
 test('an element with symbol is passed through', () => {
     let input: Group<string | Node, unknown>[][] = [[{
         name: "group 1",

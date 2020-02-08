@@ -1,24 +1,31 @@
 import {Group, Node, Stack} from "./graphModel";
 
-function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node, unknown> {
+function convertStringsToNodes(element: (string | Group<string | Node, unknown>)): Node | Group<Node, unknown> {
+    if (typeof element === 'string') {
+        return {
+            kind: 'node',
+            name: element
+        }
+    }
+
     // It is necessary to go through the array by index,
     // because the array operations `every`, `map` and `flat` bypass empty array elements.
-    for (let i = 0; i < group.elements.length; i++) {
-        if (group.elements[i] === undefined) throw new Error("Empty array elements are not allowed.");
+    for (let i = 0; i < element.elements.length; i++) {
+        if (element.elements[i] === undefined) throw new Error("Empty array elements are not allowed.");
     }
     return {
         kind: 'group',
-        name: group.name,
-        elements: group.elements.map(element => {
-            if (typeof element === 'string') {
+        name: element.name,
+        elements: element.elements.map(nestedElement => {
+            if (typeof nestedElement === 'string') {
                 return {
                     kind: 'node',
-                    name: element
+                    name: nestedElement
                 }
-            } else if ("elements" in element) {
-                return convertStringsToNodes(element);
+            } else if ("elements" in nestedElement) {
+                return convertStringsToNodes(nestedElement);
             } else {
-                return Object.assign(element, {
+                return Object.assign(nestedElement, {
                     kind: 'node'
                 });
             }
@@ -26,7 +33,7 @@ function convertStringsToNodes(group: Group<string | Node, unknown>): Group<Node
     }
 }
 
-export function stringsToNodes(strings: Group<string | Node, unknown>[][]): Stack<Node, unknown> {
+export function stringsToNodes(strings: (string | Group<string | Node, unknown>)[][]): Stack<Node, unknown> {
     return {
         kind: 'stack',
         elements: strings.map(layer => {
