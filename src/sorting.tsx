@@ -10,9 +10,9 @@ export function and<T>(...sortFunctions: ((o1: T, o2: T) => number)[]) {
     return (o1: T, o2: T) => {
         let i = 0;
         while (true) {
-            if (i == sortFunctions.length) return 0;
+            if (i === sortFunctions.length) return 0;
             let result = sortFunctions[i](o1, o2);
-            if (result != 0) return result;
+            if (result !== 0) return result;
             i++;
         }
     }
