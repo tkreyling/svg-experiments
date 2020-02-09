@@ -2,10 +2,10 @@ import {Edge, Graph, Node} from "./graphModel";
 import {indicesToReferences as indicesToReferencesImport} from "./indicesToReferences";
 import {stringsToNodes as stringsToNodesImport} from "./stringsToNodes";
 
-// noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const indicesToReferences = indicesToReferencesImport;
 
-// noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stringsToNodes = stringsToNodesImport;
 
 export function parseGraph(text: string): Graph<Node, unknown, unknown> | string {

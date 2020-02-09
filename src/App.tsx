@@ -72,13 +72,13 @@ var graph = {
 graph
 `;
 
-// noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const indicesToReferences = indicesToReferencesImport;
 
-// noinspection JSUnusedLocalSymbols
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stringsToNodes = stringsToNodesImport;
 
-// eslint-disable-next-line
+// eslint-disable-next-line no-eval
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
 const App: React.FC = () => {
