@@ -19,8 +19,11 @@ export function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node,
     }
 }
 
-function groupNestingLevel(element: Node | Layer<Node, unknown> | Group<Node, unknown>): number {
+function groupNestingLevel(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {
+        case "stack":
+            // Ignore the nesting of the elements below the first one
+            return groupNestingLevel(element.elements[0]);
         case "layer":
             return Math.max(...element.elements.map(groupNestingLevel));
         case "group":
