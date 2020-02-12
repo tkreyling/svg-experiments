@@ -1,8 +1,8 @@
-import {addIndexAndKeyToNode} from "./addIndexAndKeyToNode";
-import {Index, Key, Node, Stack} from "./graphModel";
+import {addIndexToNode} from "./addIndexToNode";
+import {Index, Node, Stack} from "./graphModel";
 
 test('no nodes need no layer positioning', () => {
-    addIndexAndKeyToNode({kind: 'stack', elements: []});
+    addIndexToNode({kind: 'stack', elements: []});
 });
 
 test('one node in one layer ', () => {
@@ -11,13 +11,13 @@ test('one node in one layer ', () => {
         elements: [{kind: 'group', name: "group 1", elements: [{kind: "node", name: "node 1"}]}]
     }]};
 
-    addIndexAndKeyToNode(elements);
+    addIndexToNode(elements);
 
-    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index, Index> = {kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                kind: 'group', name: "group 1", key: "G_0_0", index: 0,
+                kind: 'group', name: "group 1", index: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0}
+                    {kind: "node", name: "node 1", index: 0}
                 ]
             }]
         }]};
@@ -33,15 +33,15 @@ test('two nodes in one layer', () => {
             }]
     }]};
 
-    addIndexAndKeyToNode(elements);
+    addIndexToNode(elements);
 
-    let expectedElements: Stack<Node & Index & Key, Index & Key> = {
+    let expectedElements: Stack<Node & Index, Index> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                name: "group 1", kind: 'group', key: "G_0_0", index: 0,
+                name: "group 1", kind: 'group', index: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0},
-                    {kind: "node", name: "node 2", key: "0_1", index: 1}
+                    {kind: "node", name: "node 1", index: 0},
+                    {kind: "node", name: "node 2", index: 1}
                 ]
             }]
         }]
@@ -59,21 +59,21 @@ test('two nodes in one layer in two groups', () => {
             ]
     }]};
 
-    addIndexAndKeyToNode(elements);
+    addIndexToNode(elements);
 
-    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index, Index> = {kind: 'stack', elements: [{
         kind: 'layer', elements: [
             {
                 name: "group 1",
                 kind: 'group',
-                key: "G_0_0", index: 0,
-                elements: [{kind: "node", name: "node 1", key: "0_0", index: 0}]
+                index: 0,
+                elements: [{kind: "node", name: "node 1", index: 0}]
             },
             {
                 name: "group 2",
                 kind: 'group',
-                key: "G_0_1", index: 1,
-                elements: [{kind: "node", name: "node 2", key: "0_1", index: 1}]
+                index: 1,
+                elements: [{kind: "node", name: "node 2", index: 1}]
             }
         ]
     }]};
@@ -90,15 +90,15 @@ test('three nodes in one layer ', () => {
         }]
     }]};
 
-    addIndexAndKeyToNode(elements);
+    addIndexToNode(elements);
 
-    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index, Index> = {kind: 'stack', elements: [{
         kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "G_0_0", index: 0,
+            name: "group 1", kind: 'group', index: 0,
                 elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0},
-                {kind: "node", name: "node 2", key: "0_1", index: 1},
-                {kind: "node", name: "node 3", key: "0_2", index: 2}
+                {kind: "node", name: "node 1", index: 0},
+                {kind: "node", name: "node 2", index: 1},
+                {kind: "node", name: "node 3", index: 2}
             ]
         }]
     }]};
@@ -111,22 +111,22 @@ test('two nodes and one node in two layers ', () => {
         {kind: 'layer', elements: [{name: "group 2", kind: 'group', elements: [{kind: "node", name: "node 3"}]}]}
     ]};
 
-    addIndexAndKeyToNode(elements);
+    addIndexToNode(elements);
 
-    let expectedElements: Stack<Node & Index & Key, Index & Key> = {
+    let expectedElements: Stack<Node & Index, Index> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                name: "group 1", kind: 'group', key: "G_0_0", index: 0,
+                name: "group 1", kind: 'group', index: 0,
                 elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0},
-                    {kind: "node", name: "node 2", key: "0_1", index: 1}
+                    {kind: "node", name: "node 1", index: 0},
+                    {kind: "node", name: "node 2", index: 1}
                 ]
             }]
         }, {
             kind: 'layer', elements: [{
-                name: "group 2", kind: 'group', key: "G_1_0", index: 0,
+                name: "group 2", kind: 'group', index: 0,
                 elements: [
-                    {kind: "node", name: "node 3", key: "1_0", index: 0}
+                    {kind: "node", name: "node 3", index: 0}
                 ]
             }]
         }]
