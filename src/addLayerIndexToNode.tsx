@@ -1,5 +1,21 @@
 import {Graph, Group, Layer, LayerIndex, Node, Stack} from "./graphModel";
 
+function numberOfLayers(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
+    switch (element.kind) {
+        case "stack":
+            return element.elements
+                .map(numberOfLayers)
+                .reduce((sum, add) => sum + add, 0);
+        case "layer":
+            return Math.max(...element.elements.map(numberOfLayers));
+        case "group": {
+            return Math.max(...element.elements.map(numberOfLayers));
+        }
+        case "node":
+            return 1;
+    }
+}
+
 export function addLayerIndexToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>):
     Graph<N & LayerIndex, E, G & LayerIndex> {
     addLayerIndexToNode(graph.stack);
@@ -12,8 +28,9 @@ export function addLayerIndexToNode<N extends Node, G>(
 ) {
     switch (element.kind) {
         case "stack": {
-            element.elements.forEach((groups, layerIndex) => {
-                addLayerIndexToNode(groups, layerIndex);
+            element.elements.forEach(nestedElement => {
+                addLayerIndexToNode(nestedElement, layerIndex);
+                layerIndex += numberOfLayers(nestedElement);
             });
             return;
         }

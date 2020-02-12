@@ -133,3 +133,76 @@ test('two nodes and one node in two layers ', () => {
     };
     expect(elements).toStrictEqual(expectedElements);
 });
+
+test('stack embedded in a layer', () => {
+    let elements: Stack<Node, unknown> = {
+        kind: 'stack', elements: [{
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group  1", elements: [{kind: "node", name: "node 1"}]
+            }],
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 2", elements: [{kind: "node", name: "node 2"}]
+            }, {
+                kind: 'stack', elements: [{
+                    kind: 'layer', elements: [{
+                        kind: 'group', name: "group 3", elements: [{kind: "node", name: "node 3"}]
+                    }],
+                }, {
+                    kind: 'layer', elements: [{
+                        kind: 'group', name: "group 4", elements: [{kind: "node", name: "node 4"}]
+                    }],
+                }]
+            }, {
+                kind: 'group', name: "group 5", elements: [{kind: "node", name: "node 5"}]
+            }],
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 6", elements: [{kind: "node", name: "node 6"}]
+            }],
+        }]
+    };
+
+    addLayerIndexToNode(elements);
+
+    let expectedElements: Stack<Node & LayerIndex, LayerIndex> = {
+        kind: 'stack', elements: [{
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group  1", layerIndex: 0, elements: [{
+                    kind: "node", name: "node 1", layerIndex: 0
+                }]
+            }],
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 2", layerIndex: 1, elements: [{
+                    kind: "node", name: "node 2", layerIndex: 1
+                }]
+            }, {
+                kind: 'stack', elements: [{
+                    kind: 'layer', elements: [{
+                        kind: 'group', name: "group 3", layerIndex: 1, elements: [{
+                            kind: "node", name: "node 3", layerIndex: 1
+                        }]
+                    }],
+                }, {
+                    kind: 'layer', elements: [{
+                        kind: 'group', name: "group 4", layerIndex: 2, elements: [{
+                            kind: "node", name: "node 4", layerIndex: 2
+                        }]
+                    }],
+                }]
+            }, {
+                kind: 'group', name: "group 5", layerIndex: 1, elements: [{
+                    kind: "node", name: "node 5", layerIndex: 1
+                }]
+            }],
+        }, {
+            kind: 'layer', elements: [{
+                kind: 'group', name: "group 6", layerIndex: 3, elements: [{
+                    kind: "node", name: "node 6", layerIndex: 3
+                }]
+            }],
+        }]
+    };
+    expect(elements).toStrictEqual(expectedElements);
+});
