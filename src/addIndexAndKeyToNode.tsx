@@ -1,9 +1,9 @@
-import {Graph, Group, IndexAndKey, Layer, Node, Stack} from "./graphModel";
+import {Graph, Group, Index, Key, Layer, Node, Stack} from "./graphModel";
 
 export function addIndexAndKeyToNodeG<N extends Node, E, G>(graph: Graph<N, E, G>):
-    Graph<N & IndexAndKey, E, G & IndexAndKey> {
+    Graph<N & Index & Key, E, G & Index & Key> {
     addIndexAndKeyToNode(graph.stack);
-    return graph as unknown as Graph<N & IndexAndKey, E, G & IndexAndKey>;
+    return graph as unknown as Graph<N & Index & Key, E, G & Index & Key>;
 }
 
 export function addIndexAndKeyToNode<N extends Node, G>(

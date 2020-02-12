@@ -1,5 +1,5 @@
 import {addIndexAndKeyToNode} from "./addIndexAndKeyToNode";
-import {IndexAndKey, Node, Stack} from "./graphModel";
+import {Index, Key, Node, Stack} from "./graphModel";
 
 test('no nodes need no layer positioning', () => {
     addIndexAndKeyToNode({kind: 'stack', elements: []});
@@ -13,7 +13,7 @@ test('one node in one layer ', () => {
 
     addIndexAndKeyToNode(elements);
 
-    let expectedElements: Stack<Node & IndexAndKey, IndexAndKey> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1", key: "G_0_0", index: 0,
                 elements: [
@@ -35,7 +35,7 @@ test('two nodes in one layer', () => {
 
     addIndexAndKeyToNode(elements);
 
-    let expectedElements: Stack<Node & IndexAndKey, IndexAndKey> = {
+    let expectedElements: Stack<Node & Index & Key, Index & Key> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', key: "G_0_0", index: 0,
@@ -61,7 +61,7 @@ test('two nodes in one layer in two groups', () => {
 
     addIndexAndKeyToNode(elements);
 
-    let expectedElements: Stack<Node & IndexAndKey, IndexAndKey> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
         kind: 'layer', elements: [
             {
                 name: "group 1",
@@ -92,7 +92,7 @@ test('three nodes in one layer ', () => {
 
     addIndexAndKeyToNode(elements);
 
-    let expectedElements: Stack<Node & IndexAndKey, IndexAndKey> = {kind: 'stack', elements: [{
+    let expectedElements: Stack<Node & Index & Key, Index & Key> = {kind: 'stack', elements: [{
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group', key: "G_0_0", index: 0,
                 elements: [
@@ -113,7 +113,7 @@ test('two nodes and one node in two layers ', () => {
 
     addIndexAndKeyToNode(elements);
 
-    let expectedElements: Stack<Node & IndexAndKey, IndexAndKey> = {
+    let expectedElements: Stack<Node & Index & Key, Index & Key> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 name: "group 1", kind: 'group', key: "G_0_0", index: 0,

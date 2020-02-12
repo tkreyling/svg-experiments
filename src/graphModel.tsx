@@ -13,12 +13,14 @@ export type LayerDimensions = {
 export type LayerIndex = {
     layerIndex: number
 }
-export type IndexAndKey = {
-    key: string
+export type Index = {
     index: number
 }
-export type LayerPosition = LayerIndex & IndexAndKey
-export type GroupPosition = LayerIndex & IndexAndKey
+export type Key = {
+    key: string
+}
+export type LayerPosition = LayerIndex & Index & Key
+export type GroupPosition = LayerIndex & Index & Key
 type Symbols = "component"
 export type Node = {
     kind: 'node'
