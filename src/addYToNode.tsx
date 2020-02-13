@@ -1,6 +1,6 @@
 import {heightOfEdges} from "./heightOfEdges";
 import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
-import {Graph, Group, Height, Layer, LayerDimensions, LayerPosition, Node, Stack, Y} from "./graphModel";
+import {Graph, Group, Height, Layer, LayerDimensions, LayerIndex, LayerPosition, Node, Stack, X, Y} from "./graphModel";
 
 export function heightOfNodes(element: Node | Stack<Node, unknown> | Layer<Node, unknown> | Group<Node, unknown>): number {
     switch (element.kind) {
@@ -35,7 +35,7 @@ function groupNestingLevel(element: Node | Stack<Node, unknown> | Layer<Node, un
     }
 }
 
-export function addYToNodeG<N extends (Node & LayerPosition), E extends LayerPosition, G>(
+export function addYToNodeG<N extends (Node & LayerIndex & X), E extends LayerPosition, G>(
     graph: Graph<N, E, G>
 ): Graph<N & Y & LayerDimensions, E, G & Y & Height> {
     let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);

@@ -1,14 +1,14 @@
 import {and, ascending, descending} from "./sorting";
-import {Edge, EdgeIndex, getLowerNode, getUpperNode, Graph, LayerPosition, X} from "./graphModel";
+import {Edge, EdgeIndex, getLowerNode, getUpperNode, Graph, Key, LayerIndex, LayerPosition, X} from "./graphModel";
 
-export function addLayerPositionToEdgeG<N extends LayerPosition & X, E, G>(graph: Graph<N, E, G>):
+export function addLayerPositionToEdgeG<N extends LayerIndex & X & Key, E, G>(graph: Graph<N, E, G>):
     Graph<N, E & LayerPosition, G> {
     addLayerPositionToEdge(graph.edges);
     return graph as unknown as Graph<N, E & LayerPosition, G>;
 }
 
-export function addLayerPositionToEdge(edges: Edge<LayerPosition & X>[]) {
-    let groupedByLayerIndex = new Map<number, (Edge<LayerPosition & X> & EdgeIndex)[]>();
+export function addLayerPositionToEdge(edges: Edge<LayerIndex & X & Key>[]) {
+    let groupedByLayerIndex = new Map<number, (Edge<LayerIndex & X & Key> & EdgeIndex)[]>();
 
     edges
         .map((edge, index) => Object.assign(edge, {edgeIndex: index}))
@@ -22,8 +22,8 @@ export function addLayerPositionToEdge(edges: Edge<LayerPosition & X>[]) {
     Array.from(groupedByLayerIndex.values()).forEach(addLayerPositionToEdgeForLayer);
 }
 
-function addLayerPositionToEdgeForLayer(edges: (Edge<LayerPosition & X> & EdgeIndex)[]) {
-    let groupedByUpperNode = new Map<string, (Edge<LayerPosition & X> & EdgeIndex)[]>();
+function addLayerPositionToEdgeForLayer(edges: (Edge<LayerIndex & X & Key> & EdgeIndex)[]) {
+    let groupedByUpperNode = new Map<string, (Edge<LayerIndex & X & Key> & EdgeIndex)[]>();
 
     edges.forEach(edge => {
         let key = getUpperNode(edge).key;
@@ -40,21 +40,21 @@ function addLayerPositionToEdgeForLayer(edges: (Edge<LayerPosition & X> & EdgeIn
         let edges = groupedByUpperNode.get(nodeKey)!;
 
         let sameLayer = edges.filter(edge => getLowerNode(edge).layerIndex === getUpperNode(edge).layerIndex);
-        let sameLayerBefore = sameLayer.filter(edge => getLowerNode(edge).index <= getUpperNode(edge).index);
-        let sameLayerAfter = sameLayer.filter(edge => getLowerNode(edge).index > getUpperNode(edge).index);
+        let sameLayerBefore = sameLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
+        let sameLayerAfter = sameLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
         let otherLayer = edges.filter(edge => getLowerNode(edge).layerIndex !== getUpperNode(edge).layerIndex);
         let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
         let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
 
-        sameLayerBefore.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
-        otherLayerBefore.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
-        otherLayerAfter.sort(and(descending(edge => getLowerNode(edge).index), descending(edge => edge.edgeIndex)));
-        sameLayerAfter.sort(and(ascending(edge => getLowerNode(edge).index), ascending(edge => edge.edgeIndex)));
+        sameLayerBefore.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
+        otherLayerBefore.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
+        otherLayerAfter.sort(and(descending(edge => getLowerNode(edge).x), descending(edge => edge.edgeIndex)));
+        sameLayerAfter.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
 
-        function addLayerPosition(edge: Edge<LayerPosition>, indexInArray: number, beforeOrAfter: "A" | "B") {
+        function addLayerPosition(edge: Edge<LayerIndex & X>, indexInArray: number, beforeOrAfter: "A" | "B") {
             let layerIndex = getUpperNode(edge).layerIndex;
             let index = indexOffset + indexInArray;
             Object.assign(edge, {

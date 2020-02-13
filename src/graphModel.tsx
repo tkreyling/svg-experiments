@@ -20,7 +20,7 @@ export type Key = {
     key: string
 }
 export type LayerPosition = LayerIndex & Index & Key
-export type GroupPosition = LayerIndex & Index & Key
+export type GroupPosition = LayerIndex & Key
 type Symbols = "component"
 export type Node = {
     kind: 'node'
@@ -62,17 +62,17 @@ export type Graph<N, E, G> = {
     edges: (Edge<N> & E)[]
 }
 
-function fromIsUpper<T extends LayerPosition>(edge: Edge<T>) {
+function fromIsUpper<T extends LayerIndex & X>(edge: Edge<T>) {
     if (edge.from.layerIndex === edge.to.layerIndex) {
-        return edge.from.index <= edge.to.index;
+        return edge.from.x <= edge.to.x;
     }
     return edge.from.layerIndex < edge.to.layerIndex;
 }
 
-export function getUpperNode<T extends LayerPosition>(edge: Edge<T>): T {
+export function getUpperNode<T extends LayerIndex & X>(edge: Edge<T>): T {
     return fromIsUpper(edge) ? edge.from : edge.to;
 }
 
-export function getLowerNode<T extends LayerPosition>(edge: Edge<T>): T {
+export function getLowerNode<T extends LayerIndex & X>(edge: Edge<T>): T {
     return fromIsUpper(edge) ? edge.to : edge.from;
 }

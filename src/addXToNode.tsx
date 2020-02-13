@@ -1,15 +1,15 @@
 import {width} from "./width";
 import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
-import {Graph, Group, GroupPosition, Layer, LayerPosition, Node, Stack, X} from "./graphModel";
+import {Graph, Group, Layer, Node, Stack, X} from "./graphModel";
 
-export function addXToNodeG<N extends (Node & LayerPosition), E, G extends GroupPosition>(
+export function addXToNodeG<N extends Node, E, G>(
     graph: Graph<N, E, G>
 ): Graph<N & X, E, G & X> {
     addXToNode(graph.stack, {x: 0});
     return graph as unknown as Graph<N & X, E, G & X>;
 }
 
-export function addXToNode<N extends (Node & LayerPosition), G extends GroupPosition>(
+export function addXToNode<N extends Node, G>(
     element: N | (Group<N, G> & G) | Layer<N, G> | Stack<N, G>,
     accumulator: { x: number },
     fullWidth: number = 0

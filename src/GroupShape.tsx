@@ -1,9 +1,9 @@
 import React from "react";
 import {width} from "./width";
 import {ELEMENT_HEIGHT, GROUP_MARGIN_SIDE, STROKE_WIDTH} from "./styling";
-import {Group, GroupPosition, Height, Node, X, Y} from "./graphModel";
+import {Group, Height, Key, Node, X, Y} from "./graphModel";
 
-export const GroupShape: React.FC<Group<Node, unknown> & GroupPosition & X & Y & Height> = group => {
+export const GroupShape: React.FC<Group<Node, unknown> & X & Y & Key & Height> = group => {
     return (
         <g key={group.key}>
             <rect

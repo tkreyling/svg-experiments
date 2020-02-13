@@ -5,7 +5,7 @@ import {
     ConnectionIndex,
     Edge,
     getUpperNode,
-    LayerDimensions,
+    LayerDimensions, LayerIndex,
     LayerPosition,
     Node,
     NumberOfEdges, X,
@@ -13,7 +13,7 @@ import {
 } from "./graphModel";
 import {heightOfNodes} from "./addYToNode";
 
-function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdges>(
+function edgeEndCoordinates<N extends Node & LayerIndex & X & Y & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
 ) {
     let onLowerSide = node.layerIndex <= otherNode.layerIndex;
@@ -24,7 +24,7 @@ function edgeEndCoordinates<N extends Node & LayerPosition & X & Y & NumberOfEdg
     };
 }
 
-export const EdgeShape: React.FC<Edge<Node & LayerPosition & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
+export const EdgeShape: React.FC<Edge<Node & LayerIndex & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getUpperNode(edge).belowLayerY - VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);

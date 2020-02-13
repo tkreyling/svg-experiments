@@ -1,4 +1,4 @@
-import {Index, Key, LayerIndex, Node, Stack} from "./graphModel";
+import {Key, Node, Stack} from "./graphModel";
 import {addKeyToNode} from "./addKeyToNode";
 
 test('no nodes need no key', () => {
@@ -6,11 +6,11 @@ test('no nodes need no key', () => {
 });
 
 test('one node in one layer ', () => {
-    let elements: Stack<Node & LayerIndex & Index, LayerIndex & Index> = {
+    let elements: Stack<Node, unknown> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                kind: 'group', name: "group 1", layerIndex: 0, index: 0, elements: [{
-                    kind: "node", name: "node 1", layerIndex: 0, index: 0
+                kind: 'group', name: "group 1", elements: [{
+                    kind: "node", name: "node 1"
                 }]
             }]
         }]
@@ -18,11 +18,11 @@ test('one node in one layer ', () => {
 
     addKeyToNode(elements);
 
-    let expectedElements: Stack<Node & Key & LayerIndex & Index, Key & LayerIndex & Index> = {
+    let expectedElements: Stack<Node & Key, Key> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                kind: 'group', name: "group 1", layerIndex: 0, index: 0, key: "G_0_0", elements: [{
-                    kind: "node", name: "node 1", layerIndex: 0, index: 0, key: "0_0"
+                kind: 'group', name: "group 1", key: "0", elements: [{
+                    kind: "node", name: "node 1", key: "1"
                 }]
             }]
         }]

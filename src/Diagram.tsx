@@ -1,5 +1,4 @@
 import React from "react";
-import {addIndexToNodeG} from "./addIndexToNode";
 import {addXToNodeG} from "./addXToNode";
 import {addLayerPositionToEdgeG} from "./addLayerPositionToEdge";
 import {addYToNodeG, heightOfNodes} from "./addYToNode";
@@ -21,7 +20,6 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
     return [graph]
         .map(addLayerIndexToNodeG)
         .map(insertPlaceholdersInMultilayerEdges)
-        .map(addIndexToNodeG)
         .map(addKeyToNodeG)
         .map(addXToNodeG)
         .map(addLayerPositionToEdgeG)

@@ -1,10 +1,10 @@
 import React from "react";
 import {width} from "./width";
 import {ELEMENT_HEIGHT, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
-import {LayerPosition, Node, X, Y} from "./graphModel";
+import {Key, Node, X, Y} from "./graphModel";
 import {ComponentSymbol} from "./Symbols";
 
-export const NodeShape: React.FC<Node & LayerPosition & X & Y> = node => {
+export const NodeShape: React.FC<Node & X & Y & Key> = node => {
     if (node.isPlaceholder) return null;
 
     let isComponent = node.symbol === "component";
