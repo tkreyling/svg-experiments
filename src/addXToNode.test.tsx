@@ -1,10 +1,10 @@
 import {addXToNode} from "./addXToNode";
 import {width} from "./width";
 import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
-import {GroupPosition, Layer, LayerPosition, Node, Stack, X} from "./graphModel";
+import {Layer, Node, Stack, X} from "./graphModel";
 
 test('no element results in no layouted elements', () => {
-    let layer: Layer<Node & LayerPosition, GroupPosition> = {kind: 'layer', elements: []};
+    let layer: Layer<Node, unknown> = {kind: 'layer', elements: []};
 
     addXToNode(layer, {x: 0}, width(layer));
 
@@ -12,29 +12,25 @@ test('no element results in no layouted elements', () => {
 });
 
 test('one element is layouted to the origin', () => {
-    let elements: Layer<Node & LayerPosition, GroupPosition> = {
+    let elements: Layer<Node, unknown> = {
         kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
+            name: "group 1", kind: 'group', elements: [
+                {kind: "node", name: "node 1"}
             ]
         }]
     };
 
     addXToNode(elements, {x: 0}, width(elements));
 
-    let expected: Layer<Node & LayerPosition & X, GroupPosition & X> = {
+    let expected: Layer<Node & X, X> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
-            key: "0_0", index: 0, layerIndex: 0,
             x: MARGIN_SIDE,
             elements: [
                 {
                     kind: "node",
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    key: "0_0",
-                    index: 0,
-                    layerIndex: 0
                 }
             ]
         }]
@@ -43,17 +39,17 @@ test('one element is layouted to the origin', () => {
 });
 
 test('one element in the second layer keeps space for the two borders between the layers', () => {
-    let elements: Stack<Node & LayerPosition, GroupPosition> = {
+    let elements: Stack<Node, unknown> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
-                kind: 'group', name: "group 1", key: "0_0", index: 0, layerIndex: 0, elements: [
-                    {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
+                kind: 'group', name: "group 1", elements: [
+                    {kind: "node", name: "node 1"}
                 ]
             }]
         }, {
             kind: 'layer', elements: [{
-                kind: 'group', name: "group 2", key: "1_0", index: 0, layerIndex: 1, elements: [
-                    {kind: "node", name: "node 2", key: "1_0", index: 0, layerIndex: 1}
+                kind: 'group', name: "group 2", elements: [
+                    {kind: "node", name: "node 2"}
                 ]
             }]
         }]
@@ -61,36 +57,29 @@ test('one element in the second layer keeps space for the two borders between th
 
     addXToNode(elements, {x: 0}, width(elements));
 
-    let expected: Stack<Node & LayerPosition & X, GroupPosition & X> = {
+    let expected: Stack<Node & X, X> = {
         kind: 'stack', elements: [{
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 1",
-                key: "0_0", index: 0, layerIndex: 0,
+                
                 x: MARGIN_SIDE,
                 elements: [
                     {
                         kind: "node",
                         name: "node 1",
-                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                        key: "0_0",
-                        index: 0,
-                        layerIndex: 0
+                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE
                     }
                 ]
             }]
         }, {
             kind: 'layer', elements: [{
                 kind: 'group', name: "group 2",
-                key: "1_0", index: 0, layerIndex: 1,
                 x: MARGIN_SIDE,
                 elements: [
                     {
                         kind: "node",
                         name: "node 2",
-                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                        key: "1_0",
-                        index: 0,
-                        layerIndex: 1
+                        x: MARGIN_SIDE + GROUP_MARGIN_SIDE
                     }
                 ]
             }]
@@ -100,38 +89,31 @@ test('one element in the second layer keeps space for the two borders between th
 });
 
 test('two elements are layouted right beside each other', () => {
-    let elements: Layer<Node & LayerPosition, GroupPosition> = {
+    let elements: Layer<Node, unknown> = {
         kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0},
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
+            name: "group 1", kind: 'group', elements: [
+                {kind: "node", name: "node 1"},
+                {kind: "node", name: "node 2"}
             ]
         }]
     };
 
     addXToNode(elements, {x: 0}, width(elements));
 
-    let expected: Layer<Node & LayerPosition & X, GroupPosition & X> = {
+    let expected: Layer<Node & X, X> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
-            key: "0_0", index: 0, layerIndex: 0,
             x: MARGIN_SIDE,
             elements: [
                 {
                     kind: "node",
                     name: "node 1",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    key: "0_0",
-                    index: 0,
-                    layerIndex: 0
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE
                 },
                 {
                     kind: "node",
                     name: "node 2",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING,
-                    key: "0_1",
-                    index: 1,
-                    layerIndex: 0
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING
                 }
             ]
         }]
@@ -140,39 +122,33 @@ test('two elements are layouted right beside each other', () => {
 });
 
 test('width of node is adjusted by size property', () => {
-    let elements: Layer<Node & LayerPosition, GroupPosition> = {
+    let elements: Layer<Node, unknown> = {
         kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0, size: 1.2},
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
+            name: "group 1", kind: 'group', elements: [
+                {kind: "node", name: "node 1", size: 1.2},
+                {kind: "node", name: "node 2"}
             ]
         }]
     };
 
     addXToNode(elements, {x: 0}, width(elements));
 
-    let expected: Layer<Node & LayerPosition & X, GroupPosition & X> = {
+    let expected: Layer<Node & X, X> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
-            key: "0_0", index: 0, layerIndex: 0,
+            
             x: MARGIN_SIDE,
             elements: [
                 {
                     kind: "node",
                     name: "node 1",
                     x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    key: "0_0",
-                    index: 0,
-                    layerIndex: 0,
                     size: 1.2
                 },
                 {
                     kind: "node",
                     name: "node 2",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH * 1.2 + HORIZONTAL_SPACING,
-                    key: "0_1",
-                    index: 1,
-                    layerIndex: 0
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH * 1.2 + HORIZONTAL_SPACING
                 }
             ]
         }]
@@ -181,47 +157,40 @@ test('width of node is adjusted by size property', () => {
 });
 
 test('two elements in two groups have an additional spacing for the two group borders', () => {
-    let elements: Layer<Node & LayerPosition, GroupPosition> = {
+    let elements: Layer<Node, unknown> = {
         kind: 'layer', elements: [{
-            name: "group 1", kind: 'group', key: "0_0", index: 0, layerIndex: 0, elements: [
-                {kind: "node", name: "node 1", key: "0_0", index: 0, layerIndex: 0}
+            name: "group 1", kind: 'group', elements: [
+                {kind: "node", name: "node 1"}
             ]
         }, {
-            name: "group 2", kind: 'group', key: "0_1", index: 1, layerIndex: 0, elements: [
-                {kind: "node", name: "node 2", key: "0_1", index: 1, layerIndex: 0}
+            name: "group 2", kind: 'group', elements: [
+                {kind: "node", name: "node 2"}
             ]
         }]
     };
 
     addXToNode(elements, {x: 0}, width(elements));
 
-    let expected: Layer<Node & LayerPosition & X, GroupPosition & X> = {
+    let expected: Layer<Node & X, X> = {
         kind: 'layer', elements: [{
             name: "group 1", kind: 'group',
-            key: "0_0", index: 0, layerIndex: 0,
+            
             x: MARGIN_SIDE,
             elements: [
                 {
                     kind: "node",
                     name: "node 1",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE,
-                    key: "0_0",
-                    index: 0,
-                    layerIndex: 0
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE
                 }
             ]
         }, {
             name: "group 2", kind: 'group',
-            key: "0_1", index: 1, layerIndex: 0,
             x: MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE,
             elements: [
                 {
                     kind: "node",
                     name: "node 2",
-                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE,
-                    key: "0_1",
-                    index: 1,
-                    layerIndex: 0
+                    x: MARGIN_SIDE + GROUP_MARGIN_SIDE + ELEMENT_WIDTH + HORIZONTAL_SPACING + 2 * GROUP_MARGIN_SIDE
                 }
             ]
         }]
