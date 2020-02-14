@@ -1,16 +1,14 @@
 import {GroupShape} from "./GroupShape";
-import {Group, GroupPosition, Height, Node, X, Y} from "./graphModel";
+import {Group, Height, Key, Node, X, Y} from "./graphModel";
 
 test('coordinates are just passed through', () => {
-  let props: Group<Node, unknown> & GroupPosition & X & Y & Height = {
+  let props: Group<Node, unknown> & X & Y & Key & Height = {
     kind: "group",
     x: 10,
     y: 10,
     height: 100,
     name: "group 1",
     key: "0_0",
-    index: 0,
-    layerIndex: 0,
     elements: []
   };
 

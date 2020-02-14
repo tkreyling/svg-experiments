@@ -20,7 +20,6 @@ export type Key = {
     key: string
 }
 export type LayerPosition = LayerIndex & Index & Key
-export type GroupPosition = LayerIndex & Key
 type Symbols = "component"
 export type Node = {
     kind: 'node'
