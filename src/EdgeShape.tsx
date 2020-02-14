@@ -4,7 +4,7 @@ import {EDGE_SPACING, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
 import {
     ConnectionIndex,
     Edge,
-    getUpperNode,
+    getUpperLeftNode,
     LayerDimensions, LayerIndex,
     LayerPosition,
     Node,
@@ -26,7 +26,7 @@ function edgeEndCoordinates<N extends Node & LayerIndex & X & Y & NumberOfEdges>
 
 export const EdgeShape: React.FC<Edge<Node & LayerIndex & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
-    let upperNodeEdgesY = getUpperNode(edge).belowLayerY - VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
+    let upperNodeEdgesY = getUpperLeftNode(edge).belowLayerY - VERTICAL_SPACING / 2 + edge.index * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
     return (
         <path key={edge.key} d={

@@ -1,10 +1,10 @@
 import {EDGE_SPACING} from "./styling";
-import {Edge, getUpperNode, LayerIndex, LayerPosition, X} from "./graphModel";
+import {Edge, getUpperLeftNode, LayerIndex, LayerPosition, X} from "./graphModel";
 
 export function heightOfEdges(edges: (Edge<LayerIndex & X> & LayerPosition)[], numberOfLayers: number): number[] {
     let groupedByLayerIndex = new Map<number, (Edge<LayerIndex & X> & LayerPosition)[]>();
     edges.forEach(edge => {
-        let layerIndex = getUpperNode(edge).layerIndex;
+        let layerIndex = getUpperLeftNode(edge).layerIndex;
         let grouped = groupedByLayerIndex.get(layerIndex) || [];
         grouped.push(edge);
         groupedByLayerIndex.set(layerIndex, grouped);

@@ -1,5 +1,5 @@
 import {and, ascending, descending} from "./sorting";
-import {Edge, EdgeIndex, getLowerNode, getUpperNode, Graph, Key, LayerIndex, LayerPosition, X} from "./graphModel";
+import {Edge, EdgeIndex, getLowerRightNode, getUpperLeftNode, Graph, Key, LayerIndex, LayerPosition, X} from "./graphModel";
 
 export function addLayerPositionToEdgeG<N extends LayerIndex & X & Key, E, G>(graph: Graph<N, E, G>):
     Graph<N, E & LayerPosition, G> {
@@ -13,7 +13,7 @@ export function addLayerPositionToEdge(edges: Edge<LayerIndex & X & Key>[]) {
     edges
         .map((edge, index) => Object.assign(edge, {edgeIndex: index}))
         .forEach(edge => {
-            let key = getUpperNode(edge).layerIndex;
+            let key = getUpperLeftNode(edge).layerIndex;
             let edges = groupedByLayerIndex.get(key) || [];
             edges.push(edge);
             groupedByLayerIndex.set(key, edges);
@@ -26,7 +26,7 @@ function addLayerPositionToEdgeForLayer(edges: (Edge<LayerIndex & X & Key> & Edg
     let groupedByUpperNode = new Map<string, (Edge<LayerIndex & X & Key> & EdgeIndex)[]>();
 
     edges.forEach(edge => {
-        let key = getUpperNode(edge).key;
+        let key = getUpperLeftNode(edge).key;
         let edges = groupedByUpperNode.get(key) || [];
         edges.push(edge);
         groupedByUpperNode.set(key, edges);
@@ -39,23 +39,23 @@ function addLayerPositionToEdgeForLayer(edges: (Edge<LayerIndex & X & Key> & Edg
     nodeKeys.forEach(nodeKey => {
         let edges = groupedByUpperNode.get(nodeKey)!;
 
-        let sameLayer = edges.filter(edge => getLowerNode(edge).layerIndex === getUpperNode(edge).layerIndex);
-        let sameLayerBefore = sameLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
-        let sameLayerAfter = sameLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
-        let otherLayer = edges.filter(edge => getLowerNode(edge).layerIndex !== getUpperNode(edge).layerIndex);
-        let otherLayerBefore = otherLayer.filter(edge => getLowerNode(edge).x <= getUpperNode(edge).x);
-        let otherLayerAfter = otherLayer.filter(edge => getLowerNode(edge).x > getUpperNode(edge).x);
+        let sameLayer = edges.filter(edge => getLowerRightNode(edge).layerIndex === getUpperLeftNode(edge).layerIndex);
+        let sameLayerBefore = sameLayer.filter(edge => getLowerRightNode(edge).x <= getUpperLeftNode(edge).x);
+        let sameLayerAfter = sameLayer.filter(edge => getLowerRightNode(edge).x > getUpperLeftNode(edge).x);
+        let otherLayer = edges.filter(edge => getLowerRightNode(edge).layerIndex !== getUpperLeftNode(edge).layerIndex);
+        let otherLayerBefore = otherLayer.filter(edge => getLowerRightNode(edge).x <= getUpperLeftNode(edge).x);
+        let otherLayerAfter = otherLayer.filter(edge => getLowerRightNode(edge).x > getUpperLeftNode(edge).x);
 
-        sameLayerBefore.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
-        otherLayerBefore.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
-        otherLayerAfter.sort(and(descending(edge => getLowerNode(edge).x), descending(edge => edge.edgeIndex)));
-        sameLayerAfter.sort(and(ascending(edge => getLowerNode(edge).x), ascending(edge => edge.edgeIndex)));
+        sameLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).x), ascending(edge => edge.edgeIndex)));
+        otherLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).x), ascending(edge => edge.edgeIndex)));
+        otherLayerAfter.sort(and(descending(edge => getLowerRightNode(edge).x), descending(edge => edge.edgeIndex)));
+        sameLayerAfter.sort(and(ascending(edge => getLowerRightNode(edge).x), ascending(edge => edge.edgeIndex)));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
 
         function addLayerPosition(edge: Edge<LayerIndex & X>, indexInArray: number, beforeOrAfter: "A" | "B") {
-            let layerIndex = getUpperNode(edge).layerIndex;
+            let layerIndex = getUpperLeftNode(edge).layerIndex;
             let index = indexOffset + indexInArray;
             Object.assign(edge, {
                 key: nodeKey + "_" + beforeOrAfter + "_" + index,

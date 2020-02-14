@@ -61,17 +61,17 @@ export type Graph<N, E, G> = {
     edges: (Edge<N> & E)[]
 }
 
-function fromIsUpper<T extends LayerIndex & X>(edge: Edge<T>) {
+function fromIsUpperLeft<T extends LayerIndex & X>(edge: Edge<T>) {
     if (edge.from.layerIndex === edge.to.layerIndex) {
         return edge.from.x <= edge.to.x;
     }
     return edge.from.layerIndex < edge.to.layerIndex;
 }
 
-export function getUpperNode<T extends LayerIndex & X>(edge: Edge<T>): T {
-    return fromIsUpper(edge) ? edge.from : edge.to;
+export function getUpperLeftNode<T extends LayerIndex & X>(edge: Edge<T>): T {
+    return fromIsUpperLeft(edge) ? edge.from : edge.to;
 }
 
-export function getLowerNode<T extends LayerIndex & X>(edge: Edge<T>): T {
-    return fromIsUpper(edge) ? edge.to : edge.from;
+export function getLowerRightNode<T extends LayerIndex & X>(edge: Edge<T>): T {
+    return fromIsUpperLeft(edge) ? edge.to : edge.from;
 }
