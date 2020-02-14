@@ -1,15 +1,13 @@
 import {NodeShape} from "./NodeShape";
-import {LayerPosition, Node, X, Y} from "./graphModel";
+import {Key, Node, X, Y} from "./graphModel";
 
 test('coordinates are just passed through', () => {
-  let props: Node & LayerPosition & X & Y = {
+  let props: Node & X & Y & Key = {
     kind: "node",
     x: 10,
     y: 10,
     name: "element 1",
-    key: "0_0",
-    index: 0,
-    layerIndex: 0
+    key: "0_0"
   };
 
   let actual = NodeShape(props);
