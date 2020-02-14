@@ -1,8 +1,18 @@
 import {EdgeShape} from "./EdgeShape";
-import {ConnectionIndex, Edge, LayerDimensions, LayerPosition, Node, NumberOfEdges, X, Y} from "./graphModel";
+import {
+    ConnectionIndex,
+    Edge,
+    LayerDimensions,
+    LayerIndex,
+    LayerPosition,
+    Node,
+    NumberOfEdges,
+    X,
+    Y
+} from "./graphModel";
 
 test('coordinates are just passed through', () => {
-    let edge: Edge<Node & LayerPosition & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex = {
+    let edge: Edge<Node & LayerIndex & X & Y & LayerDimensions & NumberOfEdges> & LayerPosition & ConnectionIndex = {
         key: "0",
         index: 0,
         layerIndex: 0,
@@ -11,8 +21,6 @@ test('coordinates are just passed through', () => {
         from: {
             kind: "node",
             name: "element 1",
-            key: "0_0",
-            index: 0,
             layerIndex: 0,
             x: 10,
             y: 10,
@@ -23,8 +31,6 @@ test('coordinates are just passed through', () => {
         to: {
             kind: "node",
             name: "element 2",
-            key: "1_1",
-            index: 1,
             layerIndex: 1,
             x: 20,
             y: 100,
