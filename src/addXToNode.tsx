@@ -5,7 +5,7 @@ import {Graph, Group, Layer, Node, Stack, X} from "./graphModel";
 export function addXToNodeG<N extends Node, E, G>(
     graph: Graph<N, E, G>
 ): Graph<N & X, E, G & X> {
-    addXToNode(graph.stack, {x: 0});
+    addXToNode(graph.stack, {x: MARGIN_SIDE});
     return graph as unknown as Graph<N & X, E, G & X>;
 }
 
@@ -20,13 +20,16 @@ export function addXToNode<N extends Node, G>(
             element.elements.forEach(layer => {
                 addXToNode(layer, accumulator, fullWidth);
             });
+            accumulator.x += fullWidth + HORIZONTAL_SPACING;
             return;
         }
         case "layer": {
-            accumulator.x = MARGIN_SIDE + (fullWidth - width(element)) / 2;
+            let oldX = accumulator.x;
+            accumulator.x = oldX + (fullWidth - width(element)) / 2;
             element.elements.forEach(group => {
                 addXToNode(group, accumulator, fullWidth);
             });
+            accumulator.x = oldX;
             return;
         }
         case "group": {
