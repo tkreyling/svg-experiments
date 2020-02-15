@@ -10,7 +10,7 @@ import {NodeShape} from "./NodeShape";
 import {GroupShape} from "./GroupShape";
 import {EdgeShape} from "./EdgeShape";
 import {width} from "./width";
-import {MARGIN_SIDE, MARGIN_TOP} from "./styling";
+import {MARGIN_SIDE, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
 import {Graph, Node} from "./graphModel";
 import {addLayerIndexToNodeG} from "./addLayerIndexToNode";
 import {insertPlaceholdersInMultilayerEdges} from "./insertPlaceholdersInMultilayerEdges";
@@ -28,7 +28,9 @@ export const Diagram: React.FC<Graph<Node, unknown, unknown>> = graph => {
         .map(graph => {
             let heightOfAllEdges = heightOfEdges(graph.edges, graph.stack.elements.length);
             let overallWidth = width(graph.stack) + 2 * MARGIN_SIDE;
-            let height = heightOfNodes(graph.stack) + heightOfAllEdges.reduce((sum, add) => sum + add) + 2 * MARGIN_TOP;
+            let height = heightOfNodes(graph.stack) + VERTICAL_SPACING +
+                heightOfAllEdges.reduce((sum, add) => sum + add) +
+                2 * MARGIN_TOP;
 
             return (
                 <svg viewBox={"0 0 " + overallWidth + " " + height}>
