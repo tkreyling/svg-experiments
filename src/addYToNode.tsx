@@ -79,15 +79,17 @@ export function addYToNode<N extends Node & LayerIndex, G extends LayerIndex>(
 ) {
     switch (element.kind) {
         case "stack": {
-            let oldY = accumulator.y;
-            let oldNodeY = accumulator.nodeY;
-            let oldBelowLayerY = accumulator.belowLayerY;
+            let old = {
+                y: accumulator.y,
+                nodeY: accumulator.nodeY,
+                belowLayerY: accumulator.belowLayerY
+            };
             element.elements.forEach((layer, layerIndex) => {
                 addYToNode(layer, accumulator, heightOfEdges);
             });
-            accumulator.y = oldY;
-            accumulator.nodeY = oldNodeY;
-            accumulator.belowLayerY = oldBelowLayerY;
+            accumulator.y = old.y;
+            accumulator.nodeY = old.nodeY;
+            accumulator.belowLayerY = old.belowLayerY;
             return;
         }
         case "layer": {
