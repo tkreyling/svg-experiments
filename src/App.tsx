@@ -1,4 +1,10 @@
 import React, {useState} from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 import './App.css';
 import {indicesToReferences as indicesToReferencesImport} from "./indicesToReferences";
 import {stringsToNodes as stringsToNodesImport} from "./stringsToNodes";
@@ -81,7 +87,7 @@ const stringsToNodes = stringsToNodesImport;
 // eslint-disable-next-line no-eval
 const initialGraph: Graph<Node, unknown, unknown> = eval(graphAsString);
 
-const App: React.FC = () => {
+const Editor: React.FC = () => {
     const [graph, setGraph] = useState(initialGraph);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -105,6 +111,40 @@ const App: React.FC = () => {
                 <p className="error-message">{errorMessage}</p>
             </div>
         </div>
+    );
+};
+
+const Architecture: React.FC = () => {
+    return (
+        <div>Architecture</div>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <Router>
+            <div>
+                <ul>
+                    <li>
+                        <Link to="/">Editor</Link>
+                    </li>
+                    <li>
+                        <Link to="/architecture">Sample Architecture</Link>
+                    </li>
+                </ul>
+
+                <hr/>
+
+                <Switch>
+                    <Route exact path="/">
+                        <Editor/>
+                    </Route>
+                    <Route path="/architecture">
+                        <Architecture/>
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
     );
 };
 
