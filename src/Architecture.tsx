@@ -1,68 +1,50 @@
 import React from "react";
 import {Diagram} from "./Diagram";
-import {Node, Stack} from "./graphModel";
+import {Edge, Node, Stack} from "./graphModel";
+
+function component(name: string): Node {
+    return {
+        kind: "node", name: name, symbol: "component", size: 1.2
+    }
+}
 
 export const Architecture: React.FC = () => {
+    let productAPI = component("Product API");
+    let stockAPI = component("Stock API");
+    let productServiceDB = component("Product Service DB");
+    let productImporter = component("Product Importer");
+    let stockImporter = component("Stock Importer");
+    let categoryImporter = component("Category Importer");
+    let campaignImporter = component("Campaign Importer");
+
     let stack: Stack<Node, unknown> = {
         kind: "stack",
         elements: [
             {
                 kind: "layer",
-                elements: [
-                    {
-                        kind: "group", name: "Product Service",
-                        elements: [
-                            {
-                                kind: "node", name: "Product API", symbol: "component"
-                            },
-                            {
-                                kind: "node", name: "Stock API", symbol: "component"
-                            }
-                        ]
-                    }
-                ]
+                elements: [productAPI, stockAPI]
             },
             {
                 kind: "layer",
-                elements: [
-                    {
-                        kind: "group", name: "",
-                        elements: [
-                            {
-                                kind: "node", name: "Product Service DB"
-                            },
-                            {
-                                kind: "node", name: "", isPlaceholder: true
-                            }
-                        ]
-                    }
-                ]
+                elements: [productServiceDB]
             },
             {
                 kind: "layer",
-                elements: [
-                    {
-                        kind: "group", name: "",
-                        elements: [
-                            {
-                                kind: "node", name: "Product Importer", symbol: "component"
-                            },
-                            {
-                                kind: "node", name: "Stock Importer", symbol: "component"
-                            },
-                            {
-                                kind: "node", name: "Category Importer", symbol: "component"
-                            },
-                            {
-                                kind: "node", name: "Campaign Importer", symbol: "component"
-                            }
-                        ]
-                    }
-                ]
+                elements: [productImporter, stockImporter, categoryImporter, campaignImporter]
             }
         ]
     };
+
+    let edges: Edge<Node>[] = [
+        {from: productAPI, to: productServiceDB},
+        {from: stockAPI, to: productServiceDB},
+        {from: productServiceDB, to: productImporter},
+        {from: productServiceDB, to: stockImporter},
+        {from: productServiceDB, to: categoryImporter},
+        {from: productServiceDB, to: campaignImporter}
+    ];
+
     return (
-        <Diagram stack={stack} edges={[]}/>
+        <Diagram stack={stack} edges={edges}/>
     );
 };
