@@ -1,4 +1,4 @@
-import {Element, Node} from "./newGraphModel";
+import {Column, Element, Node, Row} from "./newGraphModel";
 import {assertNever} from "./assertNever";
 
 export type OffsetXBorder = { offsetXBorders: number };
@@ -17,6 +17,9 @@ export function addOffsetXBorders(element: Element<unknown>, accumulator = {offs
             return;
         }
         case "row": {
+            Object.assign<Row<unknown>, OffsetXBorder>(element, {
+                offsetXBorders: accumulator.offsetXBorders
+            });
             if (element.border) {
                 accumulator.offsetXBorders++;
             }
@@ -27,6 +30,9 @@ export function addOffsetXBorders(element: Element<unknown>, accumulator = {offs
             return;
         }
         case "column": {
+            Object.assign<Column<unknown>, OffsetXBorder>(element, {
+                offsetXBorders: accumulator.offsetXBorders
+            });
             if (element.border) {
                 accumulator.offsetXBorders++;
             }
