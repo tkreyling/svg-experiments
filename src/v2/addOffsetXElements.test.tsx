@@ -13,12 +13,12 @@ test('a single node has offsetXElements 0', () => {
     expect(element).toStrictEqual(expected)
 });
 
-test('a row without elements receives no offsetXElements', () => {
+test('a row without elements receives offsetXElements 0 itself', () => {
     let element: InputType = {kind: "row", elements: []};
 
     addOffsetXElements(element);
 
-    let expected: OutputType = {kind: "row", elements: []};
+    let expected: OutputType = {kind: "row", offsetXElements: 0, elements: []};
     expect(element).toStrictEqual(expected)
 });
 
@@ -28,7 +28,7 @@ test('a single node in a row has offsetXElements 0', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{kind: "node", offsetXElements: 0}]
+        kind: "row", offsetXElements: 0, elements: [{kind: "node", offsetXElements: 0}]
     };
     expect(element).toStrictEqual(expected)
 });
@@ -39,7 +39,7 @@ test('the second node in a row has offsetXElements 1', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
+        kind: "row", offsetXElements: 0, elements: [{
             kind: "node", offsetXElements: 0
         }, {
             kind: "node", offsetXElements: 1
@@ -60,8 +60,8 @@ test('a node nested twice in rows has offsetXElements 0', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "row", elements: [{
+        kind: "row", offsetXElements: 0, elements: [{
+            kind: "row", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }]
         }]
@@ -83,8 +83,8 @@ test('a node after an row has an increased offsetXElements', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "row", elements: [{
+        kind: "row", offsetXElements: 0, elements: [{
+            kind: "row", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }]
         }, {
@@ -100,7 +100,7 @@ test('a single node in a column has offsetXElements 0', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{kind: "node", offsetXElements: 0}]
+        kind: "column", offsetXElements: 0, elements: [{kind: "node", offsetXElements: 0}]
     };
     expect(element).toStrictEqual(expected)
 });
@@ -111,7 +111,7 @@ test('the second node in a columns has the same offsetXElements', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{
+        kind: "column", offsetXElements: 0, elements: [{
             kind: "node", offsetXElements: 0
         }, {
             kind: "node", offsetXElements: 0
@@ -132,8 +132,8 @@ test('a node nested twice in columns has offsetXElements 0', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{
-            kind: "column", elements: [{
+        kind: "column", offsetXElements: 0, elements: [{
+            kind: "column", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }]
         }]
@@ -155,8 +155,8 @@ test('a node after an column in a row has an increased offsetXElements', () => {
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "column", elements: [{
+        kind: "row", offsetXElements: 0, elements: [{
+            kind: "column", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }]
         }, {
@@ -188,8 +188,8 @@ test('rows inside of a column have independent offsetXElements', () => {
     addOffsetXElements(element);
 
     let expected: OutputType =  {
-        kind: "column", elements: [{
-            kind: "row", elements: [{
+        kind: "column", offsetXElements: 0, elements: [{
+            kind: "row", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }, {
                 kind: "node", offsetXElements: 1
@@ -197,7 +197,7 @@ test('rows inside of a column have independent offsetXElements', () => {
                 kind: "node", offsetXElements: 2
             }]
         }, {
-            kind: "row", elements: [{
+            kind: "row", offsetXElements: 0, elements: [{
                 kind: "node", offsetXElements: 0
             }, {
                 kind: "node", offsetXElements: 1
@@ -233,9 +233,9 @@ test('a node after a column receives the max offsetXElements increased by one', 
     addOffsetXElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "column", elements: [{
-                kind: "row", elements: [{
+        kind: "row", offsetXElements: 0, elements: [{
+            kind: "column", offsetXElements: 0, elements: [{
+                kind: "row", offsetXElements: 0, elements: [{
                     kind: "node", offsetXElements: 0
                 }, {
                     kind: "node", offsetXElements: 1
@@ -243,7 +243,7 @@ test('a node after a column receives the max offsetXElements increased by one', 
                     kind: "node", offsetXElements: 2
                 }]
             }, {
-                kind: "row", elements: [{
+                kind: "row", offsetXElements: 0, elements: [{
                     kind: "node", offsetXElements: 0
                 }, {
                     kind: "node", offsetXElements: 1
