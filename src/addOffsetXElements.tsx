@@ -4,10 +4,15 @@ export type Node = {
 
 export type Row<N> = {
     kind: "row",
-    elements: ((Node & N) | Row<N>)[]
+    elements: Element<N>[]
 };
 
-export type Element<N> = (Node & N) | Row<N>;
+export type Column<N> = {
+    kind: "column",
+    elements: Element<N>[]
+};
+
+export type Element<N> = (Node & N) | Row<N> | Column<N>;
 
 export type OffsetXElements = { offsetXElements: number };
 
@@ -25,5 +30,23 @@ export function addOffsetXElements(element: Element<unknown>, accumulator = {off
             element.elements.forEach(nestedElement => addOffsetXElements(nestedElement, accumulator));
             return;
         }
+        case "column": {
+            let maxOffsetXElements = 0;
+            let oldOffsetXElements = accumulator.offsetXElements;
+            element.elements.forEach(nestedElement => {
+                addOffsetXElements(nestedElement, accumulator);
+                maxOffsetXElements = Math.max(maxOffsetXElements, accumulator.offsetXElements);
+                accumulator.offsetXElements = oldOffsetXElements;
+            });
+            accumulator.offsetXElements = maxOffsetXElements;
+            return;
+        }
+        default: {
+            assertNever(element);
+        }
     }
+}
+
+function assertNever(x: never): never {
+    throw new Error("Unexpected object: " + x);
 }
