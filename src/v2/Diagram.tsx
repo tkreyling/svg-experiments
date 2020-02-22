@@ -21,7 +21,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
     addOffsetXElements(element);
     addOffsetYElements(element);
     return (
-        <svg viewBox={"0 0 500 200"}>
+        <svg viewBox={"0 0 1000 300"}>
             {allNodes(element as Element<OffsetXElements & OffsetYElements>).map(NodeShape)}
         </svg>
     )
