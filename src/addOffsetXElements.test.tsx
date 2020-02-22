@@ -1,4 +1,5 @@
-import {addOffsetXElements, Element, OffsetXElements} from "./addOffsetXElements";
+import {addOffsetXElements, OffsetXElements} from "./addOffsetXElements";
+import {Element} from "./newGraphModel";
 
 type InputType = Element<unknown>;
 type OutputType = Element<OffsetXElements>;
