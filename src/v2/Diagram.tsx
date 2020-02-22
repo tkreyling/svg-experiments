@@ -16,7 +16,8 @@ function allNodes<T>(element: Element<T>): (Node & T)[] {
     }
 }
 
-export const Diagram: React.FC<Element<unknown>> = element => {
+export const Diagram: React.FC<{element: Element<unknown>}> = props => {
+    let element = props.element;
     addOffsetXElements(element);
     addOffsetYElements(element);
     return (
