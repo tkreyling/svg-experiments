@@ -30,7 +30,7 @@ test('indices array with empty array element results in an error', () => {
                         {kind: "node", name: "node 1"}, {kind: "node", name: "node 2"}]
                 }]
         }]};
-    // noinspection JSConsecutiveCommasInArrayLiteral
+    // eslint-disable-next-line no-sparse-arrays
     let edgeIndices: IndexPair[] = [{from: [0,, 0] as any, to: [0, 0, 1]}];
 
     try {

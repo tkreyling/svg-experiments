@@ -1,6 +1,6 @@
 import React from "react";
 import {width} from "./width";
-import {ELEMENT_HEIGHT, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
+import {ELEMENT_HEIGHT, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "../styling";
 import {Key, Node, X, Y} from "./graphModel";
 import {ComponentSymbol} from "./Symbols";
 

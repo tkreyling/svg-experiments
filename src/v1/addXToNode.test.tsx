@@ -1,6 +1,6 @@
 import {addXToNode} from "./addXToNode";
 import {width} from "./width";
-import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "../styling";
 import {Layer, Node, Stack, X} from "./graphModel";
 
 test('no element results in no layouted elements', () => {

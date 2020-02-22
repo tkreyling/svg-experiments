@@ -1,5 +1,5 @@
 import {addYToNode} from "./addYToNode";
-import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
+import {ELEMENT_HEIGHT, GROUP_MARGIN_BOTTOM, GROUP_MARGIN_TOP, MARGIN_TOP, VERTICAL_SPACING} from "../styling";
 import {Height, Layer, LayerDimensions, LayerIndex, Node, Stack, Y} from "./graphModel";
 
 test('no element results in no layouted elements', () => {

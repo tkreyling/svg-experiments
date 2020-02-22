@@ -5,7 +5,7 @@ import {
     GROUP_MARGIN_TOP,
     MARGIN_TOP,
     VERTICAL_SPACING
-} from "./styling";
+} from "../styling";
 import {Graph, Group, Height, Layer, LayerDimensions, LayerIndex, LayerPosition, Node, Stack, X, Y} from "./graphModel";
 
 export function heightOfNodes(

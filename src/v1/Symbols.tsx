@@ -1,5 +1,5 @@
 import React from "react";
-import {STROKE_WIDTH} from "./styling";
+import {STROKE_WIDTH} from "../styling";
 
 export type Symbol = {
     x: number

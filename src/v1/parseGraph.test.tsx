@@ -1,11 +1,11 @@
 import {parseGraph} from "./parseGraph";
 import {Graph, Node} from "./graphModel";
 
-test('reports unexpected token \;', () => {
+test('reports unexpected token ;', () => {
     expect(parseGraph("var g = {;")).toStrictEqual("Unexpected token ';'");
 });
 
-test('reports unexpected token \"', () => {
+test('reports unexpected token "', () => {
     expect(parseGraph(`var nodes = ["node 1", "`)).toStrictEqual("Invalid or unexpected token");
 });
 

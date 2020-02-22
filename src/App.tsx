@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
-import {Editor} from "./Editor";
-import {Architecture} from "./Architecture";
+import {Editor} from "./v1/Editor";
+import {Architecture} from "./v1/Architecture";
 
 const App: React.FC = () => {
     return (

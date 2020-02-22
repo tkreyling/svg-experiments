@@ -1,6 +1,6 @@
 import React from "react";
 import {width} from "./width";
-import {EDGE_SPACING, STROKE_WIDTH, VERTICAL_SPACING} from "./styling";
+import {EDGE_SPACING, STROKE_WIDTH, VERTICAL_SPACING} from "../styling";
 import {
     ConnectionIndex,
     Edge,
