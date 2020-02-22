@@ -1,4 +1,4 @@
-import {Element, Node} from "./newGraphModel";
+import {Column, Element, Node, Row} from "./newGraphModel";
 import {assertNever} from "./assertNever";
 
 export type OffsetYElements = { offsetYElements: number };
@@ -18,6 +18,9 @@ export function addOffsetYElements(element: Element<unknown>, accumulator = {off
             return;
         }
         case "row": {
+            Object.assign<Row<unknown>, OffsetYElements>(element, {
+                offsetYElements: accumulator.offsetYElements
+            });
             let maxOffsetYElements = 0;
             let oldOffsetYElements = accumulator.offsetYElements;
             element.elements.forEach(nestedElement => {
@@ -29,6 +32,9 @@ export function addOffsetYElements(element: Element<unknown>, accumulator = {off
             return;
         }
         case "column": {
+            Object.assign<Column<unknown>, OffsetYElements>(element, {
+                offsetYElements: accumulator.offsetYElements
+            });
             element.elements.forEach(nestedElement => addOffsetYElements(nestedElement, accumulator));
             return;
         }

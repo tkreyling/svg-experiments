@@ -13,12 +13,12 @@ test('a single node has offsetYElements 0', () => {
     expect(element).toStrictEqual(expected)
 });
 
-test('a row without elements receives no offsetYElements', () => {
+test('a row without elements receives offsetYElements 0 itself', () => {
     let element: InputType = {kind: "row", elements: []};
 
     addOffsetYElements(element);
 
-    let expected: OutputType = {kind: "row", elements: []};
+    let expected: OutputType = {kind: "row", offsetYElements: 0, elements: []};
     expect(element).toStrictEqual(expected)
 });
 
@@ -28,7 +28,7 @@ test('a single node in a row has offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{kind: "node", offsetYElements: 0}]
+        kind: "row", offsetYElements: 0, elements: [{kind: "node", offsetYElements: 0}]
     };
     expect(element).toStrictEqual(expected)
 });
@@ -39,7 +39,7 @@ test('the second node in a row has also offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
+        kind: "row", offsetYElements: 0, elements: [{
             kind: "node", offsetYElements: 0
         }, {
             kind: "node", offsetYElements: 0
@@ -60,8 +60,8 @@ test('a node nested twice in rows has offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "row", elements: [{
+        kind: "row", offsetYElements: 0, elements: [{
+            kind: "row", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }]
         }]
@@ -83,8 +83,8 @@ test('a node after an row has also offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "row", elements: [{
+        kind: "row", offsetYElements: 0, elements: [{
+            kind: "row", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }]
         }, {
@@ -100,7 +100,7 @@ test('a single node in a column has offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{kind: "node", offsetYElements: 0}]
+        kind: "column", offsetYElements: 0, elements: [{kind: "node", offsetYElements: 0}]
     };
     expect(element).toStrictEqual(expected)
 });
@@ -111,7 +111,7 @@ test('the second node in a columns has offsetYElements 1', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{
+        kind: "column", offsetYElements: 0, elements: [{
             kind: "node", offsetYElements: 0
         }, {
             kind: "node", offsetYElements: 1
@@ -132,8 +132,8 @@ test('a node nested twice in columns has offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{
-            kind: "column", elements: [{
+        kind: "column", offsetYElements: 0, elements: [{
+            kind: "column", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }]
         }]
@@ -155,8 +155,8 @@ test('a node after an column in a row has offsetYElements 0', () => {
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "row", elements: [{
-            kind: "column", elements: [{
+        kind: "row", offsetYElements: 0, elements: [{
+            kind: "column", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }]
         }, {
@@ -188,8 +188,8 @@ test('every row inside of a column receives an increased offsetYElements', () =>
     addOffsetYElements(element);
 
     let expected: OutputType =  {
-        kind: "column", elements: [{
-            kind: "row", elements: [{
+        kind: "column", offsetYElements: 0, elements: [{
+            kind: "row", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }, {
                 kind: "node", offsetYElements: 0
@@ -197,7 +197,7 @@ test('every row inside of a column receives an increased offsetYElements', () =>
                 kind: "node", offsetYElements: 0
             }]
         }, {
-            kind: "row", elements: [{
+            kind: "row", offsetYElements: 1, elements: [{
                 kind: "node", offsetYElements: 1
             }, {
                 kind: "node", offsetYElements: 1
@@ -229,8 +229,8 @@ test('columns inside of a row have independent offsetYElements', () => {
     addOffsetYElements(element);
 
     let expected: OutputType =  {
-        kind: "row", elements: [{
-            kind: "column", elements: [{
+        kind: "row", offsetYElements: 0, elements: [{
+            kind: "column", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }, {
                 kind: "node", offsetYElements: 1
@@ -238,7 +238,7 @@ test('columns inside of a row have independent offsetYElements', () => {
                 kind: "node", offsetYElements: 2
             }]
         }, {
-            kind: "column", elements: [{
+            kind: "column", offsetYElements: 0, elements: [{
                 kind: "node", offsetYElements: 0
             }, {
                 kind: "node", offsetYElements: 1
@@ -274,9 +274,9 @@ test('a node after a row in one column receives the max offsetYElements increase
     addOffsetYElements(element);
 
     let expected: OutputType = {
-        kind: "column", elements: [{
-            kind: "row", elements: [{
-                kind: "column", elements: [{
+        kind: "column", offsetYElements: 0, elements: [{
+            kind: "row", offsetYElements: 0, elements: [{
+                kind: "column", offsetYElements: 0, elements: [{
                     kind: "node", offsetYElements: 0
                 }, {
                     kind: "node", offsetYElements: 1
@@ -284,7 +284,7 @@ test('a node after a row in one column receives the max offsetYElements increase
                     kind: "node", offsetYElements: 2
                 }]
             }, {
-                kind: "column", elements: [{
+                kind: "column", offsetYElements: 0, elements: [{
                     kind: "node", offsetYElements: 0
                 }, {
                     kind: "node", offsetYElements: 1
