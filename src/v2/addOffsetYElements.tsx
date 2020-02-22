@@ -3,6 +3,10 @@ import {assertNever} from "./assertNever";
 
 export type OffsetYElements = { offsetYElements: number };
 
+export function addOffsetYElementsG<N>(element: Element<N>): Element<N & OffsetYElements> {
+    addOffsetYElements(element);
+    return element as Element<N & OffsetYElements>;
+}
 
 export function addOffsetYElements(element: Element<unknown>, accumulator = {offsetYElements: 0}) {
     switch (element.kind) {

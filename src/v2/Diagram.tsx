@@ -2,8 +2,8 @@ import React from "react";
 import {Element, Node} from "./newGraphModel";
 import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
-import {addOffsetYElements, OffsetYElements} from "./addOffsetYElements";
-import {addOffsetXElements, OffsetXElements} from "./addOffsetXElements";
+import {addOffsetYElementsG} from "./addOffsetYElements";
+import {addOffsetXElementsG} from "./addOffsetXElements";
 
 function allNodes<T>(element: Element<T>): (Node & T)[] {
     switch (element.kind) {
@@ -17,12 +17,12 @@ function allNodes<T>(element: Element<T>): (Node & T)[] {
 }
 
 export const Diagram: React.FC<{element: Element<unknown>}> = props => {
-    let element = props.element;
-    addOffsetXElements(element);
-    addOffsetYElements(element);
-    return (
-        <svg viewBox={"0 0 1000 300"}>
-            {allNodes(element as Element<OffsetXElements & OffsetYElements>).map(NodeShape)}
-        </svg>
-    )
+    return [props.element]
+        .map(addOffsetXElementsG)
+        .map(addOffsetYElementsG)
+        .map(element => (
+            <svg viewBox={"0 0 1000 300"}>
+                {allNodes(element).map(NodeShape)}
+            </svg>
+        ))[0];
 };
