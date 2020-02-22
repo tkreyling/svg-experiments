@@ -1,4 +1,5 @@
 import {Element, Node} from "./newGraphModel";
+import {assertNever} from "./assertNever";
 
 export type OffsetYElements = { offsetYElements: number };
 
@@ -31,8 +32,4 @@ export function addOffsetYElements(element: Element<unknown>, accumulator = {off
             assertNever(element);
         }
     }
-}
-
-function assertNever(x: never): never {
-    throw new Error("Unexpected object: " + x);
 }
