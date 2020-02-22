@@ -6,6 +6,7 @@ import {addOffsetYElementsG} from "./addOffsetYElements";
 import {addOffsetXElementsG} from "./addOffsetXElements";
 import {addOffsetXBordersG} from "./addOffsetXBorders";
 import {addEmbeddedXBordersG} from "./addEmbeddedXBorders";
+import {addEmbeddedXElementsG} from "./addEmbeddedXElements";
 
 function allNodes<T>(element: Element<T>): (Node & T)[] {
     switch (element.kind) {
@@ -24,6 +25,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addOffsetYElementsG)
         .map(addOffsetXBordersG)
         .map(addEmbeddedXBordersG)
+        .map(addEmbeddedXElementsG)
         .map(element => (
             <svg viewBox={"0 0 1000 300"}>
                 {allNodes(element).map(NodeShape)}
