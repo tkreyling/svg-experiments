@@ -3,7 +3,7 @@ import {Container, Element, Node} from "./newGraphModel";
 import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG} from "./OffsetElementsY";
-import {addOffsetXElementsG} from "./addOffsetXElements";
+import {addOffsetElementsXG} from "./OffsetElementsX";
 import {addEmbeddedBordersXG} from "./EmbeddedBordersX";
 import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
@@ -35,7 +35,7 @@ function allContainers<N>(element: Element<N>): Container<N>[] {
 
 export const Diagram: React.FC<{element: Element<unknown>}> = props => {
     return [props.element]
-        .map(addOffsetXElementsG)
+        .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)
         .map(addBorderIndexLeftG)
         .map(addBorderIndexRightG)

@@ -1,5 +1,5 @@
 import React from "react";
-import {OffsetXElements} from "./addOffsetXElements";
+import {OffsetElementsX} from "./OffsetElementsX";
 import {OffsetElementsY} from "./OffsetElementsY";
 import {
     ELEMENT_HEIGHT,
@@ -11,11 +11,11 @@ import {
 } from "./styling";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 
-export const NodeShape: React.FC<OffsetXElements & BorderIndexMaxX & OffsetElementsY> = node => {
+export const NodeShape: React.FC<OffsetElementsX & BorderIndexMaxX & OffsetElementsY> = node => {
     return (
-        <g key={node.offsetElementsY + "_" + node.offsetXElements}>
-            <rect x={node.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-            node.borderIndexMaxX * (node.offsetXElements * 2 + 1) * BORDER_SPACING_X}
+        <g key={node.offsetElementsY + "_" + node.offsetElementsX}>
+            <rect x={node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
+            node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X}
                   y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)}
                   width={ELEMENT_WIDTH}
                   height={ELEMENT_HEIGHT}
