@@ -11,6 +11,7 @@ import {addBorderIndexMaxXG} from "./BorderIndexMaxX";
 import {addBorderIndexLeftG} from "./BorderIndexLeft";
 import {addBorderIndexRightG} from "./BorderIndexRight";
 import {addBorderIndexTopG} from "./BorderIndexTop";
+import {addBorderIndexBottomG} from "./BorderIndexBottom";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -41,6 +42,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addBorderIndexLeftG)
         .map(addBorderIndexRightG)
         .map(addBorderIndexTopG)
+        .map(addBorderIndexBottomG)
         .map(addEmbeddedBordersXG)
         .map(addBorderIndexMaxXG)
         .map(addEmbeddedElementsXG)
