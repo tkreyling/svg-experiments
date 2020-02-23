@@ -1,11 +1,11 @@
 import {Column, Element, Node, Row} from "./newGraphModel";
 import {assertNever} from "./assertNever";
-import {LeftBorderIndex} from "./addLeftBorderIndex";
+import {BorderIndexLeft} from "./BorderIndexLeft";
 import {RightBorderIndex} from "./addRightBorderIndex";
 
 export type MaxXBorderIndex = { maxXBorderIndex: number };
 
-export function addMaxXBorderIndexG<N extends LeftBorderIndex & RightBorderIndex>(
+export function addMaxXBorderIndexG<N extends BorderIndexLeft & RightBorderIndex>(
     element: Element<N>
 ): Element<N & MaxXBorderIndex> {
     let maxEmbeddedXBorders = determineMaxXBorderIndex(element);
@@ -13,17 +13,17 @@ export function addMaxXBorderIndexG<N extends LeftBorderIndex & RightBorderIndex
     return element as Element<N & MaxXBorderIndex>;
 }
 
-function determineMaxXBorderIndex(element: Element<LeftBorderIndex & RightBorderIndex>): number {
+function determineMaxXBorderIndex(element: Element<BorderIndexLeft & RightBorderIndex>): number {
     switch (element.kind) {
         case "node": return 0;
         case "row": return Math.max(
             ...element.elements.map(determineMaxXBorderIndex),
-            element.leftBorderIndex,
+            element.borderIndexLeft,
             element.rightBorderIndex
         );
         case "column": return Math.max(
             ...element.elements.map(determineMaxXBorderIndex),
-            element.leftBorderIndex,
+            element.borderIndexLeft,
             element.rightBorderIndex
         );
         default: {
@@ -32,7 +32,7 @@ function determineMaxXBorderIndex(element: Element<LeftBorderIndex & RightBorder
     }
 }
 
-export function addMaxXBorderIndex(element: Element<LeftBorderIndex & RightBorderIndex>, maxXBorderIndex: number) {
+export function addMaxXBorderIndex(element: Element<BorderIndexLeft & RightBorderIndex>, maxXBorderIndex: number) {
     switch (element.kind) {
         case "node": {
             Object.assign<Node, MaxXBorderIndex>(element, {

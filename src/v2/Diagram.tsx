@@ -8,7 +8,7 @@ import {addEmbeddedBordersXG} from "./EmbeddedBordersX";
 import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
 import {addMaxXBorderIndexG} from "./addMaxXBorderIndex";
-import {addLeftBorderIndexG} from "./addLeftBorderIndex";
+import {addBorderIndexLeftG} from "./BorderIndexLeft";
 import {addRightBorderIndexG} from "./addRightBorderIndex";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
@@ -37,7 +37,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
     return [props.element]
         .map(addOffsetXElementsG)
         .map(addOffsetYElementsG)
-        .map(addLeftBorderIndexG)
+        .map(addBorderIndexLeftG)
         .map(addRightBorderIndexG)
         .map(addEmbeddedBordersXG)
         .map(addMaxXBorderIndexG)
