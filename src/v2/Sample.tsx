@@ -12,7 +12,7 @@ export const Sample: React.FC = () => {
                     kind: "node"
                 }]
             }, {
-                kind: "column", elements: [{
+                kind: "column", border: "solid", elements: [{
                     kind: "node"
                 }, {
                     kind: "node"
@@ -21,7 +21,19 @@ export const Sample: React.FC = () => {
                 }]
             }]
         }, {
-            kind: "node"
+            kind: "row", elements: [{
+                kind: "node"
+            }, {
+                kind: "node"
+            }]
+        }, {
+            kind: "row", border: "solid", elements: [{
+                kind: "node"
+            }, {
+                kind: "node"
+            }, {
+                kind: "node"
+            }]
         }]
     };
     return (

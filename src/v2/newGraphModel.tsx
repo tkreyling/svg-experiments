@@ -14,4 +14,6 @@ export type Column<N> = {
     elements: Element<N>[]
 };
 
+export type Container<N> = (Row<N> & N) | (Column<N> & N);
+
 export type Element<N> = (Node & N) | (Row<N> & N) | (Column<N> & N);
