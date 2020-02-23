@@ -12,11 +12,10 @@ import {OffsetYElements} from "./addOffsetYElements";
 import {Container} from "./newGraphModel";
 import {EmbeddedXElements} from "./addEmbeddedXElements";
 import {EmbeddedXBorders} from "./addEmbeddedXBorders";
-import {OffsetXBorder} from "./addOffsetXBorders";
 import {MaxEmbeddedXBorders} from "./addMaxEmbeddedXBorders";
 import {LeftBorderIndex} from "./addLeftBorderIndex";
 
-type Props = Container<OffsetXElements & OffsetXBorder & LeftBorderIndex & OffsetYElements & EmbeddedXElements & MaxEmbeddedXBorders & EmbeddedXBorders>;
+type Props = Container<OffsetXElements & LeftBorderIndex & OffsetYElements & EmbeddedXElements & MaxEmbeddedXBorders & EmbeddedXBorders>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
