@@ -15,8 +15,8 @@ test('one edge between two consecutive layers requires no additional space', () 
     expect(heightOfEdges([
         {
             key: "0_0", index: 0, layerIndex: 0,
-            from: {key: "0_0", index: 0, layerIndex: 0},
-            to: {key: "1_0", index: 0, layerIndex: 1}
+            from: {x: 0, layerIndex: 0},
+            to: {x: 0, layerIndex: 1}
         }
     ], 2))
         .toStrictEqual([0, 0])
@@ -26,13 +26,13 @@ test('two edges between two consecutive layers require additional spacing', () =
     expect(heightOfEdges([
         {
             key: "0_0", index: 0, layerIndex: 0,
-            from: {key: "0_0", index: 0, layerIndex: 0},
-            to: {key: "1_0", index: 0, layerIndex: 1}
+            from: {x: 0, layerIndex: 0},
+            to: {x: 0, layerIndex: 1}
         },
         {
             key: "0_1", index: 1, layerIndex: 0,
-            from: {key: "0_1", index: 1, layerIndex: 0},
-            to: {key: "1_1", index: 1, layerIndex: 1}
+            from: {x: 1, layerIndex: 0},
+            to: {x: 1, layerIndex: 1}
         }
     ], 2))
         .toStrictEqual([EDGE_SPACING, 0])
@@ -42,30 +42,30 @@ test('an edge from a lower layer to an upper layer requires space below the uppe
     expect(heightOfEdges([
         {
             key: "0_0", index: 0, layerIndex: 0,
-            from: {key: "1_0", index: 0, layerIndex: 1},
-            to: {key: "0_0", index: 0, layerIndex: 0}
+            from: {x: 0, layerIndex: 1},
+            to: {x: 0, layerIndex: 0}
         },
         {
             key: "0_0", index: 1, layerIndex: 0,
-            from: {key: "1_1", index: 1, layerIndex: 1},
-            to: {key: "0_1", index: 1, layerIndex: 0}
+            from: {x: 1, layerIndex: 1},
+            to: {x: 1, layerIndex: 0}
         }
     ], 2))
         .toStrictEqual([EDGE_SPACING, 0])
 });
 
 test('edges from the bottom layer to the bottom layer requires space below the bottom layer', () => {
-    let origin = {key: "0_0", index: 0, layerIndex: 0};
+    let origin = {x: 0, layerIndex: 0};
     expect(heightOfEdges([
         {
             key: "0_0", index: 0, layerIndex: 0,
             from: origin,
-            to: {key: "0_1", index: 1, layerIndex: 0}
+            to: {x: 1, layerIndex: 0}
         },
         {
             key: "0_0", index: 1, layerIndex: 0,
             from: origin,
-            to: {key: "0_2", index: 2, layerIndex: 0}
+            to: {x: 2, layerIndex: 0}
         }
     ], 1))
         .toStrictEqual([EDGE_SPACING])
