@@ -1,5 +1,5 @@
 import {width} from "./width";
-import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING} from "../styling";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING} from "./styling";
 import {Layer, Node, Stack} from "./graphModel";
 
 test('no element has no width', () => {

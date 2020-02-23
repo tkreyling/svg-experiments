@@ -1,5 +1,5 @@
 import {width} from "./width";
-import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "../styling";
+import {ELEMENT_WIDTH, GROUP_MARGIN_SIDE, HORIZONTAL_SPACING, MARGIN_SIDE} from "./styling";
 import {Graph, Group, Layer, Node, Stack, X} from "./graphModel";
 
 export function addXToNodeG<N extends Node, E, G>(

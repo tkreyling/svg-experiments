@@ -10,7 +10,7 @@ import {NodeShape} from "./NodeShape";
 import {GroupShape} from "./GroupShape";
 import {EdgeShape} from "./EdgeShape";
 import {width} from "./width";
-import {MARGIN_SIDE, MARGIN_TOP, VERTICAL_SPACING} from "../styling";
+import {MARGIN_SIDE, MARGIN_TOP, VERTICAL_SPACING} from "./styling";
 import {Graph, Node} from "./graphModel";
 import {addLayerIndexToNodeG} from "./addLayerIndexToNode";
 import {insertPlaceholdersInMultilayerEdges} from "./insertPlaceholdersInMultilayerEdges";

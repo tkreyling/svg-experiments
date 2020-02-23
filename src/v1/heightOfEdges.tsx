@@ -1,4 +1,4 @@
-import {EDGE_SPACING} from "../styling";
+import {EDGE_SPACING} from "./styling";
 import {Edge, getUpperLeftNode, LayerIndex, LayerPosition, X} from "./graphModel";
 
 export function heightOfEdges(edges: (Edge<LayerIndex & X> & LayerPosition)[], numberOfLayers: number): number[] {

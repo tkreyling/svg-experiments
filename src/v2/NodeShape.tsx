@@ -8,7 +8,7 @@ import {
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
     VERTICAL_SPACING
-} from "../styling";
+} from "./styling";
 import {OffsetXBorder} from "./addOffsetXBorders";
 
 export const NodeShape: React.FC<OffsetXElements & OffsetXBorder & OffsetYElements> = node => {

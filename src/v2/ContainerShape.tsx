@@ -6,7 +6,7 @@ import {
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
     VERTICAL_SPACING
-} from "../styling";
+} from "./styling";
 import {OffsetXElements} from "./addOffsetXElements";
 import {OffsetYElements} from "./addOffsetYElements";
 import {Container} from "./newGraphModel";
