@@ -2,7 +2,7 @@ import React from "react";
 import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    GROUP_MARGIN_SIDE,
+    BORDER_SPACING_X,
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
     VERTICAL_SPACING
@@ -20,10 +20,10 @@ export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={"G_" + container.offsetYElements + "_" + container.offsetXElements}>
             <rect
-                x={container.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + container.offsetXBorders * GROUP_MARGIN_SIDE}
+                x={container.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) + container.offsetXBorders * BORDER_SPACING_X}
                 y={container.offsetYElements * (ELEMENT_HEIGHT + VERTICAL_SPACING) + 5}
                 width={container.embeddedXElements * ELEMENT_WIDTH + (container.embeddedXElements - 1) * HORIZONTAL_SPACING +
-                container.embeddedXBorders * 2 * GROUP_MARGIN_SIDE}
+                container.embeddedXBorders * 2 * BORDER_SPACING_X}
                 height={ELEMENT_HEIGHT}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
         </g>
