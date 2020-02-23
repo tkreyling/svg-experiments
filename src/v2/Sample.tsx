@@ -6,14 +6,18 @@ export const Sample: React.FC = () => {
     let element: Element<unknown> = {
         kind: "column", elements: [{
             kind: "row", elements: [{
-                kind: "column", elements: [{
+                kind: "column", border: "solid", elements: [{
                     kind: "node"
                 }, {
                     kind: "node"
                 }]
             }, {
                 kind: "column", border: "solid", elements: [{
-                    kind: "node"
+                    kind: "row", border: "solid", elements: [{
+                        kind: "node"
+                    }, {
+                        kind: "node"
+                    }]
                 }, {
                     kind: "node"
                 }, {
