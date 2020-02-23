@@ -14,15 +14,16 @@ import {EmbeddedXElements} from "./addEmbeddedXElements";
 import {EmbeddedXBorders} from "./addEmbeddedXBorders";
 import {OffsetXBorder} from "./addOffsetXBorders";
 import {MaxEmbeddedXBorders} from "./addMaxEmbeddedXBorders";
+import {LeftBorderIndex} from "./addLeftBorderIndex";
 
-type Props = Container<OffsetXElements & OffsetXBorder & OffsetYElements & EmbeddedXElements & MaxEmbeddedXBorders & EmbeddedXBorders>;
+type Props = Container<OffsetXElements & OffsetXBorder & LeftBorderIndex & OffsetYElements & EmbeddedXElements & MaxEmbeddedXBorders & EmbeddedXBorders>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={"G_" + container.offsetYElements + "_" + container.offsetXElements}>
             <rect
                 x={container.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-                (container.maxEmbeddedXBorders * (container.offsetXElements * 2 + 1)  - container.embeddedXBorders) * BORDER_SPACING_X}
+                (container.maxEmbeddedXBorders * (container.offsetXElements * 2 + 1)  - container.leftBorderIndex) * BORDER_SPACING_X}
                 y={container.offsetYElements * (ELEMENT_HEIGHT + VERTICAL_SPACING) + 5}
                 width={container.embeddedXElements * ELEMENT_WIDTH + (container.embeddedXElements - 1) * HORIZONTAL_SPACING +
                 ((container.embeddedXElements - 1) * container.maxEmbeddedXBorders + container.embeddedXBorders) * 2 * BORDER_SPACING_X}
