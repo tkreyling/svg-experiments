@@ -5,7 +5,7 @@ import {assertNever} from "./assertNever";
 import {addOffsetYElementsG} from "./addOffsetYElements";
 import {addOffsetXElementsG} from "./addOffsetXElements";
 import {addEmbeddedBordersXG} from "./EmbeddedBordersX";
-import {addEmbeddedXElementsG} from "./addEmbeddedXElements";
+import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
 import {addMaxXBorderIndexG} from "./addMaxXBorderIndex";
 import {addLeftBorderIndexG} from "./addLeftBorderIndex";
@@ -41,7 +41,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addRightBorderIndexG)
         .map(addEmbeddedBordersXG)
         .map(addMaxXBorderIndexG)
-        .map(addEmbeddedXElementsG)
+        .map(addEmbeddedElementsXG)
         .map(element => (
             <svg viewBox={"0 0 1000 300"}>
                 {allContainers(element).filter(c => c.border).map(ContainerShape)}
