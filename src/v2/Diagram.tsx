@@ -9,6 +9,7 @@ import {addEmbeddedXElementsG} from "./addEmbeddedXElements";
 import {ContainerShape} from "./ContainerShape";
 import {addMaxEmbeddedXBordersG} from "./addMaxEmbeddedXBorders";
 import {addLeftBorderIndexG} from "./addLeftBorderIndex";
+import {addRightBorderIndexG} from "./addRightBorderIndex";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -37,6 +38,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addOffsetXElementsG)
         .map(addOffsetYElementsG)
         .map(addLeftBorderIndexG)
+        .map(addRightBorderIndexG)
         .map(addEmbeddedXBordersG)
         .map(addMaxEmbeddedXBordersG)
         .map(addEmbeddedXElementsG)
