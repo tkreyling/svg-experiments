@@ -8,22 +8,22 @@ import {
     VERTICAL_SPACING
 } from "./styling";
 import {OffsetXElements} from "./addOffsetXElements";
-import {OffsetYElements} from "./addOffsetYElements";
+import {OffsetElementsY} from "./OffsetElementsY";
 import {Container} from "./newGraphModel";
 import {EmbeddedElementsX} from "./EmbeddedElementsX";
 import {EmbeddedBordersX} from "./EmbeddedBordersX";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 
-type Props = Container<OffsetXElements & BorderIndexLeft & OffsetYElements & EmbeddedElementsX & BorderIndexMaxX & EmbeddedBordersX>;
+type Props = Container<OffsetXElements & BorderIndexLeft & OffsetElementsY & EmbeddedElementsX & BorderIndexMaxX & EmbeddedBordersX>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
-        <g key={"G_" + container.offsetYElements + "_" + container.offsetXElements}>
+        <g key={"G_" + container.offsetElementsY + "_" + container.offsetXElements}>
             <rect
                 x={container.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
                 (container.borderIndexMaxX * (container.offsetXElements * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}
-                y={container.offsetYElements * (ELEMENT_HEIGHT + VERTICAL_SPACING) + 5}
+                y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING) + 5}
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING +
                 ((container.embeddedElementsX - 1) * container.borderIndexMaxX + container.embeddedBordersX) * 2 * BORDER_SPACING_X}
                 height={ELEMENT_HEIGHT}
