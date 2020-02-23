@@ -9,13 +9,13 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
-import {MaxXBorderIndex} from "./addMaxXBorderIndex";
+import {BorderIndexMaxX} from "./BorderIndexMaxX";
 
-export const NodeShape: React.FC<OffsetXElements & MaxXBorderIndex & OffsetYElements> = node => {
+export const NodeShape: React.FC<OffsetXElements & BorderIndexMaxX & OffsetYElements> = node => {
     return (
         <g key={node.offsetYElements + "_" + node.offsetXElements}>
             <rect x={node.offsetXElements * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-            node.maxXBorderIndex * (node.offsetXElements * 2 + 1) * BORDER_SPACING_X}
+            node.borderIndexMaxX * (node.offsetXElements * 2 + 1) * BORDER_SPACING_X}
                   y={node.offsetYElements * (ELEMENT_HEIGHT + VERTICAL_SPACING)}
                   width={ELEMENT_WIDTH}
                   height={ELEMENT_HEIGHT}

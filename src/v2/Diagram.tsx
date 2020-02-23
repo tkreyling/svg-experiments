@@ -7,7 +7,7 @@ import {addOffsetXElementsG} from "./addOffsetXElements";
 import {addEmbeddedBordersXG} from "./EmbeddedBordersX";
 import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
-import {addMaxXBorderIndexG} from "./addMaxXBorderIndex";
+import {addBorderIndexMaxXG} from "./BorderIndexMaxX";
 import {addBorderIndexLeftG} from "./BorderIndexLeft";
 import {addRightBorderIndexG} from "./addRightBorderIndex";
 
@@ -40,7 +40,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addBorderIndexLeftG)
         .map(addRightBorderIndexG)
         .map(addEmbeddedBordersXG)
-        .map(addMaxXBorderIndexG)
+        .map(addBorderIndexMaxXG)
         .map(addEmbeddedElementsXG)
         .map(element => (
             <svg viewBox={"0 0 1000 300"}>
