@@ -11,11 +11,11 @@ import {OffsetXElements} from "./addOffsetXElements";
 import {OffsetYElements} from "./addOffsetYElements";
 import {Container} from "./newGraphModel";
 import {EmbeddedXElements} from "./addEmbeddedXElements";
-import {EmbeddedXBorders} from "./addEmbeddedXBorders";
+import {EmbeddedBordersX} from "./EmbeddedBordersX";
 import {MaxXBorderIndex} from "./addMaxXBorderIndex";
 import {LeftBorderIndex} from "./addLeftBorderIndex";
 
-type Props = Container<OffsetXElements & LeftBorderIndex & OffsetYElements & EmbeddedXElements & MaxXBorderIndex & EmbeddedXBorders>;
+type Props = Container<OffsetXElements & LeftBorderIndex & OffsetYElements & EmbeddedXElements & MaxXBorderIndex & EmbeddedBordersX>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
@@ -25,7 +25,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 (container.maxXBorderIndex * (container.offsetXElements * 2 + 1)  - container.leftBorderIndex) * BORDER_SPACING_X}
                 y={container.offsetYElements * (ELEMENT_HEIGHT + VERTICAL_SPACING) + 5}
                 width={container.embeddedXElements * ELEMENT_WIDTH + (container.embeddedXElements - 1) * HORIZONTAL_SPACING +
-                ((container.embeddedXElements - 1) * container.maxXBorderIndex + container.embeddedXBorders) * 2 * BORDER_SPACING_X}
+                ((container.embeddedXElements - 1) * container.maxXBorderIndex + container.embeddedBordersX) * 2 * BORDER_SPACING_X}
                 height={ELEMENT_HEIGHT}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
