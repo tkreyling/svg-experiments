@@ -8,6 +8,7 @@ import {addOffsetXBordersG} from "./addOffsetXBorders";
 import {addEmbeddedXBordersG} from "./addEmbeddedXBorders";
 import {addEmbeddedXElementsG} from "./addEmbeddedXElements";
 import {ContainerShape} from "./ContainerShape";
+import {addMaxEmbeddedXBordersG} from "./addMaxEmbeddedXBorders";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -37,6 +38,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addOffsetYElementsG)
         .map(addOffsetXBordersG)
         .map(addEmbeddedXBordersG)
+        .map(addMaxEmbeddedXBordersG)
         .map(addEmbeddedXElementsG)
         .map(element => (
             <svg viewBox={"0 0 1000 300"}>
