@@ -32,11 +32,17 @@ export const Sample: React.FC = () => {
             }]
         }, {
             kind: "row", border: "solid", elements: [{
-                kind: "node"
+                kind: "row", border: "solid", elements: [{
+                    kind: "node"
+                }, {
+                    kind: "node"
+                }]
             }, {
-                kind: "node"
-            }, {
-                kind: "node"
+                kind: "row", border: "solid", elements: [{
+                    kind: "node"
+                }, {
+                    kind: "node"
+                }]
             }]
         }]
     };
