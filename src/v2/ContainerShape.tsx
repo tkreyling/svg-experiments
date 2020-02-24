@@ -13,17 +13,19 @@ import {OffsetElementsX} from "./OffsetElementsX";
 import {OffsetElementsY} from "./OffsetElementsY";
 import {Container} from "./newGraphModel";
 import {EmbeddedElementsX} from "./EmbeddedElementsX";
-import {EmbeddedBordersX} from "./EmbeddedBordersX";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexTop} from "./BorderIndexTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./BorderIndexMaxTop";
 import {BorderIndexBottom} from "./BorderIndexBottom";
+import {BorderIndexRight} from "./BorderIndexRight";
 
 type Props = Container<
-    OffsetElementsX & BorderIndexLeft & BorderIndexMaxX & EmbeddedElementsX & EmbeddedBordersX &
+    OffsetElementsX &
     OffsetElementsY &
+    EmbeddedElementsX &
+    BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
 
@@ -37,7 +39,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM}
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING +
-                ((container.embeddedElementsX - 1) * container.borderIndexMaxX + container.embeddedBordersX) * 2 * BORDER_SPACING_X}
+                ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X}
                 height={ELEMENT_HEIGHT}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
