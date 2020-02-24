@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
+import {HashRouter as Router, Link, Route, Switch} from "react-router-dom";
 import {Editor} from "./v1/Editor";
 import {Architecture} from "./v1/Architecture";
 import {Sample} from "./v2/Sample";
