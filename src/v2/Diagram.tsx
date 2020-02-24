@@ -4,7 +4,6 @@ import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG} from "./OffsetElementsY";
 import {addOffsetElementsXG} from "./OffsetElementsX";
-import {addEmbeddedBordersXG} from "./EmbeddedBordersX";
 import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
 import {addBorderIndexMaxXG} from "./BorderIndexMaxX";
@@ -49,7 +48,6 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addBorderIndexMaxXG)
         .map(addBorderIndexMaxTopG)
         .map(addBorderIndexMaxBottomG)
-        .map(addEmbeddedBordersXG)
         .map(addEmbeddedElementsXG)
         .map(addEmbeddedElementsYG)
         .map(element => (
