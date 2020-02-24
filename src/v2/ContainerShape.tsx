@@ -34,9 +34,8 @@ export const ContainerShape: React.FC<Props> = container => {
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
                 (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + container.borderIndexMaxTop * (container.offsetElementsY + 1) * BORDER_SPACING_TOP
-                + container.borderIndexMaxBottom * container.offsetElementsY * BORDER_SPACING_BOTTOM
-                - container.borderIndexTop * BORDER_SPACING_TOP}
+                + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
+                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM}
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING +
                 ((container.embeddedElementsX - 1) * container.borderIndexMaxX + container.embeddedBordersX) * 2 * BORDER_SPACING_X}
                 height={ELEMENT_HEIGHT}
@@ -46,9 +45,9 @@ export const ContainerShape: React.FC<Props> = container => {
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
                 (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X}
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + container.borderIndexMaxTop * (container.offsetElementsY + 1) * BORDER_SPACING_TOP
-                + container.borderIndexMaxBottom * container.offsetElementsY * BORDER_SPACING_BOTTOM
-                - container.borderIndexTop * BORDER_SPACING_TOP + 15}
+                + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
+                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
+                + 15}
                 fill="black">{
                 container.borderIndexMaxPreviousTop + "/" + container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
                 container.borderIndexMaxPreviousBottom + "/" + container.borderIndexBottom + "/" + container.borderIndexMaxBottom}
