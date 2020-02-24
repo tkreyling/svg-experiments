@@ -17,12 +17,13 @@ import {EmbeddedBordersX} from "./EmbeddedBordersX";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexTop} from "./BorderIndexTop";
-import {BorderIndexMaxBottom} from "./BorderIndexMaxBottom";
+import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
 import {BorderIndexMaxTop} from "./BorderIndexMaxTop";
+import {BorderIndexBottom} from "./BorderIndexBottom";
 
 type Props = Container<
     OffsetElementsX & BorderIndexLeft & BorderIndexMaxX & EmbeddedElementsX & EmbeddedBordersX &
-    OffsetElementsY & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxBottom>;
+    OffsetElementsY & BorderIndexTop & BorderIndexMaxTop & BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
@@ -41,12 +42,14 @@ export const ContainerShape: React.FC<Props> = container => {
 
             <text
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-                (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}
+                (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X}
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + container.borderIndexMaxTop * (container.offsetElementsY + 1) * BORDER_SPACING_TOP
                 + container.borderIndexMaxBottom * container.offsetElementsY * BORDER_SPACING_BOTTOM
-                - container.borderIndexTop * BORDER_SPACING_TOP+ 15}
-                fill="black">{container.borderIndexTop + "/" + container.borderIndexMaxTop}
+                - container.borderIndexTop * BORDER_SPACING_TOP + 15}
+                fill="black">{
+                container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
+                container.borderIndexMaxPreviousBottom + "/" + container.borderIndexBottom + "/" + container.borderIndexMaxBottom}
             </text>
         </g>
     );
