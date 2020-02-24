@@ -14,6 +14,7 @@ import {addBorderIndexTopG} from "./BorderIndexTop";
 import {addBorderIndexBottomG} from "./BorderIndexBottom";
 import {addBorderIndexMaxBottomG} from "./BorderIndexMaxBottom";
 import {addBorderIndexMaxTopG} from "./BorderIndexMaxTop";
+import {addEmbeddedElementsYG} from "./EmbeddedElementsY";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -50,6 +51,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addBorderIndexMaxBottomG)
         .map(addEmbeddedBordersXG)
         .map(addEmbeddedElementsXG)
+        .map(addEmbeddedElementsYG)
         .map(element => (
             <svg viewBox={"0 0 1000 500"}>
                 {allNodes(element).map(NodeShape)}
