@@ -2,15 +2,18 @@ import {Column, Element, Node, Row} from "./newGraphModel";
 import {assertNever} from "./assertNever";
 import {BorderIndexTop} from "./BorderIndexTop";
 import {OffsetElementsY} from "./OffsetElementsY";
+import {sumOfPreviousRows} from "./sumOfPreviousRows";
 
 export type BorderIndexMaxTop = { borderIndexMaxTop: number };
+export type BorderIndexMaxPreviousTop = { borderIndexMaxPreviousTop: number };
 
 export function addBorderIndexMaxTopG<N extends OffsetElementsY & BorderIndexTop>(
     element: Element<N>
-): Element<N & BorderIndexMaxTop> {
+): Element<N & BorderIndexMaxTop & BorderIndexMaxPreviousTop> {
     let max = determineBorderIndexMaxTop(element);
-    addBorderIndexMaxTop(element, max);
-    return element as Element<N & BorderIndexMaxTop>;
+    let sums = sumOfPreviousRows(max);
+    addBorderIndexMaxTop(element, max, sums);
+    return element as Element<N & BorderIndexMaxTop & BorderIndexMaxPreviousTop>;
 }
 
 function determineBorderIndexMaxTop(element: Element<OffsetElementsY & BorderIndexTop>): Map<number, number> {
@@ -38,28 +41,31 @@ function determineBorderIndexMaxTop(element: Element<OffsetElementsY & BorderInd
     }
 }
 
-function addBorderIndexMaxTop(element: Element<OffsetElementsY & BorderIndexTop>, borderIndexMaxTop: Map<number, number>) {
+function addBorderIndexMaxTop(element: Element<OffsetElementsY & BorderIndexTop>, current: Map<number, number>, sums: Map<number, number>) {
     switch (element.kind) {
         case "node": {
-            Object.assign<Node, BorderIndexMaxTop>(element, {
-                borderIndexMaxTop: borderIndexMaxTop.get(element.offsetElementsY)!
+            Object.assign<Node, BorderIndexMaxTop & BorderIndexMaxPreviousTop>(element, {
+                borderIndexMaxTop: current.get(element.offsetElementsY)!,
+                borderIndexMaxPreviousTop: sums.get(element.offsetElementsY)!
             });
             return;
         }
         case "row": {
-            Object.assign<Row<unknown>, BorderIndexMaxTop>(element, {
-                borderIndexMaxTop: borderIndexMaxTop.get(element.offsetElementsY)!
+            Object.assign<Row<unknown>, BorderIndexMaxTop & BorderIndexMaxPreviousTop>(element, {
+                borderIndexMaxTop: current.get(element.offsetElementsY)!,
+                borderIndexMaxPreviousTop: sums.get(element.offsetElementsY)!
             });
             element.elements.forEach(nestedElement =>
-                addBorderIndexMaxTop(nestedElement, borderIndexMaxTop));
+                addBorderIndexMaxTop(nestedElement, current, sums));
             return;
         }
         case "column": {
-            Object.assign<Column<unknown>, BorderIndexMaxTop>(element, {
-                borderIndexMaxTop: borderIndexMaxTop.get(element.offsetElementsY)!
+            Object.assign<Column<unknown>, BorderIndexMaxTop & BorderIndexMaxPreviousTop>(element, {
+                borderIndexMaxTop: current.get(element.offsetElementsY)!,
+                borderIndexMaxPreviousTop: sums.get(element.offsetElementsY)!
             });
             element.elements.forEach(nestedElement =>
-                addBorderIndexMaxTop(nestedElement, borderIndexMaxTop));
+                addBorderIndexMaxTop(nestedElement, current, sums));
             return;
         }
         default: {

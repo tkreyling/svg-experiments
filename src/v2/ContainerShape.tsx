@@ -18,12 +18,14 @@ import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexTop} from "./BorderIndexTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
-import {BorderIndexMaxTop} from "./BorderIndexMaxTop";
+import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./BorderIndexMaxTop";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 
 type Props = Container<
     OffsetElementsX & BorderIndexLeft & BorderIndexMaxX & EmbeddedElementsX & EmbeddedBordersX &
-    OffsetElementsY & BorderIndexTop & BorderIndexMaxTop & BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
+    OffsetElementsY &
+    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
+    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
@@ -48,7 +50,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 + container.borderIndexMaxBottom * container.offsetElementsY * BORDER_SPACING_BOTTOM
                 - container.borderIndexTop * BORDER_SPACING_TOP + 15}
                 fill="black">{
-                container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
+                container.borderIndexMaxPreviousTop + "/" + container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
                 container.borderIndexMaxPreviousBottom + "/" + container.borderIndexBottom + "/" + container.borderIndexMaxBottom}
             </text>
         </g>
