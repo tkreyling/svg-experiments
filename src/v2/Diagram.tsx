@@ -53,7 +53,7 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addEmbeddedElementsXG)
         .map(addEmbeddedElementsYG)
         .map(element => (
-            <svg viewBox={"0 0 1000 500"}>
+            <svg viewBox={"0 0 1200 600"}>
                 {allNodes(element).map(NodeShape)}
                 {allContainers(element).filter(c => c.border).map(ContainerShape)}
             </svg>
