@@ -39,7 +39,14 @@ export const ContainerShape: React.FC<Props> = container => {
                 height={ELEMENT_HEIGHT}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
-            <text x={50} y={50} fill="black">{container.borderIndexMaxX}
+            <text
+                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
+                (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}
+                y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+                + container.borderIndexMaxTop * (container.offsetElementsY + 1) * BORDER_SPACING_TOP
+                + container.borderIndexMaxBottom * container.offsetElementsY * BORDER_SPACING_BOTTOM
+                - container.borderIndexTop * BORDER_SPACING_TOP+ 15}
+                fill="black">{container.borderIndexTop + "/" + container.borderIndexMaxTop}
             </text>
         </g>
     );
