@@ -52,8 +52,8 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addEmbeddedElementsXG)
         .map(element => (
             <svg viewBox={"0 0 1000 500"}>
-                {allContainers(element).filter(c => c.border).map(ContainerShape)}
                 {allNodes(element).map(NodeShape)}
+                {allContainers(element).filter(c => c.border).map(ContainerShape)}
             </svg>
         ))[0];
 };
