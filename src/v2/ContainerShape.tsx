@@ -20,11 +20,11 @@ import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexM
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./BorderIndexMaxTop";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {BorderIndexRight} from "./BorderIndexRight";
+import {EmbeddedElementsY} from "./EmbeddedElementsY";
 
 type Props = Container<
-    OffsetElementsX &
-    OffsetElementsY &
-    EmbeddedElementsX &
+    OffsetElementsX & EmbeddedElementsX &
+    OffsetElementsY & EmbeddedElementsY &
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
@@ -40,7 +40,10 @@ export const ContainerShape: React.FC<Props> = container => {
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM}
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING +
                 ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X}
-                height={ELEMENT_HEIGHT}
+                height={container.embeddedElementsY * ELEMENT_HEIGHT +
+                (container.embeddedElementsY - 1) * VERTICAL_SPACING +
+                container.borderIndexTop * BORDER_SPACING_TOP +
+                container.borderIndexBottom * BORDER_SPACING_BOTTOM}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text
@@ -51,6 +54,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
                 + 15}
                 fill="black">{
+                container.embeddedElementsY + "__" +
                 container.borderIndexMaxPreviousTop + "/" + container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
                 container.borderIndexMaxPreviousBottom + "/" + container.borderIndexBottom + "/" + container.borderIndexMaxBottom}
             </text>
