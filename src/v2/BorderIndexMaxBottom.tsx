@@ -2,15 +2,18 @@ import {Column, Element, Node, Row} from "./newGraphModel";
 import {assertNever} from "./assertNever";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {OffsetElementsY} from "./OffsetElementsY";
+import {sumOfPreviousRows} from "./sumOfPreviousRows";
 
 export type BorderIndexMaxBottom = { borderIndexMaxBottom: number };
+export type BorderIndexMaxPreviousBottom = { borderIndexMaxPreviousBottom: number };
 
 export function addBorderIndexMaxBottomG<N extends OffsetElementsY & BorderIndexBottom>(
     element: Element<N>
-): Element<N & BorderIndexMaxBottom> {
+): Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom> {
     let max = determineBorderIndexMaxBottom(element);
-    addBorderIndexMaxBottom(element, max);
-    return element as Element<N & BorderIndexMaxBottom>;
+    let sums = sumOfPreviousRows(max);
+    addBorderIndexMaxBottom(element, max, sums);
+    return element as Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
 }
 
 function getMostBottomOffsetElementsY(element: Element<OffsetElementsY>): number {
@@ -48,28 +51,31 @@ function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & Border
     }
 }
 
-function addBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>, borderIndexMaxBottom: Map<number, number>) {
+function addBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>, current: Map<number, number>, sums: Map<number, number>) {
     switch (element.kind) {
         case "node": {
-            Object.assign<Node, BorderIndexMaxBottom>(element, {
-                borderIndexMaxBottom: borderIndexMaxBottom.get(element.offsetElementsY)!
+            Object.assign<Node, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+                borderIndexMaxBottom: current.get(element.offsetElementsY)!,
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
             });
             return;
         }
         case "row": {
-            Object.assign<Row<unknown>, BorderIndexMaxBottom>(element, {
-                borderIndexMaxBottom: borderIndexMaxBottom.get(getMostBottomOffsetElementsY(element))!
+            Object.assign<Row<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+                borderIndexMaxBottom: current.get(getMostBottomOffsetElementsY(element))!,
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
             });
             element.elements.forEach(nestedElement =>
-                addBorderIndexMaxBottom(nestedElement, borderIndexMaxBottom));
+                addBorderIndexMaxBottom(nestedElement, current, sums));
             return;
         }
         case "column": {
-            Object.assign<Column<unknown>, BorderIndexMaxBottom>(element, {
-                borderIndexMaxBottom: borderIndexMaxBottom.get(getMostBottomOffsetElementsY(element))!
+            Object.assign<Column<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+                borderIndexMaxBottom: current.get(getMostBottomOffsetElementsY(element))!,
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
             });
             element.elements.forEach(nestedElement =>
-                addBorderIndexMaxBottom(nestedElement, borderIndexMaxBottom));
+                addBorderIndexMaxBottom(nestedElement, current, sums));
             return;
         }
         default: {
