@@ -11,7 +11,7 @@ import {
 } from "./styling";
 import {OffsetElementsX} from "./OffsetElementsX";
 import {OffsetElementsY} from "./OffsetElementsY";
-import {Container} from "./newGraphModel";
+import {Container, Element} from "./newGraphModel";
 import {EmbeddedElementsX} from "./EmbeddedElementsX";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
@@ -29,6 +29,28 @@ type Props = Container<
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
 
+function embeddedBottomBorders(element: Element<BorderIndexMaxBottom>): number {
+    switch (element.kind) {
+        case "node":
+            return element.borderIndexMaxBottom;
+        case "row":
+            return Math.max(...element.elements.map(embeddedBottomBorders), 0);
+        case "column":
+            return element.elements.slice(0, -1).map(embeddedBottomBorders).reduce((sum, add) => sum + add, 0);
+    }
+}
+
+function embeddedTopBorders(element: Element<BorderIndexMaxTop>): number {
+    switch (element.kind) {
+        case "node":
+            return element.borderIndexMaxTop;
+        case "row":
+            return Math.max(...element.elements.map(embeddedTopBorders), 0);
+        case "column":
+            return element.elements.slice(1).map(embeddedTopBorders).reduce((sum, add) => sum + add, 0);
+    }
+}
+
 export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={"G_" + container.offsetElementsY + "_" + container.offsetElementsX}>
@@ -43,6 +65,8 @@ export const ContainerShape: React.FC<Props> = container => {
                 height={container.embeddedElementsY * ELEMENT_HEIGHT +
                 (container.embeddedElementsY - 1) * VERTICAL_SPACING +
                 container.borderIndexTop * BORDER_SPACING_TOP +
+                embeddedTopBorders(container) * BORDER_SPACING_TOP +
+                embeddedBottomBorders(container) * BORDER_SPACING_BOTTOM +
                 container.borderIndexBottom * BORDER_SPACING_BOTTOM}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
