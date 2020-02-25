@@ -1,17 +1,26 @@
 import {Element} from "./newGraphModel";
-import {addBorderIndexMaxBottomG, BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
+import {
+    addBorderIndexMaxBottomG,
+    BorderIndexMaxBottom,
+    BorderIndexMaxPreviousBottom,
+    EmbeddedBorderIndexMaxBottom
+} from "./BorderIndexMaxBottom";
 import {OffsetElementsY} from "./OffsetElementsY";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 
 type InputType = Element<OffsetElementsY & BorderIndexBottom>;
-type OutputType = Element<OffsetElementsY & BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
+type OutputType = Element<OffsetElementsY & BorderIndexBottom &
+    BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>;
 
 test('a single node has borderIndexMaxBottom 0', () => {
     let element: InputType = {kind: "node", offsetElementsY: 0, borderIndexBottom: 0};
 
     addBorderIndexMaxBottomG(element);
 
-    let expected: OutputType = {kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 0, borderIndexMaxPreviousBottom: 0};
+    let expected: OutputType = {
+        kind: "node", offsetElementsY: 0, borderIndexBottom: 0, 
+        borderIndexMaxBottom: 0, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+    };
     expect(element).toStrictEqual(expected)
 });
 
@@ -20,7 +29,11 @@ test('a row without elements receives borderIndexMaxBottom 0 itself', () => {
 
     addBorderIndexMaxBottomG(element);
 
-    let expected: OutputType = {kind: "row", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 0, borderIndexMaxPreviousBottom: 0, elements: []};
+    let expected: OutputType = {
+        kind: "row", offsetElementsY: 0, borderIndexBottom: 0,
+        borderIndexMaxBottom: 0, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: []
+    };
     expect(element).toStrictEqual(expected)
 });
 
@@ -34,8 +47,11 @@ test('a row with a border has borderIndexMaxBottom 1', () => {
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0
+        kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+        borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+            borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
         }]
     };
     expect(element).toStrictEqual(expected)
@@ -53,9 +69,14 @@ test('a row with a border and a nested row with a border has borderIndexMaxBotto
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "row", offsetElementsY: 0, borderIndexBottom: 2, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+        kind: "row", offsetElementsY: 0, borderIndexBottom: 2,
+        borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };
@@ -78,13 +99,21 @@ test('a row with a border and two nested rows with border has borderIndexMaxBott
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "row", offsetElementsY: 0, borderIndexBottom: 2, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+        kind: "row", offsetElementsY: 0, borderIndexBottom: 2,
+        borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }, {
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };
@@ -107,13 +136,21 @@ test('a row with a border and two nested rows, first one without border, has bor
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "row", offsetElementsY: 0, borderIndexBottom: 2, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+        kind: "row", offsetElementsY: 0, borderIndexBottom: 2,
+        borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 0,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }, {
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };
@@ -130,8 +167,11 @@ test('a column with a border has borderIndexMaxBottom 1', () => {
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "column", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0
+        kind: "column", offsetElementsY: 0, borderIndexBottom: 1,
+        borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+            borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
         }]
     };
     expect(element).toStrictEqual(expected)
@@ -149,9 +189,14 @@ test('a column with a border and a nested row with a border has borderIndexMaxBo
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "column", offsetElementsY: 0, borderIndexBottom: 2, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0
+        kind: "column", offsetElementsY: 0, borderIndexBottom: 2,
+        borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };
@@ -174,13 +219,21 @@ test('a column with a border and two nested rows with border has borderIndexMaxB
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "column", offsetElementsY: 0, borderIndexBottom: 2, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0
+        kind: "column", offsetElementsY: 0, borderIndexBottom: 2,
+        borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 1,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }, {
-            kind: "row", offsetElementsY: 1, borderIndexBottom: 1, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 1, elements: [{
-                kind: "node", offsetElementsY: 1, borderIndexBottom: 0, borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 1
+            kind: "row", offsetElementsY: 1, borderIndexBottom: 1,
+            borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 1, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 1, borderIndexBottom: 0,
+                borderIndexMaxBottom: 2, borderIndexMaxPreviousBottom: 1, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };
@@ -203,13 +256,21 @@ test('a column with a border and two nested rows, last one without border, has b
     addBorderIndexMaxBottomG(element);
 
     let expected: OutputType = {
-        kind: "column", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, elements: [{
-            kind: "row", offsetElementsY: 0, borderIndexBottom: 1, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, elements: [{
-                kind: "node", offsetElementsY: 0, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0
+        kind: "column", offsetElementsY: 0, borderIndexBottom: 1,
+        borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 1,
+        elements: [{
+            kind: "row", offsetElementsY: 0, borderIndexBottom: 1,
+            borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 0, borderIndexBottom: 0,
+                borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 0, embeddedBorderIndexMaxBottom: 0
             }]
         }, {
-            kind: "row", offsetElementsY: 1, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 1, elements: [{
-                kind: "node", offsetElementsY: 1, borderIndexBottom: 0, borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 1
+            kind: "row", offsetElementsY: 1, borderIndexBottom: 0,
+            borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 1, embeddedBorderIndexMaxBottom: 0,
+            elements: [{
+                kind: "node", offsetElementsY: 1, borderIndexBottom: 0,
+                borderIndexMaxBottom: 1, borderIndexMaxPreviousBottom: 1, embeddedBorderIndexMaxBottom: 0
             }]
         }]
     };

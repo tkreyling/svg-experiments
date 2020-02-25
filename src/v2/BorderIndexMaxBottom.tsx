@@ -7,14 +7,15 @@ import {getMostBottomOffsetElementsY} from "./getMostBottomOffsetElementsY";
 
 export type BorderIndexMaxBottom = { borderIndexMaxBottom: number };
 export type BorderIndexMaxPreviousBottom = { borderIndexMaxPreviousBottom: number };
+export type EmbeddedBorderIndexMaxBottom = { embeddedBorderIndexMaxBottom: number };
 
 export function addBorderIndexMaxBottomG<N extends OffsetElementsY & BorderIndexBottom>(
     element: Element<N>
-): Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom> {
+): Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom> {
     let max = determineBorderIndexMaxBottom(element);
     let sums = sumOfPreviousRows(max);
     addBorderIndexMaxBottom(element, max, sums);
-    return element as Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
+    return element as Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>;
 }
 
 function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>): Map<number, number> {
@@ -42,28 +43,45 @@ function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & Border
     }
 }
 
-function addBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>, current: Map<number, number>, sums: Map<number, number>) {
+function calculateEmbeddedBorders(element: Element<OffsetElementsY>, current: Map<number, number>) {
+    let from = element.offsetElementsY;
+    let to = getMostBottomOffsetElementsY(element) - 1;
+    let embeddedBorders = 0;
+    for (let i = from; i <= to; i++) {
+        embeddedBorders += current.get(i) || 0;
+    }
+    return embeddedBorders;
+}
+
+function addBorderIndexMaxBottom(
+    element: Element<OffsetElementsY & BorderIndexBottom>,
+    current: Map<number, number>,
+    sums: Map<number, number>
+) {
     switch (element.kind) {
         case "node": {
-            Object.assign<Node, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+            Object.assign<Node, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>(element, {
                 borderIndexMaxBottom: current.get(element.offsetElementsY)!,
-                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!,
+                embeddedBorderIndexMaxBottom: 0
             });
             return;
         }
         case "row": {
-            Object.assign<Row<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+            Object.assign<Row<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>(element, {
                 borderIndexMaxBottom: current.get(getMostBottomOffsetElementsY(element))!,
-                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!,
+                embeddedBorderIndexMaxBottom: calculateEmbeddedBorders(element, current)
             });
             element.elements.forEach(nestedElement =>
                 addBorderIndexMaxBottom(nestedElement, current, sums));
             return;
         }
         case "column": {
-            Object.assign<Column<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>(element, {
+            Object.assign<Column<unknown>, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>(element, {
                 borderIndexMaxBottom: current.get(getMostBottomOffsetElementsY(element))!,
-                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!
+                borderIndexMaxPreviousBottom: sums.get(element.offsetElementsY)!,
+                embeddedBorderIndexMaxBottom: calculateEmbeddedBorders(element, current)
             });
             element.elements.forEach(nestedElement =>
                 addBorderIndexMaxBottom(nestedElement, current, sums));

@@ -11,12 +11,12 @@ import {
 } from "./styling";
 import {OffsetElementsX} from "./OffsetElementsX";
 import {OffsetElementsY} from "./OffsetElementsY";
-import {Container, Element} from "./newGraphModel";
+import {Container} from "./newGraphModel";
 import {EmbeddedElementsX} from "./EmbeddedElementsX";
 import {BorderIndexMaxX} from "./BorderIndexMaxX";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexTop} from "./BorderIndexTop";
-import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
+import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom, EmbeddedBorderIndexMaxBottom} from "./BorderIndexMaxBottom";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop, EmbeddedBorderIndexMaxTop} from "./BorderIndexMaxTop";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {BorderIndexRight} from "./BorderIndexRight";
@@ -27,18 +27,7 @@ type Props = Container<
     OffsetElementsY & EmbeddedElementsY &
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
-    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
-
-function embeddedBottomBorders(element: Element<BorderIndexMaxBottom>): number {
-    switch (element.kind) {
-        case "node":
-            return element.borderIndexMaxBottom;
-        case "row":
-            return Math.max(...element.elements.map(embeddedBottomBorders), 0);
-        case "column":
-            return element.elements.slice(0, -1).map(embeddedBottomBorders).reduce((sum, add) => sum + add, 0);
-    }
-}
+    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
@@ -55,7 +44,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 (container.embeddedElementsY - 1) * VERTICAL_SPACING +
                 container.borderIndexTop * BORDER_SPACING_TOP +
                 container.embeddedBorderIndexMaxTop * BORDER_SPACING_TOP +
-                embeddedBottomBorders(container) * BORDER_SPACING_BOTTOM +
+                container.embeddedBorderIndexMaxBottom * BORDER_SPACING_BOTTOM +
                 container.borderIndexBottom * BORDER_SPACING_BOTTOM}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
