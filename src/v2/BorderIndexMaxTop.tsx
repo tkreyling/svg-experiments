@@ -31,8 +31,8 @@ function determineBorderIndexMaxTop(element: Element<OffsetElementsY & BorderInd
             map.set(element.offsetElementsY, element.borderIndexTop);
             return element.elements.map(determineBorderIndexMaxTop).reduce((accumulator, addition) => {
                 Array.from(addition.entries()).forEach((entry) => {
-                    let maxBorderIndexTop = Math.max(accumulator.get(entry[0]) || 0, entry[1]);
-                    accumulator.set(entry[0], maxBorderIndexTop);
+                    let max = Math.max(accumulator.get(entry[0]) || 0, entry[1]);
+                    accumulator.set(entry[0], max);
                 });
                 return accumulator;
             }, map);
@@ -43,7 +43,7 @@ function determineBorderIndexMaxTop(element: Element<OffsetElementsY & BorderInd
     }
 }
 
-function calculateEmbeddedBorders(element: Element<OffsetElementsY & BorderIndexTop>, current: Map<number, number>) {
+function calculateEmbeddedBorders(element: Element<OffsetElementsY>, current: Map<number, number>) {
     let from = element.offsetElementsY + 1;
     let to = getMostBottomOffsetElementsY(element);
     let embeddedBorders = 0;
