@@ -2,18 +2,18 @@ import React from "react";
 import {Container, Element, Node} from "./newGraphModel";
 import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
-import {addOffsetElementsYG} from "./OffsetElementsY";
-import {addOffsetElementsXG} from "./OffsetElementsX";
-import {addEmbeddedElementsXG} from "./EmbeddedElementsX";
+import {addOffsetElementsYG} from "./elementsLayout/OffsetElementsY";
+import {addOffsetElementsXG} from "./elementsLayout/OffsetElementsX";
+import {addEmbeddedElementsXG} from "./elementsLayout/EmbeddedElementsX";
 import {ContainerShape} from "./ContainerShape";
-import {addBorderIndexMaxXG} from "./BorderIndexMaxX";
-import {addBorderIndexLeftG} from "./BorderIndexLeft";
-import {addBorderIndexRightG} from "./BorderIndexRight";
-import {addBorderIndexTopG} from "./BorderIndexTop";
-import {addBorderIndexBottomG} from "./BorderIndexBottom";
-import {addBorderIndexMaxBottomG} from "./BorderIndexMaxBottom";
-import {addBorderIndexMaxTopG} from "./BorderIndexMaxTop";
-import {addEmbeddedElementsYG} from "./EmbeddedElementsY";
+import {addBorderIndexMaxXG} from "./elementsLayout/BorderIndexMaxX";
+import {addBorderIndexLeftG} from "./elementsLayout/BorderIndexLeft";
+import {addBorderIndexRightG} from "./elementsLayout/BorderIndexRight";
+import {addBorderIndexTopG} from "./elementsLayout/BorderIndexTop";
+import {addBorderIndexBottomG} from "./elementsLayout/BorderIndexBottom";
+import {addBorderIndexMaxBottomG} from "./elementsLayout/BorderIndexMaxBottom";
+import {addBorderIndexMaxTopG} from "./elementsLayout/BorderIndexMaxTop";
+import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {

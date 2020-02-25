@@ -1,4 +1,4 @@
-import {Element} from "./newGraphModel";
+import {Element} from "../newGraphModel";
 import {addBorderIndexLeft, BorderIndexLeft} from "./BorderIndexLeft";
 
 type InputType = Element<unknown>;

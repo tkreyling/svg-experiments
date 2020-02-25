@@ -1,5 +1,5 @@
-import {Column, Element, Node, Row} from "./newGraphModel";
-import {assertNever} from "./assertNever";
+import {Column, Element, Node, Row} from "../newGraphModel";
+import {assertNever} from "../assertNever";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexRight} from "./BorderIndexRight";
 

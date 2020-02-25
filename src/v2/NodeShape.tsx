@@ -1,6 +1,6 @@
 import React from "react";
-import {OffsetElementsX} from "./OffsetElementsX";
-import {OffsetElementsY} from "./OffsetElementsY";
+import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
+import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
@@ -9,10 +9,10 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING, BORDER_SPACING_TOP, BORDER_SPACING_BOTTOM
 } from "./styling";
-import {BorderIndexMaxX} from "./BorderIndexMaxX";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./BorderIndexMaxTop";
-import {BorderIndexTop} from "./BorderIndexTop";
-import {BorderIndexMaxPreviousBottom} from "./BorderIndexMaxBottom";
+import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
+import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
+import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
+import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 
 type Props = OffsetElementsX & BorderIndexMaxX &
     OffsetElementsY &

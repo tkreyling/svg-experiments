@@ -9,18 +9,18 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
-import {OffsetElementsX} from "./OffsetElementsX";
-import {OffsetElementsY} from "./OffsetElementsY";
+import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
+import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {Container} from "./newGraphModel";
-import {EmbeddedElementsX} from "./EmbeddedElementsX";
-import {BorderIndexMaxX} from "./BorderIndexMaxX";
-import {BorderIndexLeft} from "./BorderIndexLeft";
-import {BorderIndexTop} from "./BorderIndexTop";
-import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom, EmbeddedBorderIndexMaxBottom} from "./BorderIndexMaxBottom";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop, EmbeddedBorderIndexMaxTop} from "./BorderIndexMaxTop";
-import {BorderIndexBottom} from "./BorderIndexBottom";
-import {BorderIndexRight} from "./BorderIndexRight";
-import {EmbeddedElementsY} from "./EmbeddedElementsY";
+import {EmbeddedElementsX} from "./elementsLayout/EmbeddedElementsX";
+import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
+import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
+import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
+import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom, EmbeddedBorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
+import {BorderIndexMaxPreviousTop, BorderIndexMaxTop, EmbeddedBorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
+import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
+import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
+import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 
 type Props = Container<
     OffsetElementsX & EmbeddedElementsX &

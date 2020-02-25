@@ -1,9 +1,9 @@
-import {Column, Element, Node, Row} from "./newGraphModel";
-import {assertNever} from "./assertNever";
+import {Column, Element, Node, Row} from "../newGraphModel";
+import {assertNever} from "../assertNever";
 import {BorderIndexTop} from "./BorderIndexTop";
 import {OffsetElementsY} from "./OffsetElementsY";
-import {sumOfPreviousRows} from "./sumOfPreviousRows";
-import {getMostBottomOffsetElementsY} from "./getMostBottomOffsetElementsY";
+import {sumOfPreviousRows} from "../sumOfPreviousRows";
+import {getMostBottomOffsetElementsY} from "../getMostBottomOffsetElementsY";
 
 export type BorderIndexMaxTop = { borderIndexMaxTop: number };
 export type BorderIndexMaxPreviousTop = { borderIndexMaxPreviousTop: number };

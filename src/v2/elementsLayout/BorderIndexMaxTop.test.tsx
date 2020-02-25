@@ -1,4 +1,4 @@
-import {Element} from "./newGraphModel";
+import {Element} from "../newGraphModel";
 import {
     addBorderIndexMaxTopG,
     BorderIndexMaxPreviousTop,

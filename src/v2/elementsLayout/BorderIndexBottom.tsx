@@ -1,5 +1,5 @@
-import {Column, Element, Node, Row} from "./newGraphModel";
-import {assertNever} from "./assertNever";
+import {Column, Element, Node, Row} from "../newGraphModel";
+import {assertNever} from "../assertNever";
 
 export type BorderIndexBottom = { borderIndexBottom: number };
 

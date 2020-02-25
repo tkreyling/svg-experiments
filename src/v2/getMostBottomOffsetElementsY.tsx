@@ -1,5 +1,5 @@
 import {Element} from "./newGraphModel";
-import {OffsetElementsY} from "./OffsetElementsY";
+import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 
 export function getMostBottomOffsetElementsY(element: Element<OffsetElementsY>): number {
     switch (element.kind) {

@@ -1,4 +1,4 @@
-import {Element} from "./newGraphModel";
+import {Element} from "../newGraphModel";
 import {addEmbeddedElementsY, EmbeddedElementsY} from "./EmbeddedElementsY";
 
 type InputType = Element<unknown>;
