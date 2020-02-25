@@ -3,6 +3,7 @@ import {assertNever} from "./assertNever";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {OffsetElementsY} from "./OffsetElementsY";
 import {sumOfPreviousRows} from "./sumOfPreviousRows";
+import {getMostBottomOffsetElementsY} from "./getMostBottomOffsetElementsY";
 
 export type BorderIndexMaxBottom = { borderIndexMaxBottom: number };
 export type BorderIndexMaxPreviousBottom = { borderIndexMaxPreviousBottom: number };
@@ -14,16 +15,6 @@ export function addBorderIndexMaxBottomG<N extends OffsetElementsY & BorderIndex
     let sums = sumOfPreviousRows(max);
     addBorderIndexMaxBottom(element, max, sums);
     return element as Element<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom>;
-}
-
-function getMostBottomOffsetElementsY(element: Element<OffsetElementsY>): number {
-    switch (element.kind) {
-        case "node":
-            return element.offsetElementsY;
-        case "row":
-        case "column":
-            return Math.max(...element.elements.map(getMostBottomOffsetElementsY), element.offsetElementsY);
-    }
 }
 
 function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>): Map<number, number> {
