@@ -1,4 +1,4 @@
-import {Element} from "../newGraphModel";
+import {Element, graph} from "../newGraphModel";
 import {
     addBorderIndexMaxTopG,
     BorderIndexMaxPreviousTop,
@@ -15,7 +15,7 @@ type OutputType = Element<OffsetElementsY & BorderIndexTop &
 test('a single node has borderIndexMaxTop 0', () => {
     let element: InputType = {kind: "node", offsetElementsY: 0, borderIndexTop: 0};
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "node", offsetElementsY: 0, borderIndexTop: 0,
@@ -27,7 +27,7 @@ test('a single node has borderIndexMaxTop 0', () => {
 test('a row without elements receives borderIndexMaxTop 0 itself', () => {
     let element: InputType = {kind: "row", offsetElementsY: 0, borderIndexTop: 0, elements: []};
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "row", offsetElementsY: 0, borderIndexTop: 0,
@@ -44,7 +44,7 @@ test('a row with a border has borderIndexMaxTop 1', () => {
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "row", offsetElementsY: 0, borderIndexTop: 1,
@@ -66,7 +66,7 @@ test('a row with a border and a nested row with a border has borderIndexMaxTop 2
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "row", offsetElementsY: 0, borderIndexTop: 2,
@@ -96,7 +96,7 @@ test('a row with a border and two nested rows with border has borderIndexMaxTop 
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "row", offsetElementsY: 0, borderIndexTop: 2,
@@ -133,7 +133,7 @@ test('a row with a border and two nested rows, first one without border, has bor
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "row", offsetElementsY: 0, borderIndexTop: 2,
@@ -164,7 +164,7 @@ test('a column with a border has borderIndexMaxTop 1', () => {
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "column", offsetElementsY: 0, borderIndexTop: 1,
@@ -186,7 +186,7 @@ test('a column with a border and a nested row with a border has borderIndexMaxTo
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "column", offsetElementsY: 0, borderIndexTop: 2,
@@ -216,7 +216,7 @@ test('a column with a border and two nested rows with border has borderIndexMaxT
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "column", offsetElementsY: 0, borderIndexTop: 2,
@@ -253,7 +253,7 @@ test('a column with a border and two nested rows, not all with border, has borde
         }]
     };
 
-    addBorderIndexMaxTopG(element);
+    addBorderIndexMaxTopG(graph(element));
 
     let expected: OutputType = {
         kind: "column", offsetElementsY: 0, borderIndexTop: 1,

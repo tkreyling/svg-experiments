@@ -1,11 +1,11 @@
-import {Column, Element, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 
 export type BorderIndexRight = { borderIndexRight: number };
 
-export function addBorderIndexRightG<N>(element: Element<N>): Element<N & BorderIndexRight> {
-    addBorderIndexRight(element);
-    return element as Element<N & BorderIndexRight>;
+export function addBorderIndexRightG<N>(graph: Graph<N>): Graph<N & BorderIndexRight> {
+    addBorderIndexRight(graph.element);
+    return graph as Graph<N & BorderIndexRight>;
 }
 
 export function addBorderIndexRight(element: Element<unknown>): number {

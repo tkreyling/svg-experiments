@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Element, Node} from "./newGraphModel";
+import {Container, Element, Graph, Node} from "./newGraphModel";
 import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG} from "./elementsLayout/OffsetElementsY";
@@ -37,8 +37,8 @@ function allContainers<N>(element: Element<N>): Container<N>[] {
     }
 }
 
-export const Diagram: React.FC<{element: Element<unknown>}> = props => {
-    return [props.element]
+export const Diagram: React.FC<Graph<unknown>> = graph => {
+    return [graph]
         .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)
         .map(addBorderIndexLeftG)
@@ -50,10 +50,10 @@ export const Diagram: React.FC<{element: Element<unknown>}> = props => {
         .map(addBorderIndexMaxBottomG)
         .map(addEmbeddedElementsXG)
         .map(addEmbeddedElementsYG)
-        .map(element => (
+        .map(graph => (
             <svg viewBox={"0 0 1200 600"}>
-                {allNodes(element).map(NodeShape)}
-                {allContainers(element).filter(c => c.border).map(ContainerShape)}
+                {allNodes(graph.element).map(NodeShape)}
+                {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
             </svg>
         ))[0];
 };

@@ -17,3 +17,11 @@ export type Column<N> = {
 export type Container<N> = (Row<N> & N) | (Column<N> & N);
 
 export type Element<N> = (Node & N) | (Row<N> & N) | (Column<N> & N);
+
+export type Graph<N> = {
+    element: Element<N>
+}
+
+export function graph<N>(element: Element<N>): Graph<N> {
+    return {element: element};
+}

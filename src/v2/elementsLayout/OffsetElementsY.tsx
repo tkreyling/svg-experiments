@@ -1,11 +1,11 @@
-import {Column, Element, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 
 export type OffsetElementsY = { offsetElementsY: number };
 
-export function addOffsetElementsYG<N>(element: Element<N>): Element<N & OffsetElementsY> {
-    addOffsetElementsY(element);
-    return element as Element<N & OffsetElementsY>;
+export function addOffsetElementsYG<N>(graph: Graph<N>): Graph<N & OffsetElementsY> {
+    addOffsetElementsY(graph.element);
+    return graph as Graph<N & OffsetElementsY>;
 }
 
 export function addOffsetElementsY(element: Element<unknown>, accumulator = {offsetElementsY: 0}) {
