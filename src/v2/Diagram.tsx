@@ -14,6 +14,7 @@ import {addBorderIndexBottomG} from "./elementsLayout/BorderIndexBottom";
 import {addBorderIndexMaxBottomG} from "./elementsLayout/BorderIndexMaxBottom";
 import {addBorderIndexMaxTopG} from "./elementsLayout/BorderIndexMaxTop";
 import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
+import {EdgeShape} from "./EdgeShape";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -54,6 +55,7 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
             <svg viewBox={"0 0 1200 600"}>
                 {allNodes(graph.element).map(NodeShape)}
                 {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
+                {graph.edges.map(EdgeShape)}
             </svg>
         ))[0];
 };
