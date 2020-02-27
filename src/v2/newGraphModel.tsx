@@ -36,3 +36,16 @@ export function transformElements<N, A, E>(graph: Graph<N, E>, f: (element: Elem
     f(graph.element);
     return graph as Graph<N & A, E>;
 }
+
+export function node(): Node {
+    return {
+        kind: "node"
+    };
+}
+
+export function edge<N>(from: N, to: N): Edge<N, unknown> {
+    return {
+        from: from,
+        to: to
+    }
+}
