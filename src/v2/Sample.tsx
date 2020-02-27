@@ -36,7 +36,9 @@ export const Sample: React.FC = () => {
     };
     let edges = [
         edge(node6, node7),
-        edge(node12, node5)
+        edge(node9, node8),
+        edge(node12, node8),
+        edge(node11, node8)
     ];
     return (
         <Diagram element={element} edges={edges}/>

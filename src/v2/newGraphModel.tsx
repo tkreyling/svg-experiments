@@ -21,7 +21,7 @@ export type Element<N> = (Node & N) | (Row<N> & N) | (Column<N> & N);
 export type Edge<N, E> = {
     from: N,
     to: N
-}
+} & E
 
 export type Graph<N, E> = {
     element: Element<N>

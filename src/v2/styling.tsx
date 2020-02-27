@@ -5,4 +5,5 @@ export const BORDER_SPACING_TOP = 30;
 export const BORDER_SPACING_BOTTOM = 10;
 export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
+export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;

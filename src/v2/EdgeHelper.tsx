@@ -12,3 +12,7 @@ function fromIsUpperLeft<N extends OffsetElementsX & OffsetElementsY, E>(edge: E
 export function getUpperLeftNode<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, unknown>): N {
     return fromIsUpperLeft(edge) ? edge.from : edge.to;
 }
+
+export function getLowerRightNode<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, unknown>): N {
+    return fromIsUpperLeft(edge) ? edge.to : edge.from;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
-    BORDER_SPACING_X,
+    BORDER_SPACING_X, EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
@@ -17,6 +17,7 @@ import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBotto
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {Edge} from "./newGraphModel";
 import {getUpperLeftNode} from "./EdgeHelper";
+import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 
 function getY<N extends OffsetElementsY &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom>(node: N) {
@@ -39,9 +40,10 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
 }
 
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
-    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom, unknown>> = edge => {
+    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom,
+    MidPathSegmentOffsetY>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.to);
-    let upperNodeEdgesY = getY(getUpperLeftNode(edge)) + ELEMENT_HEIGHT + VERTICAL_SPACING / 2;
+    let upperNodeEdgesY = getY(getUpperLeftNode(edge)) + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + edge.midPathSegmentOffsetY * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.from);
     return (
         <path key={1} d={
