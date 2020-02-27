@@ -1,4 +1,4 @@
-import {Column, Element, Graph, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {OffsetElementsY} from "./OffsetElementsY";
@@ -12,10 +12,14 @@ export type EmbeddedBorderIndexMaxBottom = { embeddedBorderIndexMaxBottom: numbe
 export function addBorderIndexMaxBottomG<N extends OffsetElementsY & BorderIndexBottom>(
     graph: Graph<N>
 ): Graph<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom> {
-    let max = determineBorderIndexMaxBottom(graph.element);
+    return transformElements<N, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>(
+        graph, determineAndAddBorderIndexBottomAggregates);
+}
+
+function determineAndAddBorderIndexBottomAggregates(element: Element<OffsetElementsY & BorderIndexBottom>) {
+    let max = determineBorderIndexMaxBottom(element);
     let sums = sumOfPreviousRows(max);
-    addBorderIndexMaxBottom(graph.element, max, sums);
-    return graph as Graph<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>;
+    addBorderIndexMaxBottom(element, max, sums);
 }
 
 function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>): Map<number, number> {

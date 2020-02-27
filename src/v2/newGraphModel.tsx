@@ -25,3 +25,8 @@ export type Graph<N> = {
 export function graph<N>(element: Element<N>): Graph<N> {
     return {element: element};
 }
+
+export function transformElements<N, E>(graph: Graph<N>, f: (element: Element<N>) => void): Graph<N & E> {
+    f(graph.element);
+    return graph as Graph<N & E>;
+}

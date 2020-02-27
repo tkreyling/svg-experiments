@@ -1,11 +1,10 @@
-import {Column, Element, Graph, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 
 export type EmbeddedElementsY = { embeddedElementsY: number };
 
 export function addEmbeddedElementsYG<N>(graph: Graph<N>): Graph<N & EmbeddedElementsY> {
-    addEmbeddedElementsY(graph.element);
-    return graph as Graph<N & EmbeddedElementsY>;
+    return transformElements<N, EmbeddedElementsY>(graph, addEmbeddedElementsY);
 }
 
 export function addEmbeddedElementsY(element: Element<unknown>): number {

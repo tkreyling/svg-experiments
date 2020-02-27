@@ -1,4 +1,4 @@
-import {Column, Element, Graph, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 import {BorderIndexLeft} from "./BorderIndexLeft";
 import {BorderIndexRight} from "./BorderIndexRight";
@@ -8,9 +8,12 @@ export type BorderIndexMaxX = { borderIndexMaxX: number };
 export function addBorderIndexMaxXG<N extends BorderIndexLeft & BorderIndexRight>(
     graph: Graph<N>
 ): Graph<N & BorderIndexMaxX> {
-    let maxEmbeddedXBorders = determineBorderIndexMaxX(graph.element);
-    addBorderIndexMaxX(graph.element, maxEmbeddedXBorders);
-    return graph as Graph<N & BorderIndexMaxX>;
+    return transformElements<N, BorderIndexMaxX>(graph, determineAndAddBorderIndexMaxX);
+}
+
+function determineAndAddBorderIndexMaxX(element: Element<BorderIndexLeft & BorderIndexRight>) {
+    let maxEmbeddedXBorders = determineBorderIndexMaxX(element);
+    addBorderIndexMaxX(element, maxEmbeddedXBorders);
 }
 
 function determineBorderIndexMaxX(element: Element<BorderIndexLeft & BorderIndexRight>): number {

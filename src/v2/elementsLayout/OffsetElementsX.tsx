@@ -1,11 +1,10 @@
-import {Column, Element, Graph, Node, Row} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 
 export type OffsetElementsX = { offsetElementsX: number };
 
 export function addOffsetElementsXG<N>(graph: Graph<N>): Graph<N & OffsetElementsX> {
-    addOffsetElementsX(graph.element);
-    return graph as Graph<N & OffsetElementsX>;
+    return transformElements<N, OffsetElementsX>(graph, addOffsetElementsX);
 }
 
 export function addOffsetElementsX(element: Element<unknown>, accumulator = {offsetElementsX: 0}) {
