@@ -8,17 +8,24 @@ export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
 }
 
+export type EdgeIndex = {
+    edgeIndex: number
+}
+
 export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX, E>(graph: Graph<N, E>):
-    Graph<N, E & MidPathSegmentOffsetY> {
+    Graph<N, E & MidPathSegmentOffsetY & EdgeIndex> {
     addMidPathSegmentOffsetY(graph.edges);
-    return graph as unknown as Graph<N, E & MidPathSegmentOffsetY>;
+    return graph as unknown as Graph<N, E & MidPathSegmentOffsetY & EdgeIndex>;
 }
 
 export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX, unknown>[]) {
     let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, unknown>)[]>();
 
     edges
-        .map((edge, index) => Object.assign(edge, {edgeIndex: index}))
+        .map((edge, index) => {
+            return Object.assign<Edge<OffsetElementsY & OffsetElementsX, unknown>, EdgeIndex>(
+                edge, {edgeIndex: index});
+        })
         .forEach(edge => {
             let key = getUpperLeftNode(edge).offsetElementsY;
             let edges = groupedByOffsetElementsY.get(key) || [];
