@@ -5,10 +5,10 @@ import {BorderIndexRight} from "./BorderIndexRight";
 
 export type BorderIndexMaxX = { borderIndexMaxX: number };
 
-export function addBorderIndexMaxXG<N extends BorderIndexLeft & BorderIndexRight>(
-    graph: Graph<N>
-): Graph<N & BorderIndexMaxX> {
-    return transformElements<N, BorderIndexMaxX>(graph, determineAndAddBorderIndexMaxX);
+export function addBorderIndexMaxXG<N extends BorderIndexLeft & BorderIndexRight, E>(
+    graph: Graph<N, E>
+): Graph<N & BorderIndexMaxX, E> {
+    return transformElements<N, BorderIndexMaxX, E>(graph, determineAndAddBorderIndexMaxX);
 }
 
 function determineAndAddBorderIndexMaxX(element: Element<BorderIndexLeft & BorderIndexRight>) {

@@ -37,7 +37,7 @@ function allContainers<N>(element: Element<N>): Container<N>[] {
     }
 }
 
-export const Diagram: React.FC<Graph<unknown>> = graph => {
+export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
     return [graph]
         .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)

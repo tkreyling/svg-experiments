@@ -3,8 +3,8 @@ import {assertNever} from "../assertNever";
 
 export type OffsetElementsX = { offsetElementsX: number };
 
-export function addOffsetElementsXG<N>(graph: Graph<N>): Graph<N & OffsetElementsX> {
-    return transformElements<N, OffsetElementsX>(graph, addOffsetElementsX);
+export function addOffsetElementsXG<N, E>(graph: Graph<N, E>): Graph<N & OffsetElementsX, E> {
+    return transformElements<N, OffsetElementsX, E>(graph, addOffsetElementsX);
 }
 
 export function addOffsetElementsX(element: Element<unknown>, accumulator = {offsetElementsX: 0}) {

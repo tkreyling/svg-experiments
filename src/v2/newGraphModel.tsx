@@ -18,15 +18,21 @@ export type Container<N> = (Row<N> & N) | (Column<N> & N);
 
 export type Element<N> = (Node & N) | (Row<N> & N) | (Column<N> & N);
 
-export type Graph<N> = {
+export type Edge<N, E> = {
+    from: N,
+    to: N
+}
+
+export type Graph<N, E> = {
     element: Element<N>
+    edges: Edge<N, E>[]
 }
 
-export function graph<N>(element: Element<N>): Graph<N> {
-    return {element: element};
+export function graph<N, E>(element: Element<N>, edges: Edge<N, E>[] = []): Graph<N, E> {
+    return {element: element, edges: edges};
 }
 
-export function transformElements<N, E>(graph: Graph<N>, f: (element: Element<N>) => void): Graph<N & E> {
+export function transformElements<N, A, E>(graph: Graph<N, E>, f: (element: Element<N>) => void): Graph<N & A, E> {
     f(graph.element);
-    return graph as Graph<N & E>;
+    return graph as Graph<N & A, E>;
 }

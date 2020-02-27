@@ -3,8 +3,8 @@ import {assertNever} from "../assertNever";
 
 export type BorderIndexBottom = { borderIndexBottom: number };
 
-export function addBorderIndexBottomG<N>(graph: Graph<N>): Graph<N & BorderIndexBottom> {
-    return transformElements<N, BorderIndexBottom>(graph, addBorderIndexBottom);
+export function addBorderIndexBottomG<N, E>(graph: Graph<N, E>): Graph<N & BorderIndexBottom, E> {
+    return transformElements<N, BorderIndexBottom, E>(graph, addBorderIndexBottom);
 }
 
 export function addBorderIndexBottom(element: Element<unknown>): number {

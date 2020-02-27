@@ -3,8 +3,8 @@ import {assertNever} from "../assertNever";
 
 export type EmbeddedElementsY = { embeddedElementsY: number };
 
-export function addEmbeddedElementsYG<N>(graph: Graph<N>): Graph<N & EmbeddedElementsY> {
-    return transformElements<N, EmbeddedElementsY>(graph, addEmbeddedElementsY);
+export function addEmbeddedElementsYG<N, E>(graph: Graph<N, E>): Graph<N & EmbeddedElementsY, E> {
+    return transformElements<N, EmbeddedElementsY, E>(graph, addEmbeddedElementsY);
 }
 
 export function addEmbeddedElementsY(element: Element<unknown>): number {

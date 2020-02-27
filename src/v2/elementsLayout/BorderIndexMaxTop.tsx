@@ -9,10 +9,10 @@ export type BorderIndexMaxTop = { borderIndexMaxTop: number };
 export type BorderIndexMaxPreviousTop = { borderIndexMaxPreviousTop: number };
 export type EmbeddedBorderIndexMaxTop = { embeddedBorderIndexMaxTop: number };
 
-export function addBorderIndexMaxTopG<N extends OffsetElementsY & BorderIndexTop>(
-    graph: Graph<N>
-): Graph<N & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop> {
-    return transformElements<N, BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop>(
+export function addBorderIndexMaxTopG<N extends OffsetElementsY & BorderIndexTop, E>(
+    graph: Graph<N, E>
+): Graph<N & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop, E> {
+    return transformElements<N, BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop, E>(
         graph, determineAndAddBorderIndexTopAggregates
     );
 }
