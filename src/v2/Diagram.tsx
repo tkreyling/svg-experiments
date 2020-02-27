@@ -16,6 +16,7 @@ import {addBorderIndexMaxTopG} from "./elementsLayout/BorderIndexMaxTop";
 import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
 import {EdgeShape} from "./EdgeShape";
 import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
+import {addElementKeyG} from "./elementsLayout/ElementKey";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -41,6 +42,7 @@ function allContainers<N>(element: Element<N>): Container<N>[] {
 
 export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
     return [graph]
+        .map(addElementKeyG)
         .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)
         .map(addBorderIndexLeftG)

@@ -21,8 +21,10 @@ import {BorderIndexMaxPreviousTop, BorderIndexMaxTop, EmbeddedBorderIndexMaxTop}
 import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
 import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
+import {ElementKey} from "./elementsLayout/ElementKey";
 
 type Props = Container<
+    ElementKey &
     OffsetElementsX & EmbeddedElementsX &
     OffsetElementsY & EmbeddedElementsY &
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
@@ -31,7 +33,7 @@ type Props = Container<
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
-        <g key={"G_" + container.offsetElementsY + "_" + container.offsetElementsX}>
+        <g key={container.elementKey}>
             <rect
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
                 (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}

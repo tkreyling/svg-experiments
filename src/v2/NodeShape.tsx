@@ -13,15 +13,17 @@ import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
+import {ElementKey} from "./elementsLayout/ElementKey";
 
-type Props = OffsetElementsX & BorderIndexMaxX &
+type Props = ElementKey &
+    OffsetElementsX & BorderIndexMaxX &
     OffsetElementsY &
     BorderIndexMaxPreviousTop & BorderIndexMaxTop & BorderIndexTop &
     BorderIndexMaxPreviousBottom;
 
 export const NodeShape: React.FC<Props> = node => {
     return (
-        <g key={node.offsetElementsY + "_" + node.offsetElementsX}>
+        <g key={node.elementKey}>
             <rect x={node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
             node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X}
                   y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
