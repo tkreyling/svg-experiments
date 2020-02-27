@@ -16,6 +16,7 @@ import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/Bor
 import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {Edge} from "./newGraphModel";
+import {getUpperLeftNode} from "./EdgeHelper";
 
 function getY<N extends OffsetElementsY &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom>(node: N) {
@@ -35,17 +36,6 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
         ELEMENT_WIDTH / 2,
         y: getY(node) + (onLowerSide ? ELEMENT_HEIGHT : 0)
     };
-}
-
-function fromIsUpperLeft<N extends OffsetElementsX & OffsetElementsY, E>(edge: Edge<N, E>) {
-    if (edge.from.offsetElementsY === edge.to.offsetElementsY) {
-        return edge.from.offsetElementsX <= edge.to.offsetElementsX;
-    }
-    return edge.from.offsetElementsY < edge.to.offsetElementsY;
-}
-
-function getUpperLeftNode<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, unknown>): N {
-    return fromIsUpperLeft(edge) ? edge.from : edge.to;
 }
 
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
