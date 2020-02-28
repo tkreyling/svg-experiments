@@ -37,6 +37,11 @@ export function transformElements<N, A, E>(graph: Graph<N, E>, f: (element: Elem
     return graph as Graph<N & A, E>;
 }
 
+export function transformElementsUsingGraph<N, A, E>(graph: Graph<N, E>, f: (graph: Graph<N, E>) => void): Graph<N & A, E> {
+    f(graph);
+    return graph as Graph<N & A, E>;
+}
+
 export function node(): Node {
     return {
         kind: "node"
