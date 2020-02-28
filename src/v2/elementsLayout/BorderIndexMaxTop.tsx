@@ -35,9 +35,9 @@ function determineBorderIndexMaxTop(element: Element<OffsetElementsY & BorderInd
             let map = new Map<number, number>();
             map.set(element.offsetElementsY, element.borderIndexTop);
             return element.elements.map(determineBorderIndexMaxTop).reduce((accumulator, addition) => {
-                Array.from(addition.entries()).forEach((entry) => {
-                    let max = Math.max(accumulator.get(entry[0]) || 0, entry[1]);
-                    accumulator.set(entry[0], max);
+                Array.from(addition.entries()).forEach(([offsetElementsY, borderIndexTop]) => {
+                    let max = Math.max(accumulator.get(offsetElementsY) || 0, borderIndexTop);
+                    accumulator.set(offsetElementsY, max);
                 });
                 return accumulator;
             }, map);
