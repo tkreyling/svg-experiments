@@ -2,7 +2,7 @@ import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {Edge} from "./newGraphModel";
 
-function fromIsUpperLeft<N extends OffsetElementsX & OffsetElementsY, E>(edge: Edge<N, E>) {
+export function fromIsUpperLeft<N extends OffsetElementsX & OffsetElementsY, E>(edge: Edge<N, E>) {
     if (edge.from.offsetElementsY === edge.to.offsetElementsY) {
         return edge.from.offsetElementsX <= edge.to.offsetElementsX;
     }

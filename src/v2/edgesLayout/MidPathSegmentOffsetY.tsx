@@ -2,7 +2,8 @@ import {and, ascending, descending} from "../../v1/sorting";
 import {Edge, Graph} from "../newGraphModel";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
-import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
+import {fromIsUpperLeft, getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
+import {ConnectionIndex} from "./ConnectionIndexAndNumberOfEdges";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
@@ -12,18 +13,18 @@ export type EdgeIndex = {
     edgeIndex: number
 }
 
-export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX, E>(graph: Graph<N, E>):
+export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX, E extends ConnectionIndex>(graph: Graph<N, E>):
     Graph<N, E & MidPathSegmentOffsetY & EdgeIndex> {
     addMidPathSegmentOffsetY(graph.edges);
     return graph as unknown as Graph<N, E & MidPathSegmentOffsetY & EdgeIndex>;
 }
 
-export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX, unknown>[]) {
-    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>)[]>();
+export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX, ConnectionIndex>[]) {
+    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>)[]>();
 
     edges
         .map((edge, index) => {
-            return Object.assign<Edge<OffsetElementsY & OffsetElementsX, unknown>, EdgeIndex>(
+            return Object.assign<Edge<OffsetElementsY & OffsetElementsX, ConnectionIndex>, EdgeIndex>(
                 edge, {edgeIndex: index});
         })
         .forEach(edge => {
@@ -36,8 +37,8 @@ export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetEle
     Array.from(groupedByOffsetElementsY.values()).forEach(addMidPathSegmentOffsetYForLayer);
 }
 
-function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>[]) {
-    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>[]>();
+function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>[]) {
+    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>[]>();
 
     edges.forEach(edge => {
         let upperLeftNode = getUpperLeftNode(edge);
@@ -58,8 +59,16 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let sameLayerBefore = sameLayer.filter(edge => getLowerRightNode(edge).offsetElementsX <= getUpperLeftNode(edge).offsetElementsX);
         let sameLayerAfter = sameLayer.filter(edge => getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX);
         let otherLayer = edges.filter(edge => getLowerRightNode(edge).offsetElementsY !== getUpperLeftNode(edge).offsetElementsY);
-        let otherLayerBefore = otherLayer.filter(edge => getLowerRightNode(edge).offsetElementsX <= getUpperLeftNode(edge).offsetElementsX);
-        let otherLayerAfter = otherLayer.filter(edge => getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX);
+        let otherLayerBefore = otherLayer.filter(edge => {
+            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
+                return getLowerRightNodeIndex(edge) > getUpperLeftNodeIndex(edge);
+            return getLowerRightNode(edge).offsetElementsX < getUpperLeftNode(edge).offsetElementsX
+        });
+        let otherLayerAfter = otherLayer.filter(edge => {
+            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
+                return getLowerRightNodeIndex(edge) <= getUpperLeftNodeIndex(edge);
+            return getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX
+        });
 
         sameLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
         otherLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
@@ -81,4 +90,12 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
 
         indexOffset += Math.max(before.length, after.length);
     });
+}
+
+function getUpperLeftNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
+    return fromIsUpperLeft(edge) ? edge.fromIndex : edge.toIndex;
+}
+
+function getLowerRightNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
+    return fromIsUpperLeft(edge) ? edge.toIndex : edge.fromIndex;
 }

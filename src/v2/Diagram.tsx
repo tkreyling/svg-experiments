@@ -56,9 +56,9 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
         .map(addBorderIndexMaxBottomG)
         .map(addEmbeddedElementsXG)
         .map(addEmbeddedElementsYG)
+        .map(addConnectionIndexAndNumberOfEdgesG)
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
-        .map(addConnectionIndexAndNumberOfEdgesG)
         .map(graph => (
             <svg viewBox={"0 0 1400 600"}>
                 {allNodes(graph.element).map(NodeShape)}
