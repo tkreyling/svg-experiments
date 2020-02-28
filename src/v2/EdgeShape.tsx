@@ -18,16 +18,20 @@ import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {Edge} from "./newGraphModel";
 import {getUpperLeftNode} from "./EdgeHelper";
 import {EdgeIndex, MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
+import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 
 function getY<N extends OffsetElementsY &
-    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom>(node: N) {
+    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
+    MidPathSegmentOffsetMaxPreviousY>(node: N) {
     return node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
         + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop - node.borderIndexTop) * BORDER_SPACING_TOP
-        + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM;
+        + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
+        + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
 }
 
 function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
-    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom>(
+    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
+    MidPathSegmentOffsetMaxPreviousY>(
     node: N, otherNode: N
 ) {
     let onLowerSide = node.offsetElementsY <= otherNode.offsetElementsY;
@@ -40,7 +44,8 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
 }
 
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
-    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom,
+    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
+    MidPathSegmentOffsetMaxPreviousY,
     EdgeIndex & MidPathSegmentOffsetY>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.to);
     let upperNodeEdgesY = getY(getUpperLeftNode(edge)) + ELEMENT_HEIGHT + VERTICAL_SPACING / 2 + edge.midPathSegmentOffsetY * EDGE_SPACING;
