@@ -6,10 +6,10 @@ import {MidPathSegmentOffsetY} from "./MidPathSegmentOffsetY";
 import {sumOfPreviousRowsFillLayers} from "../sumOfPreviousRows";
 import {assertNever} from "../assertNever";
 
-type NodeData = OffsetElementsX & OffsetElementsY
-type EdgeData = MidPathSegmentOffsetY
+export type NodeData = OffsetElementsX & OffsetElementsY
+export type EdgeData = MidPathSegmentOffsetY
 type EdgeType = Edge<NodeData, EdgeData>
-type AddedNodeData = MidPathSegmentOffsetMaxPreviousY
+export type AddedNodeData = MidPathSegmentOffsetMaxPreviousY
 
 export type MidPathSegmentOffsetMaxPreviousY = {
     midPathSegmentOffsetMaxPreviousY: number
@@ -21,7 +21,7 @@ export function addMidPathSegmentOffsetYAggregatesG<N extends NodeData, E extend
     return transformElementsUsingGraph<N, AddedNodeData, E>(graph, addMidPathSegmentOffsetYAggregates);
 }
 
-function addMidPathSegmentOffsetYAggregates<N extends NodeData, E extends EdgeData>(graph: Graph<N, E>) {
+export function addMidPathSegmentOffsetYAggregates<N extends NodeData, E extends EdgeData>(graph: Graph<N, E>) {
     let maxOffsetY = determineMaxOffsetY(graph.element);
     let maxs = determineMidPathSegmentMaxOffsetY(graph.edges);
     let sums = sumOfPreviousRowsFillLayers(maxs, maxOffsetY);
