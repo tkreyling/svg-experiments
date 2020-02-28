@@ -18,6 +18,7 @@ import {EdgeShape} from "./EdgeShape";
 import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
 import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {addMidPathSegmentOffsetYAggregatesG} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+import {addConnectionIndexAndNumberOfEdgesG} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -57,6 +58,7 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
         .map(addEmbeddedElementsYG)
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
+        .map(addConnectionIndexAndNumberOfEdgesG)
         .map(graph => (
             <svg viewBox={"0 0 1400 600"}>
                 {allNodes(graph.element).map(NodeShape)}
