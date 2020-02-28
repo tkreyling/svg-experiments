@@ -2,7 +2,7 @@ import React from "react";
 import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
-    BORDER_SPACING_X,
+    BORDER_SPACING_X, EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
@@ -22,6 +22,7 @@ import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
 import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
+import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 
 type Props = Container<
     ElementKey &
@@ -29,34 +30,43 @@ type Props = Container<
     OffsetElementsY & EmbeddedElementsY &
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
-    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom>;
+    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom &
+    MidPathSegmentOffsetMaxPreviousY>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={container.elementKey}>
             <rect
-                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-                (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X}
+                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X
+                }
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
-                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM}
-                width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING +
-                ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X}
+                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
+                + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
+                }
+                width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING
+                + ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X
+                }
                 height={container.embeddedElementsY * ELEMENT_HEIGHT +
                 (container.embeddedElementsY - 1) * VERTICAL_SPACING +
                 container.borderIndexTop * BORDER_SPACING_TOP +
                 container.embeddedBorderIndexMaxTop * BORDER_SPACING_TOP +
                 container.embeddedBorderIndexMaxBottom * BORDER_SPACING_BOTTOM +
-                container.borderIndexBottom * BORDER_SPACING_BOTTOM}
+                container.borderIndexBottom * BORDER_SPACING_BOTTOM
+                }
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text
-                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
-                (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X}
+                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
+                }
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-                + 15}
+                + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
+                + 15
+                }
                 fill="black">{
                 container.embeddedElementsY + "__" +
                 container.borderIndexMaxPreviousTop + "/" + container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
