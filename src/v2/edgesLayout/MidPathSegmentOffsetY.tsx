@@ -1,4 +1,4 @@
-import {ascending, descending} from "../../v1/sorting";
+import {and, ascending, descending} from "../../v1/sorting";
 import {Edge, Graph} from "../newGraphModel";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
@@ -19,7 +19,7 @@ export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElem
 }
 
 export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX, unknown>[]) {
-    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, unknown>)[]>();
+    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>)[]>();
 
     edges
         .map((edge, index) => {
@@ -36,8 +36,8 @@ export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetEle
     Array.from(groupedByOffsetElementsY.values()).forEach(addMidPathSegmentOffsetYForLayer);
 }
 
-function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX, unknown>[]) {
-    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX, unknown>[]>();
+function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>[]) {
+    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX, EdgeIndex>[]>();
 
     edges.forEach(edge => {
         let upperLeftNode = getUpperLeftNode(edge);
@@ -61,10 +61,10 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let otherLayerBefore = otherLayer.filter(edge => getLowerRightNode(edge).offsetElementsX <= getUpperLeftNode(edge).offsetElementsX);
         let otherLayerAfter = otherLayer.filter(edge => getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX);
 
-        sameLayerBefore.sort(ascending(edge => getLowerRightNode(edge).offsetElementsX));
-        otherLayerBefore.sort(ascending(edge => getLowerRightNode(edge).offsetElementsX));
-        otherLayerAfter.sort(descending(edge => getLowerRightNode(edge).offsetElementsX));
-        sameLayerAfter.sort(ascending(edge => getLowerRightNode(edge).offsetElementsX));
+        sameLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
+        otherLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
+        otherLayerAfter.sort(and(descending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
+        sameLayerAfter.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
         let after = sameLayerAfter.concat(otherLayerAfter);
