@@ -22,7 +22,7 @@ export const Sample: React.FC = () => {
     let node_6_4 = node();
     let element: Element<unknown> = {
         kind: "column", elements: [{
-            kind: "row", elements: [{
+            kind: "row", border: "solid", elements: [{
                 kind: "column", border: "solid", elements: [node_1_1, node_1_2]
             }, {
                 kind: "column", border: "solid", elements: [{
