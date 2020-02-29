@@ -3,7 +3,7 @@ import {Edge, Graph} from "../newGraphModel";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {fromIsUpperLeft, getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
-import {ConnectionIndex} from "./ConnectionIndexAndNumberOfEdges";
+import {ConnectionIndex, NumberOfEdges} from "./ConnectionIndexAndNumberOfEdges";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
@@ -13,18 +13,18 @@ export type EdgeIndex = {
     edgeIndex: number
 }
 
-export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX, E extends ConnectionIndex>(graph: Graph<N, E>):
+export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX & NumberOfEdges, E extends ConnectionIndex>(graph: Graph<N, E>):
     Graph<N, E & MidPathSegmentOffsetY & EdgeIndex> {
     addMidPathSegmentOffsetY(graph.edges);
     return graph as unknown as Graph<N, E & MidPathSegmentOffsetY & EdgeIndex>;
 }
 
-export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX, ConnectionIndex>[]) {
-    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>)[]>();
+export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex>[]) {
+    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, EdgeIndex & ConnectionIndex>)[]>();
 
     edges
         .map((edge, index) => {
-            return Object.assign<Edge<OffsetElementsY & OffsetElementsX, ConnectionIndex>, EdgeIndex>(
+            return Object.assign<Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex>, EdgeIndex>(
                 edge, {edgeIndex: index});
         })
         .forEach(edge => {
@@ -37,8 +37,8 @@ export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetEle
     Array.from(groupedByOffsetElementsY.values()).forEach(addMidPathSegmentOffsetYForLayer);
 }
 
-function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>[]) {
-    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX, EdgeIndex & ConnectionIndex>[]>();
+function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, EdgeIndex & ConnectionIndex>[]) {
+    let groupedByUpperNode = new Map<string, Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, EdgeIndex & ConnectionIndex>[]>();
 
     edges.forEach(edge => {
         let upperLeftNode = getUpperLeftNode(edge);
@@ -61,12 +61,14 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let otherLayer = edges.filter(edge => getLowerRightNode(edge).offsetElementsY !== getUpperLeftNode(edge).offsetElementsY);
         let otherLayerBefore = otherLayer.filter(edge => {
             if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
-                return getLowerRightNodeIndex(edge) > getUpperLeftNodeIndex(edge);
-            return getLowerRightNode(edge).offsetElementsX < getUpperLeftNode(edge).offsetElementsX
+                return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 <
+                    getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
+            return getLowerRightNode(edge).offsetElementsX <= getUpperLeftNode(edge).offsetElementsX
         });
         let otherLayerAfter = otherLayer.filter(edge => {
             if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
-                return getLowerRightNodeIndex(edge) <= getUpperLeftNodeIndex(edge);
+                return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 >=
+                    getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
             return getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX
         });
 

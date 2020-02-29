@@ -2,10 +2,10 @@ import {addMidPathSegmentOffsetY, EdgeIndex, MidPathSegmentOffsetY} from "./MidP
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {Edge} from "../newGraphModel";
-import {ConnectionIndex} from "./ConnectionIndexAndNumberOfEdges";
+import {ConnectionIndex, NumberOfEdges} from "./ConnectionIndexAndNumberOfEdges";
 
-type InputType = Edge<OffsetElementsX & OffsetElementsY, ConnectionIndex>[];
-type OutputType = Edge<OffsetElementsX & OffsetElementsY, ConnectionIndex & MidPathSegmentOffsetY & EdgeIndex>[];
+type InputType = Edge<OffsetElementsX & OffsetElementsY & NumberOfEdges, ConnectionIndex>[];
+type OutputType = Edge<OffsetElementsX & OffsetElementsY & NumberOfEdges, ConnectionIndex & MidPathSegmentOffsetY & EdgeIndex>[];
 
 test('no edges need no MidPathSegmentOffsetY', () => {
     addMidPathSegmentOffsetY([]);
@@ -55,6 +55,35 @@ test('the second edge between two layers will get an increased index', () => {
             edgeIndex: 1, midPathSegmentOffsetY: 1,
             fromIndex: 0, from: {offsetElementsX: 1, offsetElementsY: 0},
             toIndex: 0, to: {offsetElementsX: 1, offsetElementsY: 1}
+        }
+    ];
+    expect(edges).toStrictEqual(expected);
+});
+
+test('edge end with same offsetElementsX receives a right side midPathSegmentOffsetY, if it connects more to the right', () => {
+    let edges: InputType = [
+        {
+            fromIndex: 0, from: {offsetElementsX: 0, offsetElementsY: 0, lowerSideEdges: 2},
+            toIndex: 0, to: {offsetElementsX: 0, offsetElementsY: 1, upperSideEdges: 1}
+        },
+        {
+            fromIndex: 1, from: {offsetElementsX: 0, offsetElementsY: 0, lowerSideEdges: 2},
+            toIndex: 0, to: {offsetElementsX: 1, offsetElementsY: 1, upperSideEdges: 1}
+        }
+    ];
+
+    addMidPathSegmentOffsetY(edges);
+
+    let expected: OutputType = [
+        {
+            edgeIndex: 0, midPathSegmentOffsetY: 1,
+            fromIndex: 0, from: {offsetElementsX: 0, offsetElementsY: 0, lowerSideEdges: 2},
+            toIndex: 0, to: {offsetElementsX: 0, offsetElementsY: 1, upperSideEdges: 1}
+        },
+        {
+            edgeIndex: 1, midPathSegmentOffsetY: 0,
+            fromIndex: 1, from: {offsetElementsX: 0, offsetElementsY: 0, lowerSideEdges: 2},
+            toIndex: 0, to: {offsetElementsX: 1, offsetElementsY: 1, upperSideEdges: 1}
         }
     ];
     expect(edges).toStrictEqual(expected);
