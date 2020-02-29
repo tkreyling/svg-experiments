@@ -10,17 +10,17 @@ export type ConnectionIndex = {
 }
 
 export type NumberOfEdges = {
-    upperSideEdges: number
-    lowerSideEdges: number
+    upperSideEdges?: number
+    lowerSideEdges?: number
 }
 
 export function addConnectionIndexAndNumberOfEdgesG<N extends OffsetElementsY & OffsetElementsX & ElementKey, E, G>(graph: Graph<N, E>):
     Graph<N & NumberOfEdges, E & ConnectionIndex> {
-    connectionIndexAndNumberOfEdges(graph.edges);
+    addConnectionIndexAndNumberOfEdges(graph.edges);
     return graph as Graph<N & NumberOfEdges, E & ConnectionIndex>;
 }
 
-export function connectionIndexAndNumberOfEdges(edges: Edge<OffsetElementsY & OffsetElementsX & ElementKey, unknown>[]) {
+export function addConnectionIndexAndNumberOfEdges(edges: Edge<OffsetElementsY & OffsetElementsX & ElementKey, unknown>[]) {
     type NodeSide = {
         node: OffsetElementsY & OffsetElementsX
         side: "LOWER" | "UPPER"

@@ -37,7 +37,7 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
     node: N, edgeIndex: number, otherNode: N
 ) {
     let onLowerSide = node.offsetElementsY <= otherNode.offsetElementsY;
-    let nodeCenteringOffset = (ELEMENT_WIDTH - ((onLowerSide ? node.lowerSideEdges : node.upperSideEdges) - 1) * EDGE_SPACING) / 2;
+    let nodeCenteringOffset = (ELEMENT_WIDTH - (((onLowerSide ? node.lowerSideEdges : node.upperSideEdges) || 0) - 1) * EDGE_SPACING) / 2;
     return {
         x: node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
             + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
