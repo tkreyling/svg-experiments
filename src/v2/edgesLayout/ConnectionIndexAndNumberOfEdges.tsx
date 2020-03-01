@@ -66,7 +66,7 @@ export function addConnectionIndexAndNumberOfEdges(edges: EdgeType[]) {
         let otherLayer = edgeEnds.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsY !== node.offsetElementsY);
 
         before.sort(and(descending(e => e.reverseNode.offsetElementsX), descending(e => e.edge.edgeIndex)));
-        otherLayer.sort(ascending(e => e.reverseNode.offsetElementsX));
+        otherLayer.sort(and(ascending(e => e.reverseNode.offsetElementsX), descending(e => e.reverseNode.offsetElementsY)));
         after.sort(and(descending(e => e.reverseNode.offsetElementsX), ascending(e => e.edge.edgeIndex)));
 
         let all = before.concat(otherLayer).concat(after);
