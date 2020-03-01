@@ -22,7 +22,7 @@ import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
 import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
-import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 
 type Props = Container<
     ElementKey &
@@ -31,7 +31,7 @@ type Props = Container<
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom &
-    MidPathSegmentOffsetMaxPreviousY>;
+    MidPathSegmentOffsetMaxPreviousY & EmbeddedMidPathSegmentY>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
@@ -53,6 +53,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 container.borderIndexTop * BORDER_SPACING_TOP +
                 container.embeddedBorderIndexMaxTop * BORDER_SPACING_TOP +
                 container.embeddedBorderIndexMaxBottom * BORDER_SPACING_BOTTOM +
+                container.embeddedMidPathSegmentY * EDGE_SPACING +
                 container.borderIndexBottom * BORDER_SPACING_BOTTOM
                 }
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>

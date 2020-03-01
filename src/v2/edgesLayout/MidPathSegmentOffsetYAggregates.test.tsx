@@ -10,7 +10,7 @@ test('no edges need no additional space after a layer', () => {
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(expectedNode1, []);
     expect(state).toStrictEqual(expected);
 });
@@ -28,12 +28,12 @@ test('midPathSegmentOffsetMaxPreviousY is set for all layers', () => {
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode3 = expectedNode({offsetElementsX: 0, offsetElementsY: 2, midPathSegmentOffsetMaxPreviousY: 0});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode3 = expectedNode({offsetElementsX: 0, offsetElementsY: 2, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(
         {
-            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0,
+            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0,
             elements: [expectedNode1, expectedNode2, expectedNode3]
         },
         []);
@@ -55,11 +55,11 @@ test('one edge between two consecutive layers requires no additional space', () 
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 0});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(
         {
-            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0,
+            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0,
             elements: [expectedNode1, expectedNode2]
         },
         [{
@@ -85,11 +85,11 @@ test('two edges between two consecutive layers require additional spacing', () =
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(
         {
-            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0,
+            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 1,
             elements: [expectedNode1, expectedNode2]
         },
         [
@@ -116,11 +116,11 @@ test('an edge from a lower layer to an upper layer requires space below the uppe
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(
         {
-            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0,
+            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 1,
             elements: [expectedNode1, expectedNode2]
         },
         [
@@ -148,12 +148,12 @@ test('edges in layer above are considered for layer below with no edges', () => 
 
     addMidPathSegmentOffsetYAggregates(state);
 
-    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0});
-    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1});
-    let expectedNode3 = expectedNode({offsetElementsX: 0, offsetElementsY: 2, midPathSegmentOffsetMaxPreviousY: 1});
+    let expectedNode1 = expectedNode({offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 0});
+    let expectedNode2 = expectedNode({offsetElementsX: 0, offsetElementsY: 1, midPathSegmentOffsetMaxPreviousY: 1, embeddedMidPathSegmentY: 0});
+    let expectedNode3 = expectedNode({offsetElementsX: 0, offsetElementsY: 2, midPathSegmentOffsetMaxPreviousY: 1, embeddedMidPathSegmentY: 0});
     let expected: ExpectedType = graph(
         {
-            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0,
+            kind: "column", offsetElementsX: 0, offsetElementsY: 0, midPathSegmentOffsetMaxPreviousY: 0, embeddedMidPathSegmentY: 1,
             elements: [expectedNode1, expectedNode2, expectedNode3]
         },
         [
