@@ -40,6 +40,11 @@ export const Sample: React.FC = () => {
         }]
     };
     let edges = [
+        edge(node_2_1, node_4_1),
+        edge(node_2_1, node_4_1),
+        edge(node_2_1, node_4_3),
+        edge(node_2_1, node_4_3),
+        edge(node_2_1, node_4_4),
         edge(node_3_2, node_4_1),
         edge(node_3_2, node_4_3),
         edge(node_3_2, node_4_4),
