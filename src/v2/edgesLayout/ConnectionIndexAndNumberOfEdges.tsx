@@ -64,12 +64,15 @@ export function addConnectionIndexAndNumberOfEdges(edges: EdgeType[]) {
         let before = sameLayer.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsX <= node.offsetElementsX);
         let after = sameLayer.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsX >= node.offsetElementsX);
         let otherLayer = edgeEnds.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsY !== node.offsetElementsY);
+        let otherLayerBefore = otherLayer.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsX <= node.offsetElementsX);
+        let otherLayerAfter = otherLayer.filter(edgeEnd => edgeEnd.reverseNode.offsetElementsX > node.offsetElementsX);
 
         before.sort(and(descending(e => e.reverseNode.offsetElementsX), descending(e => e.edge.edgeIndex)));
-        otherLayer.sort(and(ascending(e => e.reverseNode.offsetElementsX), descending(e => e.reverseNode.offsetElementsY)));
+        otherLayerBefore.sort(and(ascending(e => e.reverseNode.offsetElementsX), descending(e => e.reverseNode.offsetElementsY)));
+        otherLayerAfter.sort(and(ascending(e => e.reverseNode.offsetElementsX), ascending(e => e.reverseNode.offsetElementsY)));
         after.sort(and(descending(e => e.reverseNode.offsetElementsX), ascending(e => e.edge.edgeIndex)));
 
-        let all = before.concat(otherLayer).concat(after);
+        let all = before.concat(otherLayerBefore).concat(otherLayerAfter).concat(after);
         all.forEach((edgeEnd, index) => {
             edgeEnd.setIndex(index);
         });
