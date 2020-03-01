@@ -4,35 +4,27 @@ import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {fromIsUpperLeft, getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
 import {ConnectionIndex, NumberOfEdges} from "./ConnectionIndexAndNumberOfEdges";
+import {EdgeIndex} from "./EdgeIndex";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
 }
 
-export type EdgeIndex = {
-    edgeIndex: number
-}
-
-export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX & NumberOfEdges, E extends ConnectionIndex>(graph: Graph<N, E>):
-    Graph<N, E & MidPathSegmentOffsetY & EdgeIndex> {
+export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX & NumberOfEdges, E extends ConnectionIndex & EdgeIndex>(graph: Graph<N, E>):
+    Graph<N, E & MidPathSegmentOffsetY> {
     addMidPathSegmentOffsetY(graph.edges);
-    return graph as unknown as Graph<N, E & MidPathSegmentOffsetY & EdgeIndex>;
+    return graph as unknown as Graph<N, E & MidPathSegmentOffsetY>;
 }
 
-export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex>[]) {
-    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, EdgeIndex & ConnectionIndex>)[]>();
+export function addMidPathSegmentOffsetY(edges: Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex & EdgeIndex>[]) {
+    let groupedByOffsetElementsY = new Map<number, (Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex & EdgeIndex>)[]>();
 
-    edges
-        .map((edge, index) => {
-            return Object.assign<Edge<OffsetElementsY & OffsetElementsX & NumberOfEdges, ConnectionIndex>, EdgeIndex>(
-                edge, {edgeIndex: index});
-        })
-        .forEach(edge => {
-            let key = getUpperLeftNode(edge).offsetElementsY;
-            let edges = groupedByOffsetElementsY.get(key) || [];
-            edges.push(edge);
-            groupedByOffsetElementsY.set(key, edges);
-        });
+    edges.forEach(edge => {
+        let key = getUpperLeftNode(edge).offsetElementsY;
+        let edges = groupedByOffsetElementsY.get(key) || [];
+        edges.push(edge);
+        groupedByOffsetElementsY.set(key, edges);
+    });
 
     Array.from(groupedByOffsetElementsY.values()).forEach(addMidPathSegmentOffsetYForLayer);
 }

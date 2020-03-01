@@ -18,9 +18,10 @@ import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayo
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {Edge} from "./newGraphModel";
 import {getUpperLeftNode} from "./EdgeHelper";
-import {EdgeIndex, MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
+import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
+import {EdgeIndex} from "./edgesLayout/EdgeIndex";
 
 function getY<N extends OffsetElementsY &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &

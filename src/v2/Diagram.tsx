@@ -19,6 +19,7 @@ import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
 import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {addMidPathSegmentOffsetYAggregatesG} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {addConnectionIndexAndNumberOfEdgesG} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
+import {addEdgeIndexG} from "./edgesLayout/EdgeIndex";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -56,6 +57,7 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
         .map(addBorderIndexMaxBottomG)
         .map(addEmbeddedElementsXG)
         .map(addEmbeddedElementsYG)
+        .map(addEdgeIndexG)
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
