@@ -60,7 +60,7 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
         .map(graph => (
-            <svg viewBox={"0 0 1400 600"}>
+            <svg viewBox={"0 0 1600 800"}>
                 {allNodes(graph.element).map(NodeShape)}
                 {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
                 {graph.edges.map(EdgeShape)}
