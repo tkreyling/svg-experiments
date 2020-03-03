@@ -24,7 +24,7 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
             let from: NodeData = Object.assign<Node, NodeData>(node(), {
                 elementKey: elementKey,
                 offsetElementsY: lowerRightNode.offsetElementsY - 1,
-                offsetElementsX: Math.min(upperLeftNode.offsetElementsX, lowerRightNode.offsetElementsX) + 0.5
+                offsetElementsX: Math.min(upperLeftNode.offsetElementsX, lowerRightNode.offsetElementsX)
             });
             syntheticNodes.push(from);
             let syntheticEdge = {
