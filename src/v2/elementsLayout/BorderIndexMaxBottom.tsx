@@ -1,4 +1,4 @@
-import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElementsUsingGraph} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 import {BorderIndexBottom} from "./BorderIndexBottom";
 import {OffsetElementsY} from "./OffsetElementsY";
@@ -12,14 +12,15 @@ export type EmbeddedBorderIndexMaxBottom = { embeddedBorderIndexMaxBottom: numbe
 export function addBorderIndexMaxBottomG<N extends OffsetElementsY & BorderIndexBottom, E>(
     graph: Graph<N, E>
 ): Graph<N & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom, E> {
-    return transformElements<N, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom, E>(
+    return transformElementsUsingGraph<N, BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom, E>(
         graph, determineAndAddBorderIndexBottomAggregates);
 }
 
-function determineAndAddBorderIndexBottomAggregates(element: Element<OffsetElementsY & BorderIndexBottom>) {
-    let max = determineBorderIndexMaxBottom(element);
+function determineAndAddBorderIndexBottomAggregates(graph: Graph<OffsetElementsY & BorderIndexBottom, unknown>) {
+    let max = determineBorderIndexMaxBottom(graph.element);
     let sums = sumOfPreviousRows(max);
-    addBorderIndexMaxBottom(element, max, sums);
+    addBorderIndexMaxBottom(graph.element, max, sums);
+    graph.syntheticNodes.forEach(node => addBorderIndexMaxBottom(node, max, sums));
 }
 
 function determineBorderIndexMaxBottom(element: Element<OffsetElementsY & BorderIndexBottom>): Map<number, number> {
