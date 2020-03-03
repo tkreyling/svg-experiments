@@ -21,6 +21,7 @@ import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
+import {LowerLayerEdge} from "./edgesLayout/SyntheticNodesAndEdges";
 
 function getY<N extends OffsetElementsY &
     BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
@@ -49,7 +50,7 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
     BorderIndexMaxX & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom & BorderIndexMaxBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges,
-    EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex>> = edge => {
+    LowerLayerEdge<any, unknown> & EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getY(getUpperLeftNode(edge))
         + ELEMENT_HEIGHT
@@ -57,16 +58,39 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
         + VERTICAL_SPACING / 2
         + edge.midPathSegmentOffsetY * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
-    return (
-        <path key={edge.edgeIndex} d={
-            "M " + fromNode.x + " " + fromNode.y + " " +
-            "L " + fromNode.x + " " + upperNodeEdgesY + " " +
-            "L " + toNode.x + " " + upperNodeEdgesY + " " +
-            "L " + toNode.x + " " + toNode.y
-        }
-              stroke="black"
-              strokeWidth={STROKE_WIDTH}
-              fill="none"
-        />
-    );
+    if (!edge.lowerLayerEdge) {
+        return (
+            <path key={edge.edgeIndex} d={
+                "M " + fromNode.x + " " + fromNode.y + " " +
+                "L " + fromNode.x + " " + upperNodeEdgesY + " " +
+                "L " + toNode.x + " " + upperNodeEdgesY + " " +
+                "L " + toNode.x + " " + toNode.y
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
+        );
+    } else {
+        let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY>;
+        let lowerNodeEdgesY = getY(getUpperLeftNode(edge.lowerLayerEdge))
+            + ELEMENT_HEIGHT
+            + getUpperLeftNode(edge.lowerLayerEdge).borderIndexMaxBottom * BORDER_SPACING_BOTTOM
+            + VERTICAL_SPACING / 2
+            + lowerLayerEdge.midPathSegmentOffsetY * EDGE_SPACING;
+        return (
+            <path key={edge.edgeIndex} d={
+                "M " + fromNode.x + " " + fromNode.y + " " +
+                "L " + fromNode.x + " " + upperNodeEdgesY + " " +
+                "L " + (fromNode.x + toNode.x) / 2 + " " + upperNodeEdgesY + " " +
+                "L " + (fromNode.x + toNode.x) / 2 + " " + lowerNodeEdgesY + " " +
+                "L " + toNode.x + " " + lowerNodeEdgesY + " " +
+                "L " + toNode.x + " " + toNode.y
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
+        );
+    }
 };
