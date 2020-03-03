@@ -1,4 +1,4 @@
-import {Element, Graph, Node, node} from "../newGraphModel";
+import {Edge, Element, Graph, Node, node} from "../newGraphModel";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
@@ -7,7 +7,11 @@ import {assertNever} from "../assertNever";
 
 export type NodeData = OffsetElementsX & OffsetElementsY & ElementKey
 
-export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Graph<NodeData, unknown> {
+export type LowerLayerEdge<N, E> = {
+    lowerLayerEdge?: Edge<N, E>
+}
+
+export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Graph<NodeData, LowerLayerEdge<NodeData, unknown>> {
     let elementKey = Math.max(...allElements(graph.element).map(element => element.elementKey));
 
     let syntheticNodes: NodeData[] = [];
@@ -23,10 +27,13 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
                 offsetElementsX: Math.min(upperLeftNode.offsetElementsX, lowerRightNode.offsetElementsX) + 0.5
             });
             syntheticNodes.push(from);
-            return {
+            let syntheticEdge = {
                 from: from,
                 to: lowerRightNode
             };
+            Object.assign<Edge<NodeData, unknown>, LowerLayerEdge<NodeData, unknown>>(
+                edge, {lowerLayerEdge: syntheticEdge});
+            return syntheticEdge;
         });
 
     return Object.assign(graph, {syntheticNodes, syntheticEdges});

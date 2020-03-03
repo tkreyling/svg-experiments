@@ -1,5 +1,5 @@
-import {edge, Graph, graph, Node, node} from "../newGraphModel";
-import {addSyntheticNodesAndEdgesG, NodeData} from "./SyntheticNodesAndEdges";
+import {Edge, edge, Graph, graph, Node, node} from "../newGraphModel";
+import {addSyntheticNodesAndEdgesG, LowerLayerEdge, NodeData} from "./SyntheticNodesAndEdges";
 
 type InputType = Graph<NodeData, unknown>;
 
@@ -52,6 +52,9 @@ test('for an edge across multiple layers there is an additional edge in the lowe
     let expectedNode_3_1 = inputNode({elementKey: 3, offsetElementsX: 0, offsetElementsY: 2});
     let expectedNode_3_2 = inputNode({elementKey: 4, offsetElementsX: 1, offsetElementsY: 2});
     let syntheticNode = inputNode({elementKey: 5, offsetElementsX: 0.5, offsetElementsY: 1});
+    let syntheticEdge = edge(syntheticNode, expectedNode_3_2);
+    let expectedEdge = Object.assign<Edge<NodeData, unknown>, LowerLayerEdge<NodeData, unknown>>(
+        edge(expectedNode_1_1, expectedNode_3_2), {lowerLayerEdge: syntheticEdge});
     let expected: InputType = graph(
         {
             kind: "column",
@@ -70,9 +73,9 @@ test('for an edge across multiple layers there is an additional edge in the lowe
                 elements: [expectedNode_3_1, expectedNode_3_2]
             }]
         },
-        [edge(expectedNode_1_1, expectedNode_3_2)],
+        [expectedEdge],
         [syntheticNode],
-        [edge(syntheticNode, expectedNode_3_2)]
+        [syntheticEdge]
     );
     expect(state).toStrictEqual(expected);
 });
