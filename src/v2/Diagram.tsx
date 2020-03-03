@@ -20,6 +20,7 @@ import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {addMidPathSegmentOffsetYAggregatesG} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {addConnectionIndexAndNumberOfEdgesG} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 import {addEdgeIndexG} from "./edgesLayout/EdgeIndex";
+import {addSyntheticNodesAndEdgesG} from "./edgesLayout/SyntheticNodesAndEdges";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -43,11 +44,14 @@ function allContainers<N>(element: Element<N>): Container<N>[] {
     }
 }
 
-export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
-    return [graph]
+type DiagramProps = { graph: Graph<unknown, unknown> }
+
+export const Diagram: React.FC<DiagramProps> = props => {
+    return [props.graph]
         .map(addElementKeyG)
         .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)
+        .map(addSyntheticNodesAndEdgesG)
         .map(addBorderIndexLeftG)
         .map(addBorderIndexRightG)
         .map(addBorderIndexTopG)
@@ -61,11 +65,12 @@ export const Diagram: React.FC<Graph<unknown, unknown>> = graph => {
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
-        .map(graph => (
-            <svg viewBox={"0 0 1600 800"}>
-                {allNodes(graph.element).map(NodeShape)}
-                {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
-                {graph.edges.map(EdgeShape)}
-            </svg>
-        ))[0];
+        .map(graph =>
+            (
+                <svg viewBox={"0 0 1600 800"}>
+                    {allNodes(graph.element).map(NodeShape)}
+                    {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
+                    {graph.edges.map(EdgeShape)}
+                </svg>
+            ))[0];
 };

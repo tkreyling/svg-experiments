@@ -1,5 +1,5 @@
 import React from "react";
-import {edge, Element, node} from "./newGraphModel";
+import {edge, Element, graph, node} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const Sample: React.FC = () => {
@@ -72,6 +72,6 @@ export const Sample: React.FC = () => {
         edge(node_6_4, node_6_3)
     ];
     return (
-        <Diagram element={element} edges={edges}/>
+        <Diagram graph={graph(element, edges)}/>
     );
 };

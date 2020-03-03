@@ -26,10 +26,17 @@ export type Edge<N, E> = {
 export type Graph<N, E> = {
     element: Element<N>
     edges: Edge<N, E>[]
+    syntheticNodes: (Node & N)[]
+    syntheticEdges: Edge<N, E>[]
 }
 
-export function graph<N, E>(element: Element<N>, edges: Edge<N, E>[] = []): Graph<N, E> {
-    return {element: element, edges: edges};
+export function graph<N, E>(
+    element: Element<N>,
+    edges: Edge<N, E>[] = [],
+    syntheticNodes: (Node & N)[] = [],
+    syntheticEdges: Edge<N, E>[] = []
+): Graph<N, E> {
+    return {element, edges, syntheticNodes, syntheticEdges};
 }
 
 export function transformElements<N, A, E>(graph: Graph<N, E>, f: (element: Element<N>) => void): Graph<N & A, E> {
