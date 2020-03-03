@@ -16,7 +16,7 @@ import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {Edge} from "./newGraphModel";
-import {getUpperLeftNode} from "./EdgeHelper";
+import {getLowerRightNode, getUpperLeftNode} from "./EdgeHelper";
 import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
@@ -32,6 +32,11 @@ function getY<N extends OffsetElementsY &
         + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
 }
 
+function getX<N extends OffsetElementsX & BorderIndexMaxX>(node: N) {
+    return node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+        + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X;
+}
+
 function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
     BorderIndexMaxX & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges>(
@@ -40,9 +45,7 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
     let onLowerSide = node.offsetElementsY <= otherNode.offsetElementsY;
     let nodeCenteringOffset = (ELEMENT_WIDTH - (((onLowerSide ? node.lowerSideEdges : node.upperSideEdges) || 0) - 1) * EDGE_SPACING) / 2;
     return {
-        x: node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-            + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
-            + nodeCenteringOffset + edgeIndex * EDGE_SPACING,
+        x: getX(node) + nodeCenteringOffset + edgeIndex * EDGE_SPACING,
         y: getY(node) + (onLowerSide ? ELEMENT_HEIGHT : 0)
     };
 }
@@ -78,12 +81,17 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
             + getUpperLeftNode(edge.lowerLayerEdge).borderIndexMaxBottom * BORDER_SPACING_BOTTOM
             + VERTICAL_SPACING / 2
             + lowerLayerEdge.midPathSegmentOffsetY * EDGE_SPACING;
+        let isUpperNodeOnTheLeft = getUpperLeftNode(edge).offsetElementsX < getLowerRightNode(edge).offsetElementsX;
+        let besideTopNodeX = getX(getUpperLeftNode(edge))
+            + (isUpperNodeOnTheLeft ?
+                ELEMENT_WIDTH + getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X :
+                - getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X);
         return (
             <path key={edge.edgeIndex} d={
                 "M " + fromNode.x + " " + fromNode.y + " " +
                 "L " + fromNode.x + " " + upperNodeEdgesY + " " +
-                "L " + (fromNode.x + toNode.x) / 2 + " " + upperNodeEdgesY + " " +
-                "L " + (fromNode.x + toNode.x) / 2 + " " + lowerNodeEdgesY + " " +
+                "L " + besideTopNodeX + " " + upperNodeEdgesY + " " +
+                "L " + besideTopNodeX + " " + lowerNodeEdgesY + " " +
                 "L " + toNode.x + " " + lowerNodeEdgesY + " " +
                 "L " + toNode.x + " " + toNode.y
             }
