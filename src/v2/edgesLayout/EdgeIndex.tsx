@@ -6,7 +6,7 @@ export type EdgeIndex = {
 
 export function addEdgeIndexG<N, E>(graph: Graph<N, E>):
     Graph<N, E & EdgeIndex> {
-    addEdgeIndex(graph.edges);
+    addEdgeIndex(graph.edges.concat(graph.syntheticEdges));
     return graph as unknown as Graph<N, E & EdgeIndex>;
 }
 
