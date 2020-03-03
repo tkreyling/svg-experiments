@@ -17,7 +17,7 @@ export type MidPathSegmentOffsetY = {
 
 export function addMidPathSegmentOffsetYG<N extends OffsetElementsY & OffsetElementsX & NumberOfEdges, E extends ConnectionIndex & EdgeIndex>(graph: Graph<N, E>):
     Graph<N, E & MidPathSegmentOffsetY> {
-    addMidPathSegmentOffsetY(graph.edges);
+    addMidPathSegmentOffsetY(graph.edges.concat(graph.syntheticEdges));
     return graph as unknown as Graph<N, E & MidPathSegmentOffsetY>;
 }
 
