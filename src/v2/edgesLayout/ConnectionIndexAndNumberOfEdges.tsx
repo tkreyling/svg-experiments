@@ -4,6 +4,8 @@ import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {Edge, Graph} from "../newGraphModel";
 import {and, ascending, descending} from "../../v1/sorting";
 import {EdgeIndex} from "./EdgeIndex";
+import {LowerLayerEdge} from "./SyntheticNodesAndEdges";
+import {fromIsUpperLeft} from "../EdgeHelper";
 
 export type ConnectionIndex = {
     fromIndex: number
@@ -15,9 +17,14 @@ export type NumberOfEdges = {
     lowerSideEdges?: number
 }
 
-export function addConnectionIndexAndNumberOfEdgesG<N extends OffsetElementsY & OffsetElementsX & ElementKey, E extends EdgeIndex, G>(graph: Graph<N, E>):
+export function addConnectionIndexAndNumberOfEdgesG<
+    N extends OffsetElementsY & OffsetElementsX & ElementKey,
+    E extends EdgeIndex & LowerLayerEdge<unknown, unknown>, G>(
+        graph: Graph<N, E>):
     Graph<N & NumberOfEdges, E & ConnectionIndex> {
     addConnectionIndexAndNumberOfEdges(graph.edges);
+    let edgesWithConnectionIndex = graph.edges as unknown as Edge<OffsetElementsX & OffsetElementsY, ConnectionIndex & LowerLayerEdge<unknown, unknown>>[];
+    copyConnectionIndexToLowerLayerEdge(edgesWithConnectionIndex);
     return graph as Graph<N & NumberOfEdges, E & ConnectionIndex>;
 }
 
@@ -86,4 +93,23 @@ export function addConnectionIndexAndNumberOfEdges(edges: EdgeType[]) {
             });
         }
     });
+}
+
+function copyConnectionIndexToLowerLayerEdge(edges: Edge<OffsetElementsX & OffsetElementsY, ConnectionIndex & LowerLayerEdge<unknown, unknown>>[]) {
+    edges.forEach(edge => {
+        if (edge.lowerLayerEdge) {
+            Object.assign<Edge<unknown, unknown>, ConnectionIndex>(edge.lowerLayerEdge, {
+                fromIndex: 0,
+                toIndex: getLowerRightNodeIndex(edge)
+            });
+        }
+    });
+}
+
+export function getUpperLeftNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
+    return fromIsUpperLeft(edge) ? edge.fromIndex : edge.toIndex;
+}
+
+export function getLowerRightNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
+    return fromIsUpperLeft(edge) ? edge.toIndex : edge.fromIndex;
 }

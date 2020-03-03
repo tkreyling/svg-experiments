@@ -2,8 +2,13 @@ import {and, ascending, descending} from "../../v1/sorting";
 import {Edge, Graph} from "../newGraphModel";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
-import {fromIsUpperLeft, getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
-import {ConnectionIndex, NumberOfEdges} from "./ConnectionIndexAndNumberOfEdges";
+import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
+import {
+    ConnectionIndex,
+    getLowerRightNodeIndex,
+    getUpperLeftNodeIndex,
+    NumberOfEdges
+} from "./ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./EdgeIndex";
 
 export type MidPathSegmentOffsetY = {
@@ -84,12 +89,4 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
 
         indexOffset += Math.max(before.length, after.length);
     });
-}
-
-function getUpperLeftNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
-    return fromIsUpperLeft(edge) ? edge.fromIndex : edge.toIndex;
-}
-
-function getLowerRightNodeIndex<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, ConnectionIndex>): number {
-    return fromIsUpperLeft(edge) ? edge.toIndex : edge.fromIndex;
 }
