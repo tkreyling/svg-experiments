@@ -65,12 +65,15 @@ export const Diagram: React.FC<DiagramProps> = props => {
         .map(addConnectionIndexAndNumberOfEdgesG)
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
-        .map(graph =>
-            (
+        .map(graph => {
+            console.log(graph.edges);
+            console.log(graph.syntheticEdges);
+            return (
                 <svg viewBox={"0 0 1600 800"}>
                     {allNodes(graph.element).map(NodeShape)}
                     {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
                     {graph.edges.map(EdgeShape)}
                 </svg>
-            ))[0];
+            );
+        })[0];
 };

@@ -29,6 +29,7 @@ export function addMidPathSegmentOffsetYAggregates<N extends NodeData, E extends
     let maxs = determineMidPathSegmentMaxOffsetY(graph.edges.concat(graph.syntheticEdges));
     let sums = sumOfPreviousRowsFillLayers(maxs, maxOffsetY);
     applyMidPathSegmentOffsetYAggregates(graph.element, maxs, sums);
+    graph.syntheticNodes.forEach(node => applyMidPathSegmentOffsetYAggregates(node, maxs, sums));
 }
 
 function determineMaxOffsetY(element: Element<OffsetElementsY>): number {
