@@ -15,7 +15,6 @@ import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {Edge} from "./newGraphModel";
 import {getUpperLeftNode} from "./EdgeHelper";
 import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
@@ -24,16 +23,16 @@ import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNu
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
 
 function getY<N extends OffsetElementsY &
-    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
+    BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY>(node: N) {
     return node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-        + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop - node.borderIndexTop) * BORDER_SPACING_TOP
+        + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
         + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
         + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
 }
 
 function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
-    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
+    BorderIndexMaxX & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
 ) {
@@ -48,7 +47,7 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
 }
 
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
-    BorderIndexMaxX & BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom & BorderIndexMaxBottom &
+    BorderIndexMaxX & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom & BorderIndexMaxBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges,
     EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
