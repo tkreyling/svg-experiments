@@ -2,16 +2,18 @@ import React from "react";
 import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {
+    BORDER_SPACING_BOTTOM,
+    BORDER_SPACING_TOP,
+    BORDER_SPACING_X,
+    EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    BORDER_SPACING_X,
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
-    VERTICAL_SPACING, BORDER_SPACING_TOP, BORDER_SPACING_BOTTOM, EDGE_SPACING
+    VERTICAL_SPACING
 } from "./styling";
 import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
@@ -19,7 +21,7 @@ import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffs
 type Props = ElementKey &
     OffsetElementsX & BorderIndexMaxX &
     OffsetElementsY &
-    BorderIndexMaxPreviousTop & BorderIndexMaxTop & BorderIndexTop &
+    BorderIndexMaxPreviousTop & BorderIndexMaxTop &
     BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY;
 
@@ -31,7 +33,7 @@ export const NodeShape: React.FC<Props> = node => {
                 + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
                 }
                 y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop - node.borderIndexTop) * BORDER_SPACING_TOP
+                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
                 + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
                 + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
                 }
@@ -43,7 +45,7 @@ export const NodeShape: React.FC<Props> = node => {
                 x={node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING) +
                 node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X}
                 y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop - node.borderIndexTop) * BORDER_SPACING_TOP
+                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
                 + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
                 + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
                 + 15
