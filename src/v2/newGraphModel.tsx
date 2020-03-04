@@ -69,7 +69,6 @@ export function allNodes<N>(element: Element<N>): (Node & N)[] {
         case "node":
             return [element];
         case "row":
-            return element.elements.flatMap(allNodes);
         case "column":
             return element.elements.flatMap(allNodes);
         default: {
@@ -83,9 +82,21 @@ export function allContainers<N>(element: Element<N>): Container<N>[] {
         case "node":
             return [];
         case "row":
-            return element.elements.flatMap(allContainers).concat(element);
         case "column":
             return element.elements.flatMap(allContainers).concat(element);
+        default: {
+            assertNever(element);
+        }
+    }
+}
+
+export function allElements<N>(element: Element<N>): Element<N>[] {
+    switch (element.kind) {
+        case "node":
+            return [element];
+        case "row":
+        case "column":
+            return element.elements.flatMap(allElements).concat(element);
         default: {
             assertNever(element);
         }

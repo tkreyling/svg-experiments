@@ -1,9 +1,8 @@
-import {Edge, Element, Graph, Node, node} from "../newGraphModel";
+import {allElements, Edge, Graph, Node, node} from "../newGraphModel";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
 import {ElementKey} from "../elementsLayout/ElementKey";
-import {assertNever} from "../assertNever";
 
 export type NodeData = OffsetElementsX & OffsetElementsY & ElementKey
 
@@ -52,15 +51,4 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
         });
 
     return Object.assign(graph, {syntheticNodes, syntheticEdges});
-}
-
-function allElements<N>(element: Element<N>): Element<N>[] {
-    switch (element.kind) {
-        case "node": return [element];
-        case "row": return element.elements.flatMap(allElements).concat(element);
-        case "column": return element.elements.flatMap(allElements).concat(element);
-        default: {
-            assertNever(element);
-        }
-    }
 }
