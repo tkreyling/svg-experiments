@@ -10,7 +10,7 @@ import {
     NumberOfEdges
 } from "./ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./EdgeIndex";
-import {isMultiLayerEdge} from "./SyntheticNodesAndEdges";
+import {IsLowerLayerEdge, isMultiLayerEdge} from "./SyntheticNodesAndEdges";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
@@ -60,7 +60,7 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let otherLayerBefore = otherLayer.filter(edge => {
             if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX) {
                 if (isMultiLayerEdge(edge)) return false;
-                if ((edge as any).isLowerLayerEdge) return false;
+                if ((edge as unknown as IsLowerLayerEdge).isLowerLayerEdge) return false;
 
                 return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 <
                     getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
@@ -70,7 +70,7 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let otherLayerAfter = otherLayer.filter(edge => {
             if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX) {
                 if (isMultiLayerEdge(edge)) return true;
-                if ((edge as any).isLowerLayerEdge) return true;
+                if ((edge as unknown as IsLowerLayerEdge).isLowerLayerEdge) return true;
 
                 return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 >=
                     getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
