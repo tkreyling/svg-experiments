@@ -10,6 +10,9 @@ import {
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
+    SYMBOL_SPACING,
+    SYMBOL_WIDTH,
+    TEXT_PADDING,
     VERTICAL_SPACING
 } from "./styling";
 import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
@@ -27,37 +30,33 @@ type Props = ElementKey &
     MidPathSegmentOffsetMaxPreviousY;
 
 export const NodeShape: React.FC<Props> = node => {
+    let hasSymbol = false;
+    let x = node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+        + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
+        + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING;
+    let y = node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+        + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
+        + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
+        + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
     return (
         <g key={node.elementKey}>
             <rect
-                x={node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-                + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
-                + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING
-                }
-                y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
-                + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-                + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
-                }
+                x={x}
+                y={y}
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
                 fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
 
-            <text
-                x={node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-                + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
-                + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING
-                }
-                y={node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
-                + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-                + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
-                + 15
-                }
-                fill="black">{
-                node.midPathSegmentOffsetMaxPreviousY
-            }
+            <text x={x + TEXT_PADDING} y={y + ELEMENT_HEIGHT / 2} fill="black"
+                  clipPath={"url(#clip-element-text-" + node.elementKey + ")"}>Some Node
             </text>
+
+            <clipPath id={"clip-element-text-" + node.elementKey}>
+                <rect
+                    x={x + TEXT_PADDING} y={y}
+                    width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (hasSymbol ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                    height={ELEMENT_HEIGHT}/>
+            </clipPath>
         </g>
     );
 };

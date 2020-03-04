@@ -7,3 +7,6 @@ export const HORIZONTAL_SPACING = 10;
 export const VERTICAL_SPACING = 20;
 export const EDGE_SPACING = 10;
 export const STROKE_WIDTH = 0.5;
+export const TEXT_PADDING = 5;
+export const SYMBOL_WIDTH = 12;
+export const SYMBOL_SPACING = 3;
