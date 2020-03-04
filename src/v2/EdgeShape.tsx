@@ -16,7 +16,7 @@ import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {Edge} from "./newGraphModel";
-import {getLowerRightNode, getUpperLeftNode} from "./EdgeHelper";
+import {getLeftUpperNode, getUpperLeftNode} from "./EdgeHelper";
 import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
@@ -82,12 +82,9 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
             + getUpperLeftNode(edge.lowerLayerEdge).borderIndexMaxBottom * BORDER_SPACING_BOTTOM
             + VERTICAL_SPACING / 2
             + lowerLayerEdge.midPathSegmentOffsetY * EDGE_SPACING;
-        let isUpperNodeOnTheLeft = getUpperLeftNode(edge).offsetElementsX < getLowerRightNode(edge).offsetElementsX;
-        let besideTopNodeX = getX(getUpperLeftNode(edge))
-            + (isUpperNodeOnTheLeft ?
-                ELEMENT_WIDTH + getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X :
-                - getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X)
-        + (edge.crossLayerPathSegmentOffsetX || 0) * EDGE_SPACING;
+        let besideTopNodeX = getX(getLeftUpperNode(edge))
+            + ELEMENT_WIDTH + getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X
+            + (edge.crossLayerPathSegmentOffsetX || 0) * EDGE_SPACING;
         return (
             <path key={edge.edgeIndex} d={
                 "M " + fromNode.x + " " + fromNode.y + " " +

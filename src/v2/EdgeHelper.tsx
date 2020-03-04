@@ -16,3 +16,14 @@ export function getUpperLeftNode<N extends OffsetElementsX & OffsetElementsY>(ed
 export function getLowerRightNode<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, unknown>): N {
     return fromIsUpperLeft(edge) ? edge.to : edge.from;
 }
+
+export function fromIsLeftUpper<N extends OffsetElementsX & OffsetElementsY, E>(edge: Edge<N, E>) {
+    if (edge.from.offsetElementsX === edge.to.offsetElementsX) {
+        return edge.from.offsetElementsY <= edge.to.offsetElementsY;
+    }
+    return edge.from.offsetElementsX < edge.to.offsetElementsX;
+}
+
+export function getLeftUpperNode<N extends OffsetElementsX & OffsetElementsY>(edge: Edge<N, unknown>): N {
+    return fromIsLeftUpper(edge) ? edge.from : edge.to;
+}
