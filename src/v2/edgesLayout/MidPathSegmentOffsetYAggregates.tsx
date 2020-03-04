@@ -7,16 +7,14 @@ import {sumOfPreviousRowsFillLayers} from "../sumOfPreviousRows";
 import {assertNever} from "../assertNever";
 import {getMostBottomOffsetElementsY} from "../getMostBottomOffsetElementsY";
 
+export type MidPathSegmentOffsetMaxY = { midPathSegmentOffsetMaxY: number };
+export type MidPathSegmentOffsetMaxPreviousY = { midPathSegmentOffsetMaxPreviousY: number }
+export type EmbeddedMidPathSegmentY = { embeddedMidPathSegmentY: number };
+
 export type NodeData = OffsetElementsX & OffsetElementsY
 export type EdgeData = MidPathSegmentOffsetY
 type EdgeType = Edge<NodeData, EdgeData>
-export type AddedNodeData = MidPathSegmentOffsetMaxPreviousY & EmbeddedMidPathSegmentY
-
-export type MidPathSegmentOffsetMaxPreviousY = {
-    midPathSegmentOffsetMaxPreviousY: number
-}
-
-export type EmbeddedMidPathSegmentY = { embeddedMidPathSegmentY: number };
+export type AddedNodeData = MidPathSegmentOffsetMaxY & MidPathSegmentOffsetMaxPreviousY & EmbeddedMidPathSegmentY
 
 export function addMidPathSegmentOffsetYAggregatesG<N extends NodeData, E extends EdgeData>(
     graph: Graph<N, E>
@@ -25,23 +23,11 @@ export function addMidPathSegmentOffsetYAggregatesG<N extends NodeData, E extend
 }
 
 export function addMidPathSegmentOffsetYAggregates<N extends NodeData, E extends EdgeData>(graph: Graph<N, E>) {
-    let maxOffsetY = determineMaxOffsetY(graph.element);
+    let maxOffsetY = getMostBottomOffsetElementsY(graph.element);
     let maxs = determineMidPathSegmentMaxOffsetY(graph.edges.concat(graph.syntheticEdges));
     let sums = sumOfPreviousRowsFillLayers(maxs, maxOffsetY);
     applyMidPathSegmentOffsetYAggregates(graph.element, maxs, sums);
     graph.syntheticNodes.forEach(node => applyMidPathSegmentOffsetYAggregates(node, maxs, sums));
-}
-
-function determineMaxOffsetY(element: Element<OffsetElementsY>): number {
-    switch (element.kind) {
-        case "node": return element.offsetElementsY;
-        case "column":
-        case "row":
-            return Math.max(...element.elements.map(determineMaxOffsetY));
-        default: {
-            assertNever(element);
-        }
-    }
 }
 
 function determineMidPathSegmentMaxOffsetY(edges: EdgeType[]): Map<number, number> {
@@ -72,6 +58,7 @@ function applyMidPathSegmentOffsetYAggregates<N extends NodeData, E extends Edge
     switch (element.kind) {
         case "node": {
             Object.assign<Node, AddedNodeData>(element, {
+                midPathSegmentOffsetMaxY: current.get(element.offsetElementsY) || 0,
                 midPathSegmentOffsetMaxPreviousY: sums.get(element.offsetElementsY) || 0,
                 embeddedMidPathSegmentY: 0
             });
@@ -79,6 +66,7 @@ function applyMidPathSegmentOffsetYAggregates<N extends NodeData, E extends Edge
         }
         case "row": {
             Object.assign<Row<unknown>, AddedNodeData>(element, {
+                midPathSegmentOffsetMaxY: current.get(element.offsetElementsY) || 0,
                 midPathSegmentOffsetMaxPreviousY: sums.get(element.offsetElementsY) || 0,
                 embeddedMidPathSegmentY: calculateEmbeddedPaths(element, current)
             });
@@ -88,6 +76,7 @@ function applyMidPathSegmentOffsetYAggregates<N extends NodeData, E extends Edge
         }
         case "column": {
             Object.assign<Column<unknown>, AddedNodeData>(element, {
+                midPathSegmentOffsetMaxY: current.get(element.offsetElementsY) || 0,
                 midPathSegmentOffsetMaxPreviousY: sums.get(element.offsetElementsY) || 0,
                 embeddedMidPathSegmentY: calculateEmbeddedPaths(element, current)
             });
