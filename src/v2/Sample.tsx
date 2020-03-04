@@ -73,6 +73,7 @@ export const Sample: React.FC = () => {
         edge(node_6_2, node_4_5),
         edge(node_6_3, node_4_5),
         edge(node_6_4, node_4_5),
+        edge(node_6_4, node_6_3),
         edge(node_6_4, node_6_3)
     ];
     return (
