@@ -3,13 +3,13 @@ import {edge, Element, graph, node} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const Sample: React.FC = () => {
-    let node_1_1 = node();
+    let node_1_1 = node("Some node");
     let node_1_2 = node();
     let node_2_1 = node();
     let node_2_2 = node();
     let node_3_1 = node();
     let node_3_2 = node();
-    let node_4_1 = node();
+    let node_4_1 = node("Some node with long text");
     let node_4_2 = node();
     let node_4_3 = node();
     let node_4_4 = node();

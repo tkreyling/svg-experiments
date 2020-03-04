@@ -21,8 +21,9 @@ import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBotto
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
+import {Node} from "./newGraphModel"
 
-type Props = ElementKey &
+type Props = Node & ElementKey &
     OffsetElementsX & BorderIndexMaxX & CrossLayerPathSegmentOffsetMaxX &
     OffsetElementsY &
     BorderIndexMaxPreviousTop & BorderIndexMaxTop &
@@ -41,22 +42,26 @@ export const NodeShape: React.FC<Props> = node => {
     return (
         <g key={node.elementKey}>
             <rect
-                x={x}
-                y={y}
+                x={x} y={y}
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
                 fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
+            {node.name !== undefined &&
+            <g>
+                <text
+                    x={x + TEXT_PADDING} y={y + ELEMENT_HEIGHT / 2}
+                    fill="black"
+                    clipPath={"url(#clip-element-text-" + node.elementKey + ")"}>{node.name}
+                </text>
 
-            <text x={x + TEXT_PADDING} y={y + ELEMENT_HEIGHT / 2} fill="black"
-                  clipPath={"url(#clip-element-text-" + node.elementKey + ")"}>Some Node
-            </text>
-
-            <clipPath id={"clip-element-text-" + node.elementKey}>
-                <rect
-                    x={x + TEXT_PADDING} y={y}
-                    width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (hasSymbol ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
-                    height={ELEMENT_HEIGHT}/>
-            </clipPath>
+                <clipPath id={"clip-element-text-" + node.elementKey}>
+                    <rect
+                        x={x + TEXT_PADDING} y={y}
+                        width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (hasSymbol ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                        height={ELEMENT_HEIGHT}/>
+                </clipPath>
+            </g>
+            }
         </g>
     );
 };

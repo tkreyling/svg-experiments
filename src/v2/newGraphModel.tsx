@@ -1,7 +1,8 @@
 import {assertNever} from "./assertNever";
 
 export type Node = {
-    kind: "node"
+    kind: "node",
+    name?: string
 };
 
 export type Row<N> = {
@@ -51,9 +52,10 @@ export function transformElementsUsingGraph<N, A, E>(graph: Graph<N, E>, f: (gra
     return graph as Graph<N & A, E>;
 }
 
-export function node(): Node {
+export function node(name?: string): Node {
     return {
-        kind: "node"
+        kind: "node",
+        name: name
     };
 }
 
