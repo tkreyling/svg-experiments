@@ -1,3 +1,5 @@
+import {assertNever} from "./assertNever";
+
 export type Node = {
     kind: "node"
 };
@@ -59,5 +61,33 @@ export function edge<N>(from: N, to: N): Edge<N, unknown> {
     return {
         from: from,
         to: to
+    }
+}
+
+export function allNodes<N>(element: Element<N>): (Node & N)[] {
+    switch (element.kind) {
+        case "node":
+            return [element];
+        case "row":
+            return element.elements.flatMap(allNodes);
+        case "column":
+            return element.elements.flatMap(allNodes);
+        default: {
+            assertNever(element);
+        }
+    }
+}
+
+export function allContainers<N>(element: Element<N>): Container<N>[] {
+    switch (element.kind) {
+        case "node":
+            return [];
+        case "row":
+            return element.elements.flatMap(allContainers).concat(element);
+        case "column":
+            return element.elements.flatMap(allContainers).concat(element);
+        default: {
+            assertNever(element);
+        }
     }
 }

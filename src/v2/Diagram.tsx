@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Element, Graph, Node} from "./newGraphModel";
+import {allContainers, allNodes, Element, Graph} from "./newGraphModel";
 import {NodeShape} from "./NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
@@ -44,28 +44,6 @@ import {
     HORIZONTAL_SPACING,
     VERTICAL_SPACING
 } from "./styling";
-
-function allNodes<N>(element: Element<N>): (Node & N)[] {
-    switch (element.kind) {
-        case "node": return [element];
-        case "row": return element.elements.flatMap(allNodes);
-        case "column": return element.elements.flatMap(allNodes);
-        default: {
-            assertNever(element);
-        }
-    }
-}
-
-function allContainers<N>(element: Element<N>): Container<N>[] {
-    switch (element.kind) {
-        case "node": return [];
-        case "row": return element.elements.flatMap(allContainers).concat(element);
-        case "column": return element.elements.flatMap(allContainers).concat(element);
-        default: {
-            assertNever(element);
-        }
-    }
-}
 
 function width(element: Element<OffsetElementsX & BorderIndexMaxX & CrossLayerPathSegmentOffsetMaxX>): number {
     switch (element.kind) {
