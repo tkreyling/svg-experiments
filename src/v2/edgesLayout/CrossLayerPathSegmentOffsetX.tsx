@@ -4,7 +4,7 @@ import {LowerLayerEdge} from "./SyntheticNodesAndEdges";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {EdgeIndex} from "./EdgeIndex";
 import {getLeftUpperNode, getLowerRightNode} from "../EdgeHelper";
-import {and, ascending} from "../../v1/sorting";
+import {and, ascending} from "../sorting";
 
 export type CrossLayerPathSegmentOffsetX = {
     crossLayerPathSegmentOffsetX?: number

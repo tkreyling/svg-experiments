@@ -1,4 +1,4 @@
-import {ascending} from "../v1/sorting";
+import {ascending} from "./sorting";
 
 export function sumOfPreviousRows(max: Map<number, number>): Map<number, number> {
     let result = new Map<number, number>();

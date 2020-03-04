@@ -2,7 +2,7 @@ import {ElementKey} from "../elementsLayout/ElementKey";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {Edge, Graph} from "../newGraphModel";
-import {and, ascending, descending} from "../../v1/sorting";
+import {and, ascending, descending} from "../sorting";
 import {EdgeIndex} from "./EdgeIndex";
 import {LowerLayerEdge} from "./SyntheticNodesAndEdges";
 import {fromIsUpperLeft} from "../EdgeHelper";

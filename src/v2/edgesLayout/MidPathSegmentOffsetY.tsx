@@ -1,4 +1,4 @@
-import {and, ascending, descending} from "../../v1/sorting";
+import {and, ascending, descending} from "../sorting";
 import {Edge, Graph} from "../newGraphModel";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
