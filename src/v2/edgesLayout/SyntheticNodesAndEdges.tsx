@@ -1,4 +1,4 @@
-import {allElements, Edge, Graph, Node, node} from "../newGraphModel";
+import {allElements, allNodes, Edge, Graph, Node, node} from "../newGraphModel";
 import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
@@ -25,9 +25,24 @@ export function isMultiLayerEdge(edge: Edge<OffsetElementsY, unknown>) {
 export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Graph<NodeData, LowerLayerEdge<NodeData, unknown>> {
     let elementKey = Math.max(...allElements(graph.element).map(element => element.elementKey));
 
+    let grid = new Map<string, boolean>();
+    allNodes(graph.element).forEach(node => grid.set(node.offsetElementsX + "_" + node.offsetElementsY, true));
+
+    function nodesOnPath(edge: Edge<OffsetElementsX & OffsetElementsY, unknown>): boolean {
+        let lowerRightNode = getLowerRightNode(edge);
+        let upperLeftNode = getUpperLeftNode(edge);
+        let offsetElementsX = Math.min(upperLeftNode.offsetElementsX, lowerRightNode.offsetElementsX);
+
+        for (let i = upperLeftNode.offsetElementsY + 1; i <= lowerRightNode.offsetElementsY - 1; i++) {
+            if (grid.has(offsetElementsX + "_" + i)) return true;
+        }
+        return false;
+    }
+
     let syntheticNodes: NodeData[] = [];
     let syntheticEdges = graph.edges
         .filter(isMultiLayerEdge)
+        .filter(nodesOnPath)
         .map(edge => {
             let lowerRightNode = getLowerRightNode(edge);
             let upperLeftNode = getUpperLeftNode(edge);
