@@ -20,6 +20,9 @@ export const Sample: React.FC = () => {
     let node_6_2 = node();
     let node_6_3 = node();
     let node_6_4 = node();
+    let node_7_1 = node();
+    let node_7_2 = node();
+    let node_7_3 = node();
     let element: Element<unknown> = {
         kind: "column", elements: [{
             kind: "row", border: "solid", elements: [{
@@ -28,7 +31,7 @@ export const Sample: React.FC = () => {
                 kind: "column", border: "solid", elements: [{
                     kind: "row", border: "solid", elements: [node_2_1, node_2_2]
                 }, node_3_1, node_3_2]
-            }]
+            }, node_7_1, node_7_2, node_7_3]
         }, {
             kind: "row", elements: [node_4_1, node_4_2, node_4_3, node_4_4, node_4_5]
         }, {
@@ -53,6 +56,7 @@ export const Sample: React.FC = () => {
         edge(node_2_1, node_4_4),
         edge(node_2_2, node_4_4),
         edge(node_2_2, node_4_2),
+        edge(node_2_2, node_6_4),
         edge(node_3_2, node_4_1),
         edge(node_3_2, node_4_1),
         edge(node_3_2, node_4_3),
@@ -74,7 +78,8 @@ export const Sample: React.FC = () => {
         edge(node_6_3, node_4_5),
         edge(node_6_4, node_4_5),
         edge(node_6_4, node_6_3),
-        edge(node_6_4, node_6_3)
+        edge(node_6_4, node_6_3),
+        edge(node_7_3, node_6_4)
     ];
     return (
         <Diagram graph={graph(element, edges)}/>
