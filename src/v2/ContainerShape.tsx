@@ -23,11 +23,13 @@ import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 
 type Props = Container<
     ElementKey &
     OffsetElementsX & EmbeddedElementsX &
     OffsetElementsY & EmbeddedElementsY &
+    CrossLayerPathSegmentOffsetMaxX &
     BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom &
@@ -39,6 +41,7 @@ export const ContainerShape: React.FC<Props> = container => {
             <rect
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
                 + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X
+                + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
                 }
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
@@ -47,6 +50,7 @@ export const ContainerShape: React.FC<Props> = container => {
                 }
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING
                 + ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X
+                + (container.embeddedElementsX - 1) * container.crossLayerPathSegmentOffsetMaxX * EDGE_SPACING
                 }
                 height={container.embeddedElementsY * ELEMENT_HEIGHT +
                 (container.embeddedElementsY - 1) * VERTICAL_SPACING +
@@ -61,6 +65,7 @@ export const ContainerShape: React.FC<Props> = container => {
             <text
                 x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
                 + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
+                + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
                 }
                 y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP

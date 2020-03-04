@@ -22,6 +22,7 @@ import {addConnectionIndexAndNumberOfEdgesG} from "./edgesLayout/ConnectionIndex
 import {addEdgeIndexG} from "./edgesLayout/EdgeIndex";
 import {addSyntheticNodesAndEdgesG} from "./edgesLayout/SyntheticNodesAndEdges";
 import {addCrossLayerPathSegmentOffsetXG} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
+import {addCrossLayerPathSegmentOffsetMaxXG} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 
 function allNodes<N>(element: Element<N>): (Node & N)[] {
     switch (element.kind) {
@@ -67,6 +68,7 @@ export const Diagram: React.FC<DiagramProps> = props => {
         .map(addMidPathSegmentOffsetYG)
         .map(addMidPathSegmentOffsetYAggregatesG)
         .map(addCrossLayerPathSegmentOffsetXG)
+        .map(addCrossLayerPathSegmentOffsetMaxXG)
         .map(graph => {
             console.log(graph.edges);
             console.log(graph.syntheticEdges);
