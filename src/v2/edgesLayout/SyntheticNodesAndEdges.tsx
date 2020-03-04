@@ -8,7 +8,13 @@ import {assertNever} from "../assertNever";
 export type NodeData = OffsetElementsX & OffsetElementsY & ElementKey
 
 export type LowerLayerEdge<N, E> = {
-    lowerLayerEdge?: Edge<N, E>
+    lowerLayerEdge?: Edge<N, E> & {
+        isLowerLayerEdge: true
+    }
+}
+
+export function isMultiLayerEdge(edge: Edge<OffsetElementsY, unknown>) {
+    return Math.abs(edge.from.offsetElementsY - edge.to.offsetElementsY) >= 2;
 }
 
 export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Graph<NodeData, LowerLayerEdge<NodeData, unknown>> {
@@ -16,7 +22,7 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
 
     let syntheticNodes: NodeData[] = [];
     let syntheticEdges = graph.edges
-        .filter(edge => Math.abs(edge.from.offsetElementsY - edge.to.offsetElementsY) >= 2)
+        .filter(isMultiLayerEdge)
         .map(edge => {
             let lowerRightNode = getLowerRightNode(edge);
             let upperLeftNode = getUpperLeftNode(edge);
@@ -27,13 +33,15 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
                 offsetElementsX: Math.min(upperLeftNode.offsetElementsX, lowerRightNode.offsetElementsX)
             });
             syntheticNodes.push(from);
-            let syntheticEdge = {
-                from: from,
-                to: lowerRightNode
-            };
+            let lowerLayerEdgeProperty: LowerLayerEdge<NodeData, unknown> = {
+                lowerLayerEdge: {
+                    from: from,
+                    to: lowerRightNode,
+                    isLowerLayerEdge: true
+                }};
             Object.assign<Edge<NodeData, unknown>, LowerLayerEdge<NodeData, unknown>>(
-                edge, {lowerLayerEdge: syntheticEdge});
-            return syntheticEdge;
+                edge, lowerLayerEdgeProperty);
+            return lowerLayerEdgeProperty.lowerLayerEdge;
         });
 
     return Object.assign(graph, {syntheticNodes, syntheticEdges});
