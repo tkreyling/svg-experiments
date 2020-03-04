@@ -73,7 +73,7 @@ export const Diagram: React.FC<DiagramProps> = props => {
             console.log(graph.edges);
             console.log(graph.syntheticEdges);
             return (
-                <svg viewBox={"0 0 1600 800"}>
+                <svg viewBox={"0 0 1600 850"}>
                     {allNodes(graph.element).map(NodeShape)}
                     {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
                     {graph.edges.map(EdgeShape)}
