@@ -22,6 +22,7 @@ import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffs
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
 import {LowerLayerEdge} from "./edgesLayout/SyntheticNodesAndEdges";
+import {CrossLayerPathSegmentOffsetX} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
 
 function getY<N extends OffsetElementsY &
     BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
@@ -53,7 +54,7 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
 export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
     BorderIndexMaxX & BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom & BorderIndexMaxBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges,
-    LowerLayerEdge<any, unknown> & EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex>> = edge => {
+    LowerLayerEdge<any, unknown> & EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex & CrossLayerPathSegmentOffsetX>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getY(getUpperLeftNode(edge))
         + ELEMENT_HEIGHT
@@ -85,7 +86,8 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
         let besideTopNodeX = getX(getUpperLeftNode(edge))
             + (isUpperNodeOnTheLeft ?
                 ELEMENT_WIDTH + getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X :
-                - getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X);
+                - getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X)
+        + (edge.crossLayerPathSegmentOffsetX || 0) * EDGE_SPACING;
         return (
             <path key={edge.edgeIndex} d={
                 "M " + fromNode.x + " " + fromNode.y + " " +
