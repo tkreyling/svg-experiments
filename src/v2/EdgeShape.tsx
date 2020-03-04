@@ -21,7 +21,7 @@ import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
-import {IsLowerLayerEdge, LowerLayerEdge} from "./edgesLayout/SyntheticNodesAndEdges";
+import {IsLowerLayerEdge, LowerLayerEdge, OriginalEdge} from "./edgesLayout/SyntheticNodesAndEdges";
 import {CrossLayerPathSegmentOffsetX} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
 import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 
@@ -80,7 +80,7 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
             />
         );
     } else {
-        let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY> & IsLowerLayerEdge;
+        let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY> & IsLowerLayerEdge & OriginalEdge<unknown, unknown>;
         let lowerNodeEdgesY = getY(getUpperLeftNode(edge.lowerLayerEdge))
             + ELEMENT_HEIGHT
             + getUpperLeftNode(edge.lowerLayerEdge).borderIndexMaxBottom * BORDER_SPACING_BOTTOM

@@ -11,8 +11,12 @@ export type IsLowerLayerEdge = {
     isLowerLayerEdge: true
 };
 
+export type OriginalEdge<N, E> = {
+    originalEdge: Edge<N, E>
+};
+
 export type LowerLayerEdge<N, E> = {
-    lowerLayerEdge?: Edge<N, E> & IsLowerLayerEdge
+    lowerLayerEdge?: Edge<N, E> & IsLowerLayerEdge & OriginalEdge<N, E>
 }
 
 export function isMultiLayerEdge(edge: Edge<OffsetElementsY, unknown>) {
@@ -39,7 +43,8 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
                 lowerLayerEdge: {
                     from: from,
                     to: lowerRightNode,
-                    isLowerLayerEdge: true
+                    isLowerLayerEdge: true,
+                    originalEdge: edge
                 }};
             Object.assign<Edge<NodeData, unknown>, LowerLayerEdge<NodeData, unknown>>(
                 edge, lowerLayerEdgeProperty);

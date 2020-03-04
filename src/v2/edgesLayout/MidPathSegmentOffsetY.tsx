@@ -10,7 +10,7 @@ import {
     NumberOfEdges
 } from "./ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./EdgeIndex";
-import {IsLowerLayerEdge, isMultiLayerEdge} from "./SyntheticNodesAndEdges";
+import {IsLowerLayerEdge, isMultiLayerEdge, OriginalEdge} from "./SyntheticNodesAndEdges";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
@@ -80,7 +80,20 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
 
         sameLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
         otherLayerBefore.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), ascending(edge => edge.edgeIndex)));
-        otherLayerAfter.sort(and(descending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
+        otherLayerAfter.sort(and(
+            descending(edge => getLowerRightNode(edge).offsetElementsX),
+            ascending(edge => {
+                if (!(edge as unknown as IsLowerLayerEdge).isLowerLayerEdge) return 0;
+                let edgeWithOriginalEdge = edge as unknown as OriginalEdge<OffsetElementsX & OffsetElementsY, EdgeIndex>;
+                return getUpperLeftNode(edgeWithOriginalEdge.originalEdge).offsetElementsX;
+            }),
+            ascending(edge => {
+                if (!(edge as unknown as IsLowerLayerEdge).isLowerLayerEdge) return 0;
+                let edgeWithOriginalEdge = edge as unknown as OriginalEdge<OffsetElementsX & OffsetElementsY, EdgeIndex>;
+                return edgeWithOriginalEdge.originalEdge.edgeIndex;
+            }),
+            descending(edge => edge.edgeIndex)
+        ));
         sameLayerAfter.sort(and(ascending(edge => getLowerRightNode(edge).offsetElementsX), descending(edge => edge.edgeIndex)));
 
         let before = sameLayerBefore.concat(otherLayerBefore);
