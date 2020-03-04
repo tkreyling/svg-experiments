@@ -80,7 +80,7 @@ export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
             />
         );
     } else {
-        let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY>;
+        let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY> & { isLowerLayerEdge: true };
         let lowerNodeEdgesY = getY(getUpperLeftNode(edge.lowerLayerEdge))
             + ELEMENT_HEIGHT
             + getUpperLeftNode(edge.lowerLayerEdge).borderIndexMaxBottom * BORDER_SPACING_BOTTOM

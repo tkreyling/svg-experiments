@@ -10,6 +10,7 @@ import {
     NumberOfEdges
 } from "./ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./EdgeIndex";
+import {isMultiLayerEdge} from "./SyntheticNodesAndEdges";
 
 export type MidPathSegmentOffsetY = {
     midPathSegmentOffsetY: number
@@ -57,15 +58,23 @@ function addMidPathSegmentOffsetYForLayer(edges: Edge<OffsetElementsY & OffsetEl
         let sameLayerAfter = sameLayer.filter(edge => getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX);
         let otherLayer = edges.filter(edge => getLowerRightNode(edge).offsetElementsY !== getUpperLeftNode(edge).offsetElementsY);
         let otherLayerBefore = otherLayer.filter(edge => {
-            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
+            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX) {
+                if (isMultiLayerEdge(edge)) return false;
+                if ((edge as any).isLowerLayerEdge) return false;
+
                 return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 <
                     getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
+            }
             return getLowerRightNode(edge).offsetElementsX <= getUpperLeftNode(edge).offsetElementsX
         });
         let otherLayerAfter = otherLayer.filter(edge => {
-            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX)
+            if (getLowerRightNode(edge).offsetElementsX === getUpperLeftNode(edge).offsetElementsX) {
+                if (isMultiLayerEdge(edge)) return true;
+                if ((edge as any).isLowerLayerEdge) return true;
+
                 return getLowerRightNodeIndex(edge) - ((getLowerRightNode(edge).upperSideEdges || 1) - 1) / 2 >=
                     getUpperLeftNodeIndex(edge) - ((getUpperLeftNode(edge).lowerSideEdges || 1) - 1) / 2;
+            }
             return getLowerRightNode(edge).offsetElementsX > getUpperLeftNode(edge).offsetElementsX
         });
 
