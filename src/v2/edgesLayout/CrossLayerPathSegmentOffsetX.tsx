@@ -3,7 +3,7 @@ import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
 import {LowerLayerEdge} from "./SyntheticNodesAndEdges";
 import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
 import {EdgeIndex} from "./EdgeIndex";
-import {getLowerRightNode, getUpperLeftNode} from "../EdgeHelper";
+import {getLeftUpperNode, getLowerRightNode} from "../EdgeHelper";
 import {and, ascending} from "../../v1/sorting";
 
 export type CrossLayerPathSegmentOffsetX = {
@@ -24,7 +24,7 @@ export function addCrossLayerPathSegmentOffsetX(edges: RequiredEdgeType[]) {
     let groupedByOffsetElementsX = new Map<number, RequiredEdgeType[]>();
 
     edges.filter(edge => edge.lowerLayerEdge).forEach(edge => {
-        let key = getUpperLeftNode(edge).offsetElementsX;
+        let key = getLeftUpperNode(edge).offsetElementsX;
         let edges = groupedByOffsetElementsX.get(key) || [];
         edges.push(edge);
         groupedByOffsetElementsX.set(key, edges);
@@ -37,7 +37,7 @@ function addCrossLayerPathSegmentOffsetXForSlice(edges: RequiredEdgeType[]) {
     let groupedByUpperNode = new Map<string, RequiredEdgeType[]>();
 
     edges.forEach(edge => {
-        let upperLeftNode = getUpperLeftNode(edge);
+        let upperLeftNode = getLeftUpperNode(edge);
         let key = upperLeftNode.offsetElementsY + "_" + upperLeftNode.offsetElementsX;
         let edges = groupedByUpperNode.get(key) || [];
         edges.push(edge);
