@@ -7,10 +7,12 @@ import {assertNever} from "../assertNever";
 
 export type NodeData = OffsetElementsX & OffsetElementsY & ElementKey
 
+export type IsLowerLayerEdge = {
+    isLowerLayerEdge: true
+};
+
 export type LowerLayerEdge<N, E> = {
-    lowerLayerEdge?: Edge<N, E> & {
-        isLowerLayerEdge: true
-    }
+    lowerLayerEdge?: Edge<N, E> & IsLowerLayerEdge
 }
 
 export function isMultiLayerEdge(edge: Edge<OffsetElementsY, unknown>) {
