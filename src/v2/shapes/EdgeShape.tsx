@@ -7,15 +7,15 @@ import {
     ELEMENT_WIDTH,
     STROKE_WIDTH,
     VERTICAL_SPACING
-} from "./styling";
-import {BorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
-import {Edge} from "./newGraphModel";
-import {getLeftUpperNode, getUpperLeftNode} from "./EdgeHelper";
-import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
-import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
-import {EdgeIndex} from "./edgesLayout/EdgeIndex";
-import {IsLowerLayerEdge, LowerLayerEdge, OriginalEdge} from "./edgesLayout/SyntheticNodesAndEdges";
-import {CrossLayerPathSegmentOffsetX} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
+} from "../styling";
+import {BorderIndexMaxBottom} from "../elementsLayout/BorderIndexMaxBottom";
+import {Edge} from "../newGraphModel";
+import {getLeftUpperNode, getUpperLeftNode} from "../EdgeHelper";
+import {MidPathSegmentOffsetY} from "../edgesLayout/MidPathSegmentOffsetY";
+import {ConnectionIndex, NumberOfEdges} from "../edgesLayout/ConnectionIndexAndNumberOfEdges";
+import {EdgeIndex} from "../edgesLayout/EdgeIndex";
+import {IsLowerLayerEdge, LowerLayerEdge, OriginalEdge} from "../edgesLayout/SyntheticNodesAndEdges";
+import {CrossLayerPathSegmentOffsetX} from "../edgesLayout/CrossLayerPathSegmentOffsetX";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 

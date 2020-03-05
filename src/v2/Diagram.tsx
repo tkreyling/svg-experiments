@@ -1,11 +1,11 @@
 import React from "react";
 import {allContainers, allNodes, Element, Graph} from "./newGraphModel";
-import {NodeShape} from "./NodeShape";
+import {NodeShape} from "./shapes/NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {addOffsetElementsXG, OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {addEmbeddedElementsXG} from "./elementsLayout/EmbeddedElementsX";
-import {ContainerShape} from "./ContainerShape";
+import {ContainerShape} from "./shapes/ContainerShape";
 import {addBorderIndexMaxXG, BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {addBorderIndexLeftG} from "./elementsLayout/BorderIndexLeft";
 import {addBorderIndexRightG} from "./elementsLayout/BorderIndexRight";
@@ -18,7 +18,7 @@ import {
 } from "./elementsLayout/BorderIndexMaxBottom";
 import {addBorderIndexMaxTopG, BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
-import {EdgeShape} from "./EdgeShape";
+import {EdgeShape} from "./shapes/EdgeShape";
 import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
 import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {

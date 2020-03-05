@@ -1,7 +1,7 @@
-import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
-import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
-import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+import {OffsetElementsY} from "../elementsLayout/OffsetElementsY";
+import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "../elementsLayout/BorderIndexMaxTop";
+import {BorderIndexMaxPreviousBottom} from "../elementsLayout/BorderIndexMaxBottom";
+import {MidPathSegmentOffsetMaxPreviousY} from "../edgesLayout/MidPathSegmentOffsetYAggregates";
 import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
@@ -9,8 +9,8 @@ import {
     ELEMENT_HEIGHT,
     MARGIN_Y,
     VERTICAL_SPACING
-} from "./styling";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
+} from "../styling";
+import {BorderIndexTop} from "../elementsLayout/BorderIndexTop";
 
 export type RequiredNodeDataGetElementTopY =
     OffsetElementsY &

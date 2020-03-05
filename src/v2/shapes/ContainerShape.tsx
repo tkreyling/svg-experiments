@@ -9,16 +9,16 @@ import {
     HORIZONTAL_SPACING,
     STROKE_WIDTH,
     VERTICAL_SPACING
-} from "./styling";
-import {Container} from "./newGraphModel";
-import {EmbeddedElementsX} from "./elementsLayout/EmbeddedElementsX";
-import {BorderIndexMaxBottom, EmbeddedBorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
-import {EmbeddedBorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
-import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
-import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
-import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
-import {ElementKey} from "./elementsLayout/ElementKey";
-import {EmbeddedMidPathSegmentY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+} from "../styling";
+import {Container} from "../newGraphModel";
+import {EmbeddedElementsX} from "../elementsLayout/EmbeddedElementsX";
+import {BorderIndexMaxBottom, EmbeddedBorderIndexMaxBottom} from "../elementsLayout/BorderIndexMaxBottom";
+import {EmbeddedBorderIndexMaxTop} from "../elementsLayout/BorderIndexMaxTop";
+import {BorderIndexBottom} from "../elementsLayout/BorderIndexBottom";
+import {BorderIndexRight} from "../elementsLayout/BorderIndexRight";
+import {EmbeddedElementsY} from "../elementsLayout/EmbeddedElementsY";
+import {ElementKey} from "../elementsLayout/ElementKey";
+import {EmbeddedMidPathSegmentY} from "../edgesLayout/MidPathSegmentOffsetYAggregates";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 

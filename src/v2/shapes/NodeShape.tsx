@@ -1,7 +1,7 @@
 import React from "react";
-import {ELEMENT_HEIGHT, ELEMENT_WIDTH, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
-import {ElementKey} from "./elementsLayout/ElementKey";
-import {Node} from "./newGraphModel"
+import {ELEMENT_HEIGHT, ELEMENT_WIDTH, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "../styling";
+import {ElementKey} from "../elementsLayout/ElementKey";
+import {Node} from "../newGraphModel"
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 

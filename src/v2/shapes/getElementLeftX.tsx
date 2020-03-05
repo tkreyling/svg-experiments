@@ -1,8 +1,8 @@
-import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
-import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
-import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
-import {BORDER_SPACING_X, EDGE_SPACING, ELEMENT_WIDTH, HORIZONTAL_SPACING, MARGIN_X} from "./styling";
-import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
+import {OffsetElementsX} from "../elementsLayout/OffsetElementsX";
+import {BorderIndexMaxX} from "../elementsLayout/BorderIndexMaxX";
+import {CrossLayerPathSegmentOffsetMaxX} from "../edgesLayout/CrossLayerPathSegmentOffsetMaxX";
+import {BORDER_SPACING_X, EDGE_SPACING, ELEMENT_WIDTH, HORIZONTAL_SPACING, MARGIN_X} from "../styling";
+import {BorderIndexLeft} from "../elementsLayout/BorderIndexLeft";
 
 export type RequiredNodeDataGetElementLeftX =
     OffsetElementsX &
