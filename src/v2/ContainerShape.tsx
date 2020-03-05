@@ -5,7 +5,7 @@ import {
     BORDER_SPACING_X, EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING,
+    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
@@ -39,11 +39,13 @@ export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={container.elementKey}>
             <rect
-                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1)  - container.borderIndexLeft) * BORDER_SPACING_X
+                x={MARGIN_X
+                + container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
                 + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
                 }
-                y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+                y={MARGIN_Y
+                + container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
                 + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
@@ -63,11 +65,13 @@ export const ContainerShape: React.FC<Props> = container => {
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
 
             <text
-                x={container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+                x={MARGIN_X
+                + container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
                 + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
                 + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
                 }
-                y={container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+                y={MARGIN_Y
+                + container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
                 + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
                 + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING

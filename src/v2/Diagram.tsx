@@ -41,13 +41,14 @@ import {
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING,
+    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
     VERTICAL_SPACING
 } from "./styling";
 
 function width(element: Element<OffsetElementsX & BorderIndexMaxX & CrossLayerPathSegmentOffsetMaxX>): number {
     switch (element.kind) {
-        case "node": return element.offsetElementsX * HORIZONTAL_SPACING
+        case "node": return MARGIN_X * 2
+            + element.offsetElementsX * HORIZONTAL_SPACING
             + (element.offsetElementsX + 1) * ELEMENT_WIDTH
             + element.borderIndexMaxX * (element.offsetElementsX + 1) * 2 * BORDER_SPACING_X
             + element.crossLayerPathSegmentOffsetMaxX * (element.offsetElementsX + 1) * EDGE_SPACING;
@@ -64,7 +65,8 @@ function height(element: Element<OffsetElementsY &
     BorderIndexMaxBottom & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxY & MidPathSegmentOffsetMaxPreviousY>): number {
     switch (element.kind) {
-        case "node": return (element.offsetElementsY + 1) * VERTICAL_SPACING
+        case "node": return MARGIN_Y * 2
+            + (element.offsetElementsY + 1) * VERTICAL_SPACING
             + (element.offsetElementsY + 1) * ELEMENT_HEIGHT
             + (element.borderIndexMaxPreviousTop + element.borderIndexMaxTop) * BORDER_SPACING_TOP
             + (element.borderIndexMaxPreviousBottom + element.borderIndexMaxBottom) * BORDER_SPACING_BOTTOM

@@ -6,7 +6,7 @@ import {
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING,
+    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
@@ -28,14 +28,16 @@ import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegme
 function getY<N extends OffsetElementsY &
     BorderIndexMaxTop & BorderIndexMaxPreviousTop & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY>(node: N) {
-    return node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+    return MARGIN_Y
+        + node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
         + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
         + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
         + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
 }
 
 function getX<N extends OffsetElementsX & BorderIndexMaxX & CrossLayerPathSegmentOffsetMaxX>(node: N) {
-    return node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+    return MARGIN_X
+        + node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
         + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
         + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING;
 }

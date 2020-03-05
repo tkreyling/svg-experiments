@@ -8,7 +8,7 @@ import {
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING,
+    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
     STROKE_WIDTH,
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
@@ -32,10 +32,12 @@ type Props = Node & ElementKey &
 
 export const NodeShape: React.FC<Props> = node => {
     let hasSymbol = false;
-    let x = node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
+    let x = MARGIN_X
+        + node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
         + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
         + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING;
-    let y = node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
+    let y = MARGIN_Y
+        + node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
         + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
         + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
         + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
