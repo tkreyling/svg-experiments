@@ -1,4 +1,4 @@
-import {Edge, edge, Graph, graph, Node, node} from "../newGraphModel";
+import {Edge, edge, Element, Graph, graph, Node, node} from "../newGraphModel";
 import {
     addSyntheticNodesAndEdgesG,
     IsLowerLayerEdge,
@@ -29,24 +29,25 @@ test('for an edge across multiple layers there is an additional edge in the lowe
     let node_2_1 = inputNode({elementKey: 2, offsetElementsX: 0, offsetElementsY: 1});
     let node_3_1 = inputNode({elementKey: 3, offsetElementsX: 0, offsetElementsY: 2});
     let node_3_2 = inputNode({elementKey: 4, offsetElementsX: 1, offsetElementsY: 2});
-    let state: InputType = graph(
-        {
-            kind: "column",
+    let element: Element<NodeData> = {
+        kind: "column",
+        elementKey: 0, offsetElementsX: 0, offsetElementsY: 0,
+        elements: [{
+            kind: "row",
             elementKey: 0, offsetElementsX: 0, offsetElementsY: 0,
-            elements: [{
-                kind: "row",
-                elementKey: 0, offsetElementsX: 0, offsetElementsY: 0,
-                elements: [node_1_1, node_1_2]
-            }, {
-                kind: "row",
-                elementKey: 0, offsetElementsX: 0, offsetElementsY: 1,
-                elements: [node_2_1]
-            }, {
-                kind: "row",
-                elementKey: 0, offsetElementsX: 0, offsetElementsY: 2,
-                elements: [node_3_1, node_3_2]
-            }]
-        },
+            elements: [node_1_1, node_1_2]
+        }, {
+            kind: "row",
+            elementKey: 0, offsetElementsX: 0, offsetElementsY: 1,
+            elements: [node_2_1]
+        }, {
+            kind: "row",
+            elementKey: 0, offsetElementsX: 0, offsetElementsY: 2,
+            elements: [node_3_1, node_3_2]
+        }]
+    };
+    let state: InputType = graph(
+        element,
         [edge(node_1_1, node_3_2)]
     );
 
