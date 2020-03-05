@@ -9,8 +9,6 @@ import {
     VERTICAL_SPACING
 } from "./styling";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
-import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
-import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {Edge} from "./newGraphModel";
@@ -21,15 +19,12 @@ import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNu
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
 import {IsLowerLayerEdge, LowerLayerEdge, OriginalEdge} from "./edgesLayout/SyntheticNodesAndEdges";
 import {CrossLayerPathSegmentOffsetX} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
-import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
-import {getElementLeftX} from "./getElementLeftX";
-import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
+import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY} from "./getElementTopY";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 
-function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
-    CrossLayerPathSegmentOffsetMaxX &
-    BorderIndexLeft & BorderIndexMaxX &
+function edgeEndCoordinates<N extends RequiredNodeDataGetElementLeftX &
+    OffsetElementsY &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
     BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges>(
@@ -43,9 +38,8 @@ function edgeEndCoordinates<N extends OffsetElementsX & OffsetElementsY &
     };
 }
 
-export const EdgeShape: React.FC<Edge<OffsetElementsX & OffsetElementsY &
-    CrossLayerPathSegmentOffsetMaxX &
-    BorderIndexLeft & BorderIndexMaxX &
+export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
+    OffsetElementsY &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
     BorderIndexMaxBottom & BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY & NumberOfEdges,

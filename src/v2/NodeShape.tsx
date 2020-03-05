@@ -1,23 +1,17 @@
 import React from "react";
-import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {ELEMENT_HEIGHT, ELEMENT_WIDTH, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
-import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
-import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 import {Node} from "./newGraphModel"
-import {getElementLeftX} from "./getElementLeftX";
-import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
+import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY} from "./getElementTopY";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 
 type Props = Node & ElementKey &
-    OffsetElementsX &
-    BorderIndexLeft & BorderIndexMaxX &
-    CrossLayerPathSegmentOffsetMaxX &
+    RequiredNodeDataGetElementLeftX &
     OffsetElementsY &
     BorderIndexTop & BorderIndexMaxPreviousTop & BorderIndexMaxTop &
     BorderIndexMaxPreviousBottom &

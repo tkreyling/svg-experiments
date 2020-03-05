@@ -10,12 +10,9 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
-import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {Container} from "./newGraphModel";
 import {EmbeddedElementsX} from "./elementsLayout/EmbeddedElementsX";
-import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
-import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 import {
     BorderIndexMaxBottom,
@@ -32,16 +29,15 @@ import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
-import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
-import {getElementLeftX} from "./getElementLeftX";
+import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY} from "./getElementTopY";
 
 type Props = Container<
     ElementKey &
-    OffsetElementsX & EmbeddedElementsX &
+    RequiredNodeDataGetElementLeftX &
+    EmbeddedElementsX &
     OffsetElementsY & EmbeddedElementsY &
-    CrossLayerPathSegmentOffsetMaxX &
-    BorderIndexLeft & BorderIndexRight & BorderIndexMaxX &
+    BorderIndexRight &
     BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
     BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom &
     MidPathSegmentOffsetMaxPreviousY & EmbeddedMidPathSegmentY>;
