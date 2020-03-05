@@ -7,6 +7,7 @@ import {
     RequiredNodeDataTypes
 } from "./CrossLayerPathSegmentOffsetX";
 import {EdgeIndex} from "./EdgeIndex";
+import {IsLowerLayerEdge, OriginalEdge} from "./SyntheticNodesAndEdges";
 
 export type ResultEdgeType = Edge<RequiredNodeDataTypes, RequiredEdgeDataTypes & CrossLayerPathSegmentOffsetX>
 
@@ -84,7 +85,7 @@ function edgeWithLowerLayerEdge(
     edgeData: EdgeIndex
 ): RequiredEdgeType {
     return Object.assign<Edge<RequiredNodeDataTypes, unknown>, RequiredEdgeDataTypes>(
-        edge(inputNode(from), inputNode(to)), {lowerLayerEdge: someEdge(), edgeIndex: edgeData.edgeIndex});
+        edge(inputNode(from), inputNode(to)), {lowerLayerEdge: someLowerLayerEdge(), edgeIndex: edgeData.edgeIndex});
 }
 
 function expectedEdge(
@@ -95,6 +96,9 @@ function expectedEdge(
         edgeWithLowerLayerEdge(from, to, edgeData), {crossLayerPathSegmentOffsetX: edgeData.crossLayerPathSegmentOffsetX});
 }
 
-function someEdge() {
-    return edge(node(), node());
+function someLowerLayerEdge()  {
+    return Object.assign<Edge<unknown, unknown>, IsLowerLayerEdge & OriginalEdge<unknown, unknown>>(edge(node(), node()), {
+        isLowerLayerEdge: true,
+        originalEdge: edge(node(), node())
+    });
 }
