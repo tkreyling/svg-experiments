@@ -8,26 +8,19 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
-import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
-import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
+import {BorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {Edge} from "./newGraphModel";
 import {getLeftUpperNode, getUpperLeftNode} from "./EdgeHelper";
 import {MidPathSegmentOffsetY} from "./edgesLayout/MidPathSegmentOffsetY";
-import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {ConnectionIndex, NumberOfEdges} from "./edgesLayout/ConnectionIndexAndNumberOfEdges";
 import {EdgeIndex} from "./edgesLayout/EdgeIndex";
 import {IsLowerLayerEdge, LowerLayerEdge, OriginalEdge} from "./edgesLayout/SyntheticNodesAndEdges";
 import {CrossLayerPathSegmentOffsetX} from "./edgesLayout/CrossLayerPathSegmentOffsetX";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
-import {getElementTopY} from "./getElementTopY";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
+import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 
 function edgeEndCoordinates<N extends RequiredNodeDataGetElementLeftX &
-    OffsetElementsY &
-    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
-    BorderIndexMaxPreviousBottom &
-    MidPathSegmentOffsetMaxPreviousY & NumberOfEdges>(
+    RequiredNodeDataGetElementTopY & NumberOfEdges>(
     node: N, edgeIndex: number, otherNode: N
 ) {
     let onLowerSide = node.offsetElementsY <= otherNode.offsetElementsY;
@@ -39,10 +32,9 @@ function edgeEndCoordinates<N extends RequiredNodeDataGetElementLeftX &
 }
 
 export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
-    OffsetElementsY &
-    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
-    BorderIndexMaxBottom & BorderIndexMaxPreviousBottom &
-    MidPathSegmentOffsetMaxPreviousY & NumberOfEdges,
+    RequiredNodeDataGetElementTopY &
+    BorderIndexMaxBottom &
+    NumberOfEdges,
     LowerLayerEdge<any, unknown> & EdgeIndex & MidPathSegmentOffsetY & ConnectionIndex & CrossLayerPathSegmentOffsetX>> = edge => {
     let fromNode = edgeEndCoordinates(edge.from, edge.fromIndex, edge.to);
     let upperNodeEdgesY = getElementTopY(getUpperLeftNode(edge))

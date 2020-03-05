@@ -12,12 +12,13 @@ import {
 } from "./styling";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 
-export function getElementTopY(
-    element: OffsetElementsY &
-        BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
-        BorderIndexMaxPreviousBottom &
-        MidPathSegmentOffsetMaxPreviousY
-) {
+export type RequiredNodeDataGetElementTopY =
+    OffsetElementsY &
+    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop &
+    BorderIndexMaxPreviousBottom &
+    MidPathSegmentOffsetMaxPreviousY
+
+export function getElementTopY(element: RequiredNodeDataGetElementTopY) {
     return MARGIN_Y
         + element.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
         + (element.borderIndexMaxPreviousTop + element.borderIndexMaxTop - element.borderIndexTop) * BORDER_SPACING_TOP

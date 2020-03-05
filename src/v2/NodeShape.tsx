@@ -1,21 +1,13 @@
 import React from "react";
-import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {ELEMENT_HEIGHT, ELEMENT_WIDTH, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
-import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
 import {ElementKey} from "./elementsLayout/ElementKey";
-import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {Node} from "./newGraphModel"
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
-import {getElementTopY} from "./getElementTopY";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
+import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 
 type Props = Node & ElementKey &
     RequiredNodeDataGetElementLeftX &
-    OffsetElementsY &
-    BorderIndexTop & BorderIndexMaxPreviousTop & BorderIndexMaxTop &
-    BorderIndexMaxPreviousBottom &
-    MidPathSegmentOffsetMaxPreviousY;
+    RequiredNodeDataGetElementTopY;
 
 export const NodeShape: React.FC<Props> = node => {
     let hasSymbol = false;

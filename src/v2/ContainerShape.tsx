@@ -10,37 +10,27 @@ import {
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
-import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {Container} from "./newGraphModel";
 import {EmbeddedElementsX} from "./elementsLayout/EmbeddedElementsX";
-import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
-import {
-    BorderIndexMaxBottom,
-    BorderIndexMaxPreviousBottom,
-    EmbeddedBorderIndexMaxBottom
-} from "./elementsLayout/BorderIndexMaxBottom";
-import {
-    BorderIndexMaxPreviousTop,
-    BorderIndexMaxTop,
-    EmbeddedBorderIndexMaxTop
-} from "./elementsLayout/BorderIndexMaxTop";
+import {BorderIndexMaxBottom, EmbeddedBorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
+import {EmbeddedBorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
 import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
-import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
+import {EmbeddedMidPathSegmentY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
-import {getElementTopY} from "./getElementTopY";
+import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 
 type Props = Container<
     ElementKey &
     RequiredNodeDataGetElementLeftX &
-    EmbeddedElementsX &
-    OffsetElementsY & EmbeddedElementsY &
+    RequiredNodeDataGetElementTopY &
+    EmbeddedElementsX & EmbeddedElementsY &
     BorderIndexRight &
-    BorderIndexTop & BorderIndexMaxTop & BorderIndexMaxPreviousTop & EmbeddedBorderIndexMaxTop &
-    BorderIndexBottom & BorderIndexMaxBottom & BorderIndexMaxPreviousBottom & EmbeddedBorderIndexMaxBottom &
-    MidPathSegmentOffsetMaxPreviousY & EmbeddedMidPathSegmentY>;
+    EmbeddedBorderIndexMaxTop &
+    BorderIndexBottom & BorderIndexMaxBottom & EmbeddedBorderIndexMaxBottom &
+    EmbeddedMidPathSegmentY>;
 
 export const ContainerShape: React.FC<Props> = container => {
     return (
