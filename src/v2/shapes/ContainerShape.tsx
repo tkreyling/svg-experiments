@@ -64,11 +64,11 @@ export const ContainerShape: React.FC<Props> = container => {
                 <path d={
                     "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
                     "L " + (x + DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
+                    "H " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " +
+                    "V " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
                     "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) +
-                    "L " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT)
+                    "H " + (x + DEPLOYMENT_BOX_INDENT) + " " +
+                    "Z"
                 }
                       stroke="black"
                       strokeWidth={STROKE_WIDTH}
@@ -76,8 +76,8 @@ export const ContainerShape: React.FC<Props> = container => {
                 />
                 <path d={
                     "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT)
+                    "H " + (x + width - DEPLOYMENT_BOX_INDENT) + " " +
+                    "V " + (y + height - DEPLOYMENT_BOX_INDENT)
                 }
                       stroke="black"
                       strokeWidth={STROKE_WIDTH}
