@@ -7,12 +7,14 @@ export type Node = {
 
 export type Row<N> = {
     kind: "row",
+    name?: string,
     border?: "solid",
     elements: Element<N>[]
 };
 
 export type Column<N> = {
     kind: "column",
+    name?: string,
     border?: "solid",
     elements: Element<N>[]
 };

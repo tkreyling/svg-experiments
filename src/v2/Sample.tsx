@@ -25,20 +25,20 @@ export const Sample: React.FC = () => {
     let node_7_3 = node();
     let element: Element<unknown> = {
         kind: "column", elements: [{
-            kind: "row", border: "solid", elements: [{
-                kind: "column", border: "solid", elements: [node_1_1, node_1_2]
+            kind: "row", name: "Top row", border: "solid", elements: [{
+                kind: "column", name: "Left column", border: "solid", elements: [node_1_1, node_1_2]
             }, {
-                kind: "column", border: "solid", elements: [{
-                    kind: "row", border: "solid", elements: [node_2_1, node_2_2]
+                kind: "column", name: "Right column", border: "solid", elements: [{
+                    kind: "row", name: "Nested row", border: "solid", elements: [node_2_1, node_2_2]
                 }, node_3_1, node_3_2]
             }, node_7_1, node_7_2, node_7_3]
         }, {
             kind: "row", elements: [node_4_1, node_4_2, node_4_3, node_4_4, node_4_5]
         }, {
-            kind: "row", border: "solid", elements: [{
-                kind: "row", border: "solid", elements: [node_5_1, node_5_2]
+            kind: "row", name: "Bottom row", border: "solid", elements: [{
+                kind: "row", name: "Left row in row", border: "solid", elements: [node_5_1, node_5_2]
             }, {
-                kind: "row", border: "solid", elements: [node_6_1, node_6_2, node_6_3, node_6_4]
+                kind: "row", name: "Right row in row", border: "solid", elements: [node_6_1, node_6_2, node_6_3, node_6_4]
             }]
         }]
     };
