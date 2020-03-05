@@ -1,10 +1,15 @@
-import {Column, Element, Graph, Node, Row, transformElements} from "../newGraphModel";
+import {Column, Element, Graph, Node, Row, transformElementsUsingGraph} from "../newGraphModel";
 import {assertNever} from "../assertNever";
 
 export type BorderIndexTop = { borderIndexTop: number };
 
 export function addBorderIndexTopG<N, E>(graph: Graph<N, E>): Graph<N & BorderIndexTop, E> {
-    return transformElements<N, BorderIndexTop, E>(graph, addBorderIndexTop);
+    return transformElementsUsingGraph<N, BorderIndexTop, E>(graph, addBorderIndexTopGraph);
+}
+
+function addBorderIndexTopGraph(graph: Graph<unknown, unknown>) {
+    addBorderIndexTop(graph.element);
+    graph.syntheticNodes.forEach(node => Object.assign<Node, BorderIndexTop>(node, {borderIndexTop: 0}));
 }
 
 export function addBorderIndexTop(element: Element<unknown>): number {
