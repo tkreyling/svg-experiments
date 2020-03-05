@@ -26,7 +26,9 @@ export function addSyntheticNodesAndEdgesG(graph: Graph<NodeData, unknown>): Gra
     let elementKey = Math.max(...allElements(graph.element).map(element => element.elementKey));
 
     let grid = new Map<string, boolean>();
-    allNodes(graph.element).forEach(node => grid.set(node.offsetElementsX + "_" + node.offsetElementsY, true));
+    allNodes(graph.element)
+        .filter(node => node.visible)
+        .forEach(node => grid.set(node.offsetElementsX + "_" + node.offsetElementsY, true));
 
     function nodesOnPath(edge: Edge<OffsetElementsX & OffsetElementsY, unknown>): boolean {
         let lowerRightNode = getLowerRightNode(edge);

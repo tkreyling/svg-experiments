@@ -4,7 +4,11 @@ type Symbols = "component"
 
 export type Node = {
     kind: "node",
+} & NodeProperties;
+
+export type NodeProperties = {
     name?: string,
+    visible?: boolean,
     symbol?: Symbols
 };
 
@@ -57,12 +61,22 @@ export function transformElementsUsingGraph<N, A, E>(graph: Graph<N, E>, f: (gra
     return graph as Graph<N & A, E>;
 }
 
-export function node(name?: string, symbol?: Symbols): Node {
-    return {
+export function node(nameOrProperties?: string | NodeProperties): Node {
+    let defaults: Node = {
         kind: "node",
-        name: name,
-        symbol: symbol
+        visible: true
     };
+    if (!nameOrProperties) {
+        return defaults;
+    } else if (typeof nameOrProperties === 'string') {
+        return Object.assign<Node, NodeProperties>(defaults, {name: nameOrProperties});
+    } else {
+        return Object.assign<Node, NodeProperties>(defaults, nameOrProperties);
+    }
+}
+
+export function gap(): Node {
+    return node({visible: false});
 }
 
 export function edge<N>(from: N, to: N): Edge<N, unknown> {

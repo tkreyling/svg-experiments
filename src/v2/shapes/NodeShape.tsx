@@ -11,8 +11,11 @@ type Props = Node & ElementKey &
     RequiredNodeDataGetElementTopY;
 
 export const NodeShape: React.FC<Props> = node => {
+    if (!node.visible) return null;
+
     let x = getElementLeftX(node);
     let y = getElementTopY(node);
+
     return (
         <g key={node.elementKey}>
             <rect
