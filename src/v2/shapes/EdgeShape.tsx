@@ -47,9 +47,9 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
         return (
             <path key={edge.edgeIndex} d={
                 "M " + fromNode.x + " " + fromNode.y + " " +
-                "L " + fromNode.x + " " + upperNodeEdgesY + " " +
-                "L " + toNode.x + " " + upperNodeEdgesY + " " +
-                "L " + toNode.x + " " + toNode.y
+                "V " + upperNodeEdgesY + " " +
+                "H " + toNode.x + " " +
+                "V " + toNode.y
             }
                   stroke="black"
                   strokeWidth={STROKE_WIDTH}
@@ -69,11 +69,11 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
         return (
             <path key={edge.edgeIndex} d={
                 "M " + fromNode.x + " " + fromNode.y + " " +
-                "L " + fromNode.x + " " + upperNodeEdgesY + " " +
-                "L " + besideTopNodeX + " " + upperNodeEdgesY + " " +
-                "L " + besideTopNodeX + " " + lowerNodeEdgesY + " " +
-                "L " + toNode.x + " " + lowerNodeEdgesY + " " +
-                "L " + toNode.x + " " + toNode.y
+                "V " + upperNodeEdgesY + " " +
+                "H " + besideTopNodeX + " " +
+                "V " + lowerNodeEdgesY + " " +
+                "H " + toNode.x + " " +
+                "V " + toNode.y
             }
                   stroke="black"
                   strokeWidth={STROKE_WIDTH}
