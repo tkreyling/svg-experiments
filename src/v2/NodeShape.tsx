@@ -1,19 +1,7 @@
 import React from "react";
 import {OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
-import {
-    BORDER_SPACING_BOTTOM,
-    BORDER_SPACING_TOP,
-    EDGE_SPACING,
-    ELEMENT_HEIGHT,
-    ELEMENT_WIDTH,
-    MARGIN_Y,
-    STROKE_WIDTH,
-    SYMBOL_SPACING,
-    SYMBOL_WIDTH,
-    TEXT_PADDING,
-    VERTICAL_SPACING
-} from "./styling";
+import {ELEMENT_HEIGHT, ELEMENT_WIDTH, STROKE_WIDTH, SYMBOL_SPACING, SYMBOL_WIDTH, TEXT_PADDING} from "./styling";
 import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexMaxPreviousBottom} from "./elementsLayout/BorderIndexMaxBottom";
@@ -23,24 +11,22 @@ import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegme
 import {Node} from "./newGraphModel"
 import {getElementLeftX} from "./getElementLeftX";
 import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
+import {getElementTopY} from "./getElementTopY";
+import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
 
 type Props = Node & ElementKey &
     OffsetElementsX &
     BorderIndexLeft & BorderIndexMaxX &
     CrossLayerPathSegmentOffsetMaxX &
     OffsetElementsY &
-    BorderIndexMaxPreviousTop & BorderIndexMaxTop &
+    BorderIndexTop & BorderIndexMaxPreviousTop & BorderIndexMaxTop &
     BorderIndexMaxPreviousBottom &
     MidPathSegmentOffsetMaxPreviousY;
 
 export const NodeShape: React.FC<Props> = node => {
     let hasSymbol = false;
     let x = getElementLeftX(node);
-    let y = MARGIN_Y
-        + node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-        + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
-        + node.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-        + node.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING;
+    let y = getElementTopY(node);
     return (
         <g key={node.elementKey}>
             <rect

@@ -7,7 +7,6 @@ import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
-    MARGIN_Y,
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
@@ -35,6 +34,7 @@ import {ElementKey} from "./elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 import {getElementLeftX} from "./getElementLeftX";
+import {getElementTopY} from "./getElementTopY";
 
 type Props = Container<
     ElementKey &
@@ -51,12 +51,7 @@ export const ContainerShape: React.FC<Props> = container => {
         <g key={container.elementKey}>
             <rect
                 x={getElementLeftX(container)}
-                y={MARGIN_Y
-                + container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
-                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-                + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
-                }
+                y={getElementTopY(container)}
                 width={container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING
                 + ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X
                 + (container.embeddedElementsX - 1) * container.crossLayerPathSegmentOffsetMaxX * EDGE_SPACING
