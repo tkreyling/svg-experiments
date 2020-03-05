@@ -79,6 +79,10 @@ export function gap(): Node {
     return node({visible: false});
 }
 
+export function component(name: string): Node {
+    return node({name: name, symbol: "component"});
+}
+
 export function edge<N>(from: N, to: N): Edge<N, unknown> {
     return {
         from: from,
