@@ -22,6 +22,9 @@ import {EmbeddedMidPathSegmentY} from "../edgesLayout/MidPathSegmentOffsetYAggre
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 
+const DEPLOYMENT_BOX_INDENT = BORDER_SPACING_X * 0.3;
+const DEPLOYMENT_BOX_3D_OFFSET = BORDER_SPACING_X * 0.4;
+
 type Props = Container<
     ElementKey &
     RequiredNodeDataGetElementLeftX &
@@ -47,18 +50,55 @@ export const ContainerShape: React.FC<Props> = container => {
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
     return (
         <g key={container.elementKey}>
+            {(container.border === "solid") &&
             <rect
                 x={x}
                 y={y}
                 width={width}
                 height={height}
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
+            }
+
+            {(container.border === "deployment-box") &&
+            <g>
+                <path d={
+                    "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) +
+                    "L " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT)
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+                <path d={
+                    "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT)
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+                <path d={
+                    "M " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+            </g>
+            }
 
             {container.name &&
             <g>
                 <text
                     x={x + BORDER_SPACING_X}
-                    y={y + ELEMENT_HEIGHT / 2}
+                    y={y + ELEMENT_HEIGHT * 0.7}
                     fill="black"
                     clipPath={"url(#clip-element-text-" + container.elementKey + ")"}>{container.name}
                 </text>

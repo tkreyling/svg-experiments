@@ -13,16 +13,18 @@ export type NodeProperties = {
 };
 
 export type Row<N> = {
-    kind: "row",
-    name?: string,
-    border?: "solid",
-    elements: Element<N>[]
-};
+    kind: "row"
+} & ContainerProperties<N>;
 
 export type Column<N> = {
-    kind: "column",
+    kind: "column"
+} & ContainerProperties<N>;
+
+type Borders = "solid" | "deployment-box"
+
+type ContainerProperties<N> = {
     name?: string,
-    border?: "solid",
+    border?: Borders,
     elements: Element<N>[]
 };
 

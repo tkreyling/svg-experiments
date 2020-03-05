@@ -17,12 +17,12 @@ export const NewArchitecture: React.FC = () => {
             kind: "row",
             elements: [
                 factFinderDB,
-                {kind: "row", name: "FACT Finder", border: "solid", elements: [gap(), factFinderAPI, gap()]}
+                {kind: "row", name: "FACT Finder", border: "deployment-box", elements: [gap(), factFinderAPI, gap()]}
             ]
         }, {
             kind: "row",
             elements: [factFinderFeedServiceDB, {
-                kind: "column", name: "FACT Finder Feed Service", border: "solid",
+                kind: "column", name: "FACT Finder Feed Service", border: "deployment-box",
                 elements: [
                     {kind: "row", elements: [gap(), factFinderUpdater]},
                     {kind: "row", elements: [ffProductImporter, ffProductCampaignsImporter, ffCategoryImporter]}
@@ -54,7 +54,7 @@ export const NewArchitecture: React.FC = () => {
         kind: "row", elements: [{
             kind: "column", elements: [gap(), productServiceDB]
         }, {
-            kind: "column", name: "Product Service", border: "solid", elements: [
+            kind: "column", name: "Product Service", border: "deployment-box", elements: [
                 {
                     kind: "row", elements: [
                         gap(), gap(), productAPI, stockAPI
@@ -93,7 +93,7 @@ export const NewArchitecture: React.FC = () => {
         kind: "column", elements: [{
             kind: "row", elements: [productStream, productCampaignsStream, nightlyStockStream]
         }, {
-            kind: "row", name: "Product Exporter Service", border: "solid",
+            kind: "row", name: "Product Exporter Service", border: "deployment-box",
             elements: [productExporter, productCampaignsExporter, nightlyStockExporter]
         }]
     };
@@ -110,7 +110,7 @@ export const NewArchitecture: React.FC = () => {
     let stockExporterService: Element<unknown> = {
         kind: "column", elements: [
             stockStream,
-            {kind: "row", name: "Stock Exporter Service", border: "solid", elements: [stockExporter]}
+            {kind: "row", name: "Stock Exporter Service", border: "deployment-box", elements: [stockExporter]}
         ]
     };
     let stockExporterServiceEdges = [
@@ -123,7 +123,7 @@ export const NewArchitecture: React.FC = () => {
     let deliveryTimeExporterService: Element<unknown> = {
         kind: "column", elements: [
             deliveryTimeStream,
-            {kind: "row", name: "Delivery Time Exporter Service", border: "solid", elements: [deliveryTimeExporter]}
+            {kind: "row", name: "Delivery Time Exporter Service", border: "deployment-box", elements: [deliveryTimeExporter]}
         ]
     };
     let deliveryTimeExporterServiceEdges = [
@@ -136,7 +136,7 @@ export const NewArchitecture: React.FC = () => {
     let categoryExporterService: Element<unknown> = {
         kind: "column", elements: [
             categoryStream,
-            {kind: "row", name: "Category Exporter Service", border: "solid", elements: [categoryExporter]}
+            {kind: "row", name: "Category Exporter Service", border: "deployment-box", elements: [categoryExporter]}
         ]
     };
     let categoryExporterServiceEdges = [

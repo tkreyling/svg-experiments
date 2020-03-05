@@ -105,8 +105,8 @@ export const Diagram: React.FC<DiagramProps> = props => {
         .map(graph => {
             return (
                 <svg viewBox={"0 0 " + width(graph.element) + " " + height(graph.element)}>
-                    {allNodes(graph.element).map(NodeShape)}
                     {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
+                    {allNodes(graph.element).map(NodeShape)}
                     {graph.edges.map(EdgeShape)}
                 </svg>
             );
