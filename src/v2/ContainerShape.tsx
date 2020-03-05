@@ -63,25 +63,6 @@ export const ContainerShape: React.FC<Props> = container => {
                 container.borderIndexBottom * BORDER_SPACING_BOTTOM
                 }
                 fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
-
-            <text
-                x={MARGIN_X
-                + container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
-                + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
-                }
-                y={MARGIN_Y
-                + container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
-                + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP
-                + container.borderIndexMaxPreviousBottom * BORDER_SPACING_BOTTOM
-                + container.midPathSegmentOffsetMaxPreviousY * EDGE_SPACING
-                + 15
-                }
-                fill="black">{
-                container.embeddedElementsY + "__" +
-                container.borderIndexMaxPreviousTop + "/" + container.borderIndexTop + "/" + container.borderIndexMaxTop + "__" +
-                container.borderIndexMaxPreviousBottom + "/" + container.borderIndexBottom + "/" + container.borderIndexMaxBottom}
-            </text>
         </g>
     );
 };
