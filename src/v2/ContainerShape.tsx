@@ -2,10 +2,12 @@ import React from "react";
 import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
-    BORDER_SPACING_X, EDGE_SPACING,
+    BORDER_SPACING_X,
+    EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
+    HORIZONTAL_SPACING,
+    MARGIN_Y,
     STROKE_WIDTH,
     VERTICAL_SPACING
 } from "./styling";
@@ -16,14 +18,23 @@ import {EmbeddedElementsX} from "./elementsLayout/EmbeddedElementsX";
 import {BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
 import {BorderIndexTop} from "./elementsLayout/BorderIndexTop";
-import {BorderIndexMaxBottom, BorderIndexMaxPreviousBottom, EmbeddedBorderIndexMaxBottom} from "./elementsLayout/BorderIndexMaxBottom";
-import {BorderIndexMaxPreviousTop, BorderIndexMaxTop, EmbeddedBorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
+import {
+    BorderIndexMaxBottom,
+    BorderIndexMaxPreviousBottom,
+    EmbeddedBorderIndexMaxBottom
+} from "./elementsLayout/BorderIndexMaxBottom";
+import {
+    BorderIndexMaxPreviousTop,
+    BorderIndexMaxTop,
+    EmbeddedBorderIndexMaxTop
+} from "./elementsLayout/BorderIndexMaxTop";
 import {BorderIndexBottom} from "./elementsLayout/BorderIndexBottom";
 import {BorderIndexRight} from "./elementsLayout/BorderIndexRight";
 import {EmbeddedElementsY} from "./elementsLayout/EmbeddedElementsY";
 import {ElementKey} from "./elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY, MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
+import {getElementLeftX} from "./getElementLeftX";
 
 type Props = Container<
     ElementKey &
@@ -39,11 +50,7 @@ export const ContainerShape: React.FC<Props> = container => {
     return (
         <g key={container.elementKey}>
             <rect
-                x={MARGIN_X
-                + container.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-                + (container.borderIndexMaxX * (container.offsetElementsX * 2 + 1) - container.borderIndexLeft) * BORDER_SPACING_X
-                + container.crossLayerPathSegmentOffsetMaxX * container.offsetElementsX * EDGE_SPACING
-                }
+                x={getElementLeftX(container)}
                 y={MARGIN_Y
                 + container.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
                 + (container.borderIndexMaxPreviousTop + container.borderIndexMaxTop - container.borderIndexTop) * BORDER_SPACING_TOP

@@ -4,11 +4,10 @@ import {OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
-    BORDER_SPACING_X,
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
+    MARGIN_Y,
     STROKE_WIDTH,
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
@@ -22,9 +21,13 @@ import {ElementKey} from "./elementsLayout/ElementKey";
 import {MidPathSegmentOffsetMaxPreviousY} from "./edgesLayout/MidPathSegmentOffsetYAggregates";
 import {CrossLayerPathSegmentOffsetMaxX} from "./edgesLayout/CrossLayerPathSegmentOffsetMaxX";
 import {Node} from "./newGraphModel"
+import {getElementLeftX} from "./getElementLeftX";
+import {BorderIndexLeft} from "./elementsLayout/BorderIndexLeft";
 
 type Props = Node & ElementKey &
-    OffsetElementsX & BorderIndexMaxX & CrossLayerPathSegmentOffsetMaxX &
+    OffsetElementsX &
+    BorderIndexLeft & BorderIndexMaxX &
+    CrossLayerPathSegmentOffsetMaxX &
     OffsetElementsY &
     BorderIndexMaxPreviousTop & BorderIndexMaxTop &
     BorderIndexMaxPreviousBottom &
@@ -32,10 +35,7 @@ type Props = Node & ElementKey &
 
 export const NodeShape: React.FC<Props> = node => {
     let hasSymbol = false;
-    let x = MARGIN_X
-        + node.offsetElementsX * (ELEMENT_WIDTH + HORIZONTAL_SPACING)
-        + node.borderIndexMaxX * (node.offsetElementsX * 2 + 1) * BORDER_SPACING_X
-        + node.crossLayerPathSegmentOffsetMaxX * node.offsetElementsX * EDGE_SPACING;
+    let x = getElementLeftX(node);
     let y = MARGIN_Y
         + node.offsetElementsY * (ELEMENT_HEIGHT + VERTICAL_SPACING)
         + (node.borderIndexMaxPreviousTop + node.borderIndexMaxTop) * BORDER_SPACING_TOP
