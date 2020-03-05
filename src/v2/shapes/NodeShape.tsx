@@ -22,7 +22,7 @@ export const NodeShape: React.FC<Props> = node => {
                 x={x} y={y}
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
-                fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
+                fill="none" strokeWidth={STROKE_WIDTH} stroke="black"/>
             {node.name &&
             <g>
                 <text
