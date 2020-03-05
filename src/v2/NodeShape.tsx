@@ -20,7 +20,7 @@ export const NodeShape: React.FC<Props> = node => {
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
                 fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
-            {node.name !== undefined &&
+            {node.name &&
             <g>
                 <text
                     x={x + TEXT_PADDING} y={y + ELEMENT_HEIGHT / 2}
