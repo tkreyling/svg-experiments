@@ -3,6 +3,17 @@ import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const NewArchitecture: React.FC = () => {
+    let searchView = component("Search View");
+    let pdpViewComponent = component("PDP View");
+
+    let pdpView: Element<unknown> = {
+        kind: "row",
+        elements: [gap(), {
+            kind: "row", name: "PDP View", border: "deployment-box",
+            elements: [gap(), searchView, gap(), gap(), gap(), gap(), pdpViewComponent, gap(), gap(), gap()]
+        }]
+    };
+
     let factFinderDB = db("FACTFinder DB");
     let factFinderAPI = component("FACTFinder API");
 
@@ -160,9 +171,12 @@ export const NewArchitecture: React.FC = () => {
         .concat(categoryExporterServiceEdges);
 
     let core: Element<unknown> = {
-        kind: "column", elements: [coreServices, coreExporter]
+        kind: "column", elements: [pdpView, coreServices, coreExporter]
     };
     let coreEdges = coreServicesEdges.concat(coreExporterEdges).concat([
+        edge(pdpViewComponent, productAPI),
+        edge(pdpViewComponent, stockAPI),
+        edge(searchView, factFinderAPI),
         edge(ffProductImporter, productStream),
         edge(ffProductCampaignsImporter, productCampaignsStream),
         edge(ffCategoryImporter, categoryStream),
