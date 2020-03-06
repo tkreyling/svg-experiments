@@ -2,7 +2,7 @@ import {assertNever} from "./assertNever";
 
 type Symbols = "component"
 
-type Shapes = "rectangle" | "db-cylinder"
+type Shapes = "rectangle" | "db-cylinder" | "queue-cylinder"
 
 export type Node = {
     kind: "node",
@@ -91,6 +91,10 @@ export function component(name: string): Node {
 
 export function db(name: string): Node {
     return node({name: name, shape: "db-cylinder"});
+}
+
+export function queue(name: string): Node {
+    return node({name: name, shape: "queue-cylinder"});
 }
 
 export function edge<N>(from: N, to: N): Edge<N, unknown> {

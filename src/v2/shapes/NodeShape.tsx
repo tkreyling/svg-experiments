@@ -15,6 +15,7 @@ import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 import {ComponentSymbol} from "./Symbols";
 
 const DB_CYLINDER_ELLIPSE_Y = BORDER_SPACING_X * 0.5;
+const QUEUE_CYLINDER_ELLIPSE_X = BORDER_SPACING_X * 0.4;
 
 type Props = Node & ElementKey &
     RequiredNodeDataGetElementLeftX &
@@ -58,18 +59,45 @@ export const NodeShape: React.FC<Props> = node => {
                 />
             </g>
             }
+            {node.shape === "queue-cylinder" &&
+            <g>
+                <path d={
+                    "M " + (x +  QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
+                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,0 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + ELEMENT_HEIGHT) + " " +
+                    "H " + (x + ELEMENT_WIDTH - QUEUE_CYLINDER_ELLIPSE_X) + " " +
+                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,0 " + (x + ELEMENT_WIDTH - QUEUE_CYLINDER_ELLIPSE_X) + "," + y + " " +
+                    "Z"
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+                <path d={
+                    "M " + (x +  QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
+                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,1 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + ELEMENT_HEIGHT)
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+            </g>
+            }
             {node.name &&
             <g>
                 <text
-                    x={x + TEXT_PADDING} y={y + ELEMENT_HEIGHT * (node.shape === "db-cylinder" ? 0.7 : 0.5)}
+                    x={x + TEXT_PADDING + (node.shape === "queue-cylinder" ? 2 * QUEUE_CYLINDER_ELLIPSE_X : 0)}
+                    y={y + ELEMENT_HEIGHT * (node.shape === "db-cylinder" ? 0.7 : 0.5)}
                     fill="black"
                     clipPath={"url(#clip-element-text-" + node.elementKey + ")"}>{node.name}
                 </text>
 
                 <clipPath id={"clip-element-text-" + node.elementKey}>
                     <rect
-                        x={x + TEXT_PADDING} y={y}
-                        width={ELEMENT_WIDTH - 2 * TEXT_PADDING - (node.symbol ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)}
+                        x={x + TEXT_PADDING + (node.shape === "queue-cylinder" ? 2 * QUEUE_CYLINDER_ELLIPSE_X : 0)}
+                        y={y}
+                        width={ELEMENT_WIDTH - 2 * TEXT_PADDING
+                        - (node.symbol ? (SYMBOL_WIDTH + SYMBOL_SPACING) : 0)
+                        - (node.shape === "queue-cylinder" ? 2 * QUEUE_CYLINDER_ELLIPSE_X : 0)}
                         height={ELEMENT_HEIGHT}/>
                 </clipPath>
             </g>

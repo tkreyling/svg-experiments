@@ -1,5 +1,5 @@
 import React from "react";
-import {component, db, edge, Element, gap, graph, node} from "./newGraphModel";
+import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const NewArchitecture: React.FC = () => {
@@ -82,11 +82,11 @@ export const NewArchitecture: React.FC = () => {
         edge(categoryImporter, productServiceDB),
     ];
 
-    let productStream = node("Product Stream");
+    let productStream = queue("Product Stream");
     let productExporter = component("Product Exporter");
-    let productCampaignsStream = node("Product Campaigns Stream");
+    let productCampaignsStream = queue("Product Campaigns Stream");
     let productCampaignsExporter = component("Product Campaigns Exporter");
-    let nightlyStockStream = node("Nightly Stock Stream");
+    let nightlyStockStream = queue("Nightly Stock Stream");
     let nightlyStockExporter = component("Nightly Stock Exporter");
 
     let productExporterService: Element<unknown> = {
@@ -104,7 +104,7 @@ export const NewArchitecture: React.FC = () => {
         edge(nightlyStockExporter, nightlyStockStream),
     ];
 
-    let stockStream = node("Stock Stream");
+    let stockStream = queue("Stock Stream");
     let stockExporter = component("Stock Exporter");
 
     let stockExporterService: Element<unknown> = {
@@ -117,7 +117,7 @@ export const NewArchitecture: React.FC = () => {
         edge(stockExporter, stockStream)
     ];
 
-    let deliveryTimeStream = node("Delivery Time Stream");
+    let deliveryTimeStream = queue("Delivery Time Stream");
     let deliveryTimeExporter = component("Delivery Time Exporter");
 
     let deliveryTimeExporterService: Element<unknown> = {
@@ -130,7 +130,7 @@ export const NewArchitecture: React.FC = () => {
         edge(deliveryTimeExporter, deliveryTimeStream)
     ];
 
-    let categoryStream = node("Category Stream");
+    let categoryStream = queue("Category Stream");
     let categoryExporter = component("Category Exporter");
 
     let categoryExporterService: Element<unknown> = {
