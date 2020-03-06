@@ -1,5 +1,7 @@
 import React from "react";
 import {
+    ARROW_HEIGHT,
+    ARROW_WIDTH,
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_X,
     EDGE_SPACING,
@@ -43,18 +45,33 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
         + VERTICAL_SPACING / 2
         + edge.midPathSegmentOffsetY * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
+    let onLowerSide = edge.to.offsetElementsY <= edge.from.offsetElementsY;
+    let arrow = (
+        <path d={
+            "M " + (toNode.x + ARROW_WIDTH) + " " + (toNode.y + ARROW_HEIGHT * (onLowerSide ? 1 : -1)) + " " +
+            "L " + toNode.x + " " + toNode.y + " " +
+            "L " + (toNode.x - ARROW_WIDTH) + " " + (toNode.y + ARROW_HEIGHT * (onLowerSide ? 1 : -1))
+        }
+              stroke="black"
+              strokeWidth={STROKE_WIDTH}
+              fill="none"
+        />
+    );
     if (!edge.lowerLayerEdge) {
         return (
-            <path key={edge.edgeIndex} d={
-                "M " + fromNode.x + " " + fromNode.y + " " +
-                "V " + upperNodeEdgesY + " " +
-                "H " + toNode.x + " " +
-                "V " + toNode.y
-            }
-                  stroke="black"
-                  strokeWidth={STROKE_WIDTH}
-                  fill="none"
-            />
+            <g key={edge.edgeIndex}>
+                <path d={
+                    "M " + fromNode.x + " " + fromNode.y + " " +
+                    "V " + upperNodeEdgesY + " " +
+                    "H " + toNode.x + " " +
+                    "V " + toNode.y
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+                {arrow}
+            </g>
         );
     } else {
         let lowerLayerEdge = edge.lowerLayerEdge as Edge<unknown, MidPathSegmentOffsetY> & IsLowerLayerEdge & OriginalEdge<unknown, unknown>;
@@ -67,18 +84,21 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
             + ELEMENT_WIDTH + getUpperLeftNode(edge).borderIndexMaxX * BORDER_SPACING_X
             + (edge.crossLayerPathSegmentOffsetX! + 1) * EDGE_SPACING;
         return (
-            <path key={edge.edgeIndex} d={
-                "M " + fromNode.x + " " + fromNode.y + " " +
-                "V " + upperNodeEdgesY + " " +
-                "H " + besideTopNodeX + " " +
-                "V " + lowerNodeEdgesY + " " +
-                "H " + toNode.x + " " +
-                "V " + toNode.y
-            }
-                  stroke="black"
-                  strokeWidth={STROKE_WIDTH}
-                  fill="none"
-            />
+            <g key={edge.edgeIndex}>
+                <path d={
+                    "M " + fromNode.x + " " + fromNode.y + " " +
+                    "V " + upperNodeEdgesY + " " +
+                    "H " + besideTopNodeX + " " +
+                    "V " + lowerNodeEdgesY + " " +
+                    "H " + toNode.x + " " +
+                    "V " + toNode.y
+                }
+                      stroke="black"
+                      strokeWidth={STROKE_WIDTH}
+                      fill="none"
+                />
+                {arrow}
+            </g>
         );
     }
 };
