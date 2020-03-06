@@ -3,14 +3,34 @@ import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const NewArchitecture: React.FC = () => {
+    let contentSiteMap = component("Content Site Map");
+    let contentViewComponent = component("Content View");
+
+    let contentView: Element<unknown> = {
+        kind: "row", name: "Content View", border: "deployment-box",
+        elements: [contentSiteMap, contentViewComponent]
+    };
+
+    let edutainment: Element<unknown> = {
+        kind: "column", elements: [contentView]
+    };
+
     let searchView = component("Search View");
     let pdpViewComponent = component("PDP View");
 
     let pdpView: Element<unknown> = {
         kind: "row",
-        elements: [gap(), {
+        elements: [gap(), gap(), {
             kind: "row", name: "PDP View", border: "deployment-box",
             elements: [gap(), searchView, gap(), gap(), gap(), gap(), pdpViewComponent, gap(), gap(), gap()]
+        }]
+    };
+
+    let siteMapGenerator = component("Site Map Generator");
+
+    let coreSiteMap: Element<unknown> = {
+        kind: "column", elements: [gap(), {
+            kind: "row", name: "Site Map Generator", border: "deployment-box", elements: [siteMapGenerator]
         }]
     };
 
@@ -155,13 +175,13 @@ export const NewArchitecture: React.FC = () => {
     ];
 
     let coreServices: Element<unknown> = {
-        kind: "row", elements: [search, productService]
+        kind: "row", elements: [coreSiteMap, search, productService]
     };
     let coreServicesEdges = searchEdges.concat(productServiceEdges);
 
     let coreExporter: Element<unknown> = {
         kind: "row", elements: [
-            gap(), gap(), gap(), gap(), gap(),
+            gap(), gap(), gap(), gap(), gap(), gap(),
             productExporterService, stockExporterService, deliveryTimeExporterService, categoryExporterService
         ]
     };
@@ -177,6 +197,7 @@ export const NewArchitecture: React.FC = () => {
         edge(pdpViewComponent, productAPI),
         edge(pdpViewComponent, stockAPI),
         edge(searchView, factFinderAPI),
+        edge(siteMapGenerator, factFinderFeedServiceDB),
         edge(ffProductImporter, productStream),
         edge(ffProductCampaignsImporter, productCampaignsStream),
         edge(ffCategoryImporter, categoryStream),
@@ -188,7 +209,15 @@ export const NewArchitecture: React.FC = () => {
         edge(categoryImporter, categoryStream)
     ]);
 
+    let coreAccount: Element<unknown> = {
+        kind: "row", elements: [edutainment, core]
+    };
+    let coreAccountEdges = coreEdges.concat([
+        edge(contentViewComponent, factFinderAPI),
+        edge(contentViewComponent, productAPI)
+    ]);
+
     return (
-        <Diagram graph={graph(core, coreEdges)}/>
+        <Diagram graph={graph(coreAccount, coreAccountEdges)}/>
     );
 };
