@@ -6,10 +6,10 @@ export const NewArchitecture: React.FC = () => {
     let factFinderDB = db("FACTFinder DB");
     let factFinderAPI = component("FACTFinder API");
 
-    let factFinderFeedServiceDB = db("FACTFinder Feed Service DB");
+    let factFinderFeedServiceDB = db("FACTFinder Feed\nService DB");
     let factFinderUpdater = component("FACTFinder Updater");
     let ffProductImporter = component("Product Importer");
-    let ffProductCampaignsImporter = component("Product Campaigns Importer");
+    let ffProductCampaignsImporter = component("Product Campaigns\nImporter");
     let ffCategoryImporter = component("Category Importer");
 
     let search: Element<unknown> = {
@@ -44,9 +44,9 @@ export const NewArchitecture: React.FC = () => {
     let productAPI = component("Product API");
     let stockAPI = component("Stock API");
     let productImporter = component("Product Importer");
-    let productCampaignsImporter = component("Product Campaigns Importer");
+    let productCampaignsImporter = component("Product Campaigns\nImporter");
     let nightlyStockImporter = component("Nightly Stock Importer");
-    let nearTimeStockImporter = component("Near Time Stock Importer");
+    let nearTimeStockImporter = component("Near Time Stock\nImporter");
     let deliveryTimeImporter = component("Delivery Time Importer");
     let categoryImporter = component("Category Importer");
 
@@ -84,7 +84,7 @@ export const NewArchitecture: React.FC = () => {
 
     let productStream = queue("Product Stream");
     let productExporter = component("Product Exporter");
-    let productCampaignsStream = queue("Product Campaigns Stream");
+    let productCampaignsStream = queue("Product Campaigns\nStream");
     let productCampaignsExporter = component("Product Campaigns Exporter");
     let nightlyStockStream = queue("Nightly Stock Stream");
     let nightlyStockExporter = component("Nightly Stock Exporter");
@@ -123,7 +123,7 @@ export const NewArchitecture: React.FC = () => {
     let deliveryTimeExporterService: Element<unknown> = {
         kind: "column", elements: [
             deliveryTimeStream,
-            {kind: "row", name: "Delivery Time Exporter Service", border: "deployment-box", elements: [deliveryTimeExporter]}
+            {kind: "row", name: "Delivery Time\nExporter Service", border: "deployment-box", elements: [deliveryTimeExporter]}
         ]
     };
     let deliveryTimeExporterServiceEdges = [

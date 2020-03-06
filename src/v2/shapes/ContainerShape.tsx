@@ -7,7 +7,7 @@ import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
-    STROKE_WIDTH,
+    STROKE_WIDTH, TEXT_PADDING,
     VERTICAL_SPACING
 } from "../styling";
 import {Container} from "../newGraphModel";
@@ -95,20 +95,26 @@ export const ContainerShape: React.FC<Props> = container => {
             }
 
             {container.name &&
-            <g>
+            <g transform={"translate("
+            + (x + BORDER_SPACING_X) + " " + (y + TEXT_PADDING) + ")"}>
                 <text
-                    x={x + BORDER_SPACING_X}
-                    y={y + ELEMENT_HEIGHT * 0.55}
+                    x={0}
+                    y={0}
                     fill="black"
-                    clipPath={"url(#clip-element-text-" + container.elementKey + ")"}>{container.name}
+                    clipPath={"url(#clip-element-text-" + container.elementKey + ")"}
+                    fontSize={12}
+                >
+                    {container.name.split("\n").map((line, lineIndex) => (
+                        <tspan key={container.elementKey + "T" + lineIndex} x="0" dy="1.2em">{line}</tspan>
+                    ))}
                 </text>
 
                 <clipPath id={"clip-element-text-" + container.elementKey}>
                     <rect
-                        x={x + BORDER_SPACING_X}
-                        y={y}
+                        x={0}
+                        y={0}
                         width={width - 2 * BORDER_SPACING_X}
-                        height={ELEMENT_HEIGHT}/>
+                        height={BORDER_SPACING_TOP}/>
                 </clipPath>
             </g>
             }
