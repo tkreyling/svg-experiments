@@ -96,7 +96,7 @@ export const NewArchitecture: React.FC = () => {
     let productStream = queue("Product Stream");
     let productExporter = component("Product Exporter");
     let productCampaignsStream = queue("Product Campaigns\nStream");
-    let productCampaignsExporter = component("Product Campaigns Exporter");
+    let productCampaignsExporter = component("Product Campaigns\nExporter");
     let nightlyStockStream = queue("Nightly Stock Stream");
     let nightlyStockExporter = component("Nightly Stock Exporter");
 
