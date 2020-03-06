@@ -3,11 +3,14 @@ import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
     BORDER_SPACING_X,
+    DEPLOYMENT_BOX_3D_OFFSET,
+    DEPLOYMENT_BOX_INDENT,
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
-    STROKE_WIDTH, TEXT_PADDING,
+    STROKE_WIDTH,
+    TEXT_PADDING,
     VERTICAL_SPACING
 } from "../styling";
 import {Container} from "../newGraphModel";
@@ -21,9 +24,6 @@ import {ElementKey} from "../elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY} from "../edgesLayout/MidPathSegmentOffsetYAggregates";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
-
-const DEPLOYMENT_BOX_INDENT = BORDER_SPACING_X * 0.3;
-const DEPLOYMENT_BOX_3D_OFFSET = BORDER_SPACING_X * 0.4;
 
 type Props = Container<
     ElementKey &

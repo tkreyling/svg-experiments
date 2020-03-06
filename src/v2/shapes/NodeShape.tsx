@@ -1,8 +1,9 @@
 import React from "react";
 import {
-    BORDER_SPACING_X,
+    DB_CYLINDER_ELLIPSE_Y,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
+    QUEUE_CYLINDER_ELLIPSE_X,
     STROKE_WIDTH,
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
@@ -13,9 +14,6 @@ import {Node} from "../newGraphModel"
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 import {ComponentSymbol} from "./Symbols";
-
-const DB_CYLINDER_ELLIPSE_Y = BORDER_SPACING_X * 0.5;
-const QUEUE_CYLINDER_ELLIPSE_X = BORDER_SPACING_X * 0.4;
 
 type Props = Node & ElementKey &
     RequiredNodeDataGetElementLeftX &

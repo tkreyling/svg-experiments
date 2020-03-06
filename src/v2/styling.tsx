@@ -14,3 +14,7 @@ export const SYMBOL_WIDTH = 16;
 export const SYMBOL_SPACING = 3;
 export const ARROW_WIDTH = 3;
 export const ARROW_HEIGHT = 5;
+export const DEPLOYMENT_BOX_INDENT = BORDER_SPACING_X * 0.3;
+export const DEPLOYMENT_BOX_3D_OFFSET = BORDER_SPACING_X * 0.4;
+export const DB_CYLINDER_ELLIPSE_Y = BORDER_SPACING_X * 0.5;
+export const QUEUE_CYLINDER_ELLIPSE_X = BORDER_SPACING_X * 0.4;
