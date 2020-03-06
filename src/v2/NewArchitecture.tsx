@@ -1,12 +1,12 @@
 import React from "react";
-import {component, edge, Element, gap, graph, node} from "./newGraphModel";
+import {component, db, edge, Element, gap, graph, node} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 export const NewArchitecture: React.FC = () => {
-    let factFinderDB = node("FACTFinder DB");
+    let factFinderDB = db("FACTFinder DB");
     let factFinderAPI = component("FACTFinder API");
 
-    let factFinderFeedServiceDB = node("FACTFinder Feed Service DB");
+    let factFinderFeedServiceDB = db("FACTFinder Feed Service DB");
     let factFinderUpdater = component("FACTFinder Updater");
     let ffProductImporter = component("Product Importer");
     let ffProductCampaignsImporter = component("Product Campaigns Importer");
@@ -40,7 +40,7 @@ export const NewArchitecture: React.FC = () => {
         edge(ffCategoryImporter, factFinderFeedServiceDB)
     ];
 
-    let productServiceDB = node("Product Service DB");
+    let productServiceDB = db("Product Service DB");
     let productAPI = component("Product API");
     let stockAPI = component("Stock API");
     let productImporter = component("Product Importer");

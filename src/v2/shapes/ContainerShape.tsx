@@ -98,7 +98,7 @@ export const ContainerShape: React.FC<Props> = container => {
             <g>
                 <text
                     x={x + BORDER_SPACING_X}
-                    y={y + ELEMENT_HEIGHT * 0.7}
+                    y={y + ELEMENT_HEIGHT * 0.55}
                     fill="black"
                     clipPath={"url(#clip-element-text-" + container.elementKey + ")"}>{container.name}
                 </text>

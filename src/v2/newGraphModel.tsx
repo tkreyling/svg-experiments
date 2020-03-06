@@ -2,6 +2,8 @@ import {assertNever} from "./assertNever";
 
 type Symbols = "component"
 
+type Shapes = "rectangle" | "db-cylinder"
+
 export type Node = {
     kind: "node",
 } & NodeProperties;
@@ -9,6 +11,7 @@ export type Node = {
 export type NodeProperties = {
     name?: string,
     visible?: boolean,
+    shape?: Shapes,
     symbol?: Symbols
 };
 
@@ -66,7 +69,8 @@ export function transformElementsUsingGraph<N, A, E>(graph: Graph<N, E>, f: (gra
 export function node(nameOrProperties?: string | NodeProperties): Node {
     let defaults: Node = {
         kind: "node",
-        visible: true
+        visible: true,
+        shape: "rectangle"
     };
     if (!nameOrProperties) {
         return defaults;
@@ -83,6 +87,10 @@ export function gap(): Node {
 
 export function component(name: string): Node {
     return node({name: name, symbol: "component"});
+}
+
+export function db(name: string): Node {
+    return node({name: name, shape: "db-cylinder"});
 }
 
 export function edge<N>(from: N, to: N): Edge<N, unknown> {

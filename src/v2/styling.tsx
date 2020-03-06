@@ -1,7 +1,7 @@
 export const MARGIN_Y = 5;
 export const MARGIN_X = 5;
 export const ELEMENT_WIDTH = 150;
-export const ELEMENT_HEIGHT = 40;
+export const ELEMENT_HEIGHT = 50;
 export const BORDER_SPACING_X = 15;
 export const BORDER_SPACING_TOP = 40;
 export const BORDER_SPACING_BOTTOM = 15;
