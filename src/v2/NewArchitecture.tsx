@@ -1,8 +1,8 @@
-import React from "react";
-import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
+import React, {useState} from "react";
+import {component, db, edge, Element, gap, graph, Node, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
-export const NewArchitecture: React.FC = () => {
+function createInitialGraph() {
     let contentSiteMap = component("Content Site Map");
     let contentViewComponent = component("Content View");
 
@@ -154,7 +154,12 @@ export const NewArchitecture: React.FC = () => {
     let deliveryTimeExporterService: Element<unknown> = {
         kind: "column", elements: [
             deliveryTimeStream,
-            {kind: "row", name: "Delivery Time\nExporter Service", border: "deployment-box", elements: [deliveryTimeExporter]}
+            {
+                kind: "row",
+                name: "Delivery Time\nExporter Service",
+                border: "deployment-box",
+                elements: [deliveryTimeExporter]
+            }
         ]
     };
     let deliveryTimeExporterServiceEdges = [
@@ -217,7 +222,24 @@ export const NewArchitecture: React.FC = () => {
         edge(contentViewComponent, productAPI)
     ]);
 
+    return graph(coreAccount, coreAccountEdges);
+}
+
+export const NewArchitecture: React.FC = () => {
+    let initialGraph = createInitialGraph();
+
+    const [graphState, setGraph] = useState(initialGraph);
+
+    function setNewGraph() {
+        setGraph(oldGraph => graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges));
+    }
+
+    function onNodeClick(node: Node) {
+        node.name += " [CLICKED]";
+        setNewGraph();
+    }
+
     return (
-        <Diagram graph={graph(coreAccount, coreAccountEdges)}/>
+        <Diagram graph={graphState} onNodeClick={onNodeClick}/>
     );
 };

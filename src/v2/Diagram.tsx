@@ -1,5 +1,5 @@
 import React from "react";
-import {allContainers, allNodes, Element, Graph} from "./newGraphModel";
+import {allContainers, allNodes, Element, Graph, Node} from "./newGraphModel";
 import {NodeShape} from "./shapes/NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
@@ -79,7 +79,10 @@ function height(element: Element<OffsetElementsY &
     }
 }
 
-type DiagramProps = { graph: Graph<unknown, unknown> }
+type DiagramProps = {
+    graph: Graph<unknown, unknown>,
+    onNodeClick: (node: Node) => void
+}
 
 export const Diagram: React.FC<DiagramProps> = props => {
     return [props.graph]
@@ -106,7 +109,7 @@ export const Diagram: React.FC<DiagramProps> = props => {
             return (
                 <svg viewBox={"0 0 " + width(graph.element) + " " + height(graph.element)}>
                     {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
-                    {allNodes(graph.element).map(NodeShape)}
+                    {allNodes(graph.element).map(node => (<NodeShape key={node.elementKey+"O"} node={node} onNodeClick={props.onNodeClick}/>))}
                     {graph.edges.map(EdgeShape)}
                 </svg>
             );

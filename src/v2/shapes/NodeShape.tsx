@@ -15,11 +15,13 @@ import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeft
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
 import {ComponentSymbol} from "./Symbols";
 
-type Props = Node & ElementKey &
-    RequiredNodeDataGetElementLeftX &
-    RequiredNodeDataGetElementTopY;
+type Props = {
+    node : Node & ElementKey & RequiredNodeDataGetElementLeftX & RequiredNodeDataGetElementTopY,
+    onNodeClick: (node: Node) => void
+};
 
-export const NodeShape: React.FC<Props> = node => {
+export const NodeShape: React.FC<Props> = props => {
+    let node = props.node;
     if (!node.visible) return null;
 
     let x = getElementLeftX(node);
@@ -32,7 +34,8 @@ export const NodeShape: React.FC<Props> = node => {
                 x={x} y={y}
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
-                fill="none" strokeWidth={STROKE_WIDTH} stroke="black"/>
+                onClick={event => props.onNodeClick(node)}
+                fill="white" strokeWidth={STROKE_WIDTH} stroke="black"/>
             }
             {node.shape === "db-cylinder" &&
             <g>
