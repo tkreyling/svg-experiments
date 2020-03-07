@@ -90,14 +90,18 @@ export const Diagram: React.FC<DiagramProps> = props => {
     const [graphState, setGraph] = useState(props.initialGraph);
 
     function onNodeClick(node: Node) {
-        node.selected = !node.selected;
-        setGraph(oldGraph => {
-            oldGraph.edges
-                .filter(edge => edge.from === node || edge.to === node)
-                .forEach(edge => edge.selected = !edge.selected);
+        function setSelected(state: boolean) {
+            node.selected = state;
+            setGraph(oldGraph => {
+                oldGraph.edges
+                    .filter(edge => edge.from === node || edge.to === node)
+                    .forEach(edge => edge.selected = state);
 
-            return graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges)
-        });
+                return graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges)
+            });
+        }
+
+        setSelected(!node.selected);
     }
 
     return [graphState]
