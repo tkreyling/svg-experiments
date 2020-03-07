@@ -12,7 +12,8 @@ export type NodeProperties = {
     name?: string,
     visible?: boolean,
     shape?: Shapes,
-    symbol?: Symbols
+    symbol?: Symbols,
+    selected?: boolean
 };
 
 export type Row<N> = {
@@ -37,7 +38,8 @@ export type Element<N> = (Node & N) | (Row<N> & N) | (Column<N> & N);
 
 export type Edge<N, E> = {
     from: N,
-    to: N
+    to: N,
+    selected?: boolean
 } & E
 
 export type Graph<N, E> = {

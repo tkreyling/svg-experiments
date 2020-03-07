@@ -4,7 +4,7 @@ import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     QUEUE_CYLINDER_ELLIPSE_X,
-    STROKE_WIDTH,
+    STROKE_WIDTH, STROKE_WIDTH_SELECTED,
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
     TEXT_PADDING
@@ -27,6 +27,8 @@ export const NodeShape: React.FC<Props> = props => {
     let x = getElementLeftX(node);
     let y = getElementTopY(node);
 
+    let strokeWidth = node.selected ? STROKE_WIDTH_SELECTED: STROKE_WIDTH;
+
     return (
         <g key={node.elementKey}>
             {node.shape === "rectangle" &&
@@ -35,7 +37,10 @@ export const NodeShape: React.FC<Props> = props => {
                 width={ELEMENT_WIDTH}
                 height={ELEMENT_HEIGHT}
                 onClick={event => props.onNodeClick(node)}
-                fill="white" strokeWidth={STROKE_WIDTH} stroke="black"/>
+                fill="white"
+                strokeWidth={strokeWidth}
+                stroke="black"
+            />
             }
             {node.shape === "db-cylinder" &&
             <g>
@@ -46,16 +51,17 @@ export const NodeShape: React.FC<Props> = props => {
                     "A " + (ELEMENT_WIDTH / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,1 " + x + "," + (y + ELEMENT_HEIGHT - DB_CYLINDER_ELLIPSE_Y) + " " +
                     "Z"
                 }
+                      onClick={event => props.onNodeClick(node)}
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
-                      fill="none"
+                      strokeWidth={strokeWidth}
+                      fill="white"
                 />
                 <path d={
                     "M " + x + " " + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
                     "A " + (ELEMENT_WIDTH / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,0 " + (x + ELEMENT_WIDTH) + "," + (y + DB_CYLINDER_ELLIPSE_Y)
                 }
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
+                      strokeWidth={strokeWidth}
                       fill="none"
                 />
             </g>
@@ -69,16 +75,17 @@ export const NodeShape: React.FC<Props> = props => {
                     "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,0 " + (x + ELEMENT_WIDTH - QUEUE_CYLINDER_ELLIPSE_X) + "," + y + " " +
                     "Z"
                 }
+                      onClick={event => props.onNodeClick(node)}
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
-                      fill="none"
+                      strokeWidth={strokeWidth}
+                      fill="white"
                 />
                 <path d={
                     "M " + (x +  QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
                     "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,1 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + ELEMENT_HEIGHT)
                 }
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
+                      strokeWidth={strokeWidth}
                       fill="none"
                 />
             </g>

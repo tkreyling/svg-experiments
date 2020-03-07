@@ -7,7 +7,7 @@ import {
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    STROKE_WIDTH,
+    STROKE_WIDTH, STROKE_WIDTH_SELECTED,
     VERTICAL_SPACING
 } from "../styling";
 import {BorderIndexMaxBottom} from "../elementsLayout/BorderIndexMaxBottom";
@@ -45,6 +45,9 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
         + VERTICAL_SPACING / 2
         + edge.midPathSegmentOffsetY * EDGE_SPACING;
     let toNode = edgeEndCoordinates(edge.to, edge.toIndex, edge.from);
+
+    let strokeWidth = edge.selected ? STROKE_WIDTH_SELECTED: STROKE_WIDTH;
+
     let onLowerSide = edge.to.offsetElementsY <= edge.from.offsetElementsY;
     let arrow = (
         <path d={
@@ -53,10 +56,11 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
             "L " + (toNode.x - ARROW_WIDTH) + " " + (toNode.y + ARROW_HEIGHT * (onLowerSide ? 1 : -1))
         }
               stroke="black"
-              strokeWidth={STROKE_WIDTH}
+              strokeWidth={strokeWidth}
               fill="none"
         />
     );
+
     if (!edge.lowerLayerEdge) {
         return (
             <g key={edge.edgeIndex}>
@@ -67,7 +71,7 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
                     "V " + toNode.y
                 }
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
+                      strokeWidth={strokeWidth}
                       fill="none"
                 />
                 {arrow}
@@ -94,7 +98,7 @@ export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
                     "V " + toNode.y
                 }
                       stroke="black"
-                      strokeWidth={STROKE_WIDTH}
+                      strokeWidth={strokeWidth}
                       fill="none"
                 />
                 {arrow}

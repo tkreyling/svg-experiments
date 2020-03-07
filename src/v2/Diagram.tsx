@@ -41,7 +41,9 @@ import {
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
-    HORIZONTAL_SPACING, MARGIN_X, MARGIN_Y,
+    HORIZONTAL_SPACING,
+    MARGIN_X,
+    MARGIN_Y,
     VERTICAL_SPACING
 } from "./styling";
 
@@ -87,13 +89,15 @@ export const Diagram: React.FC<DiagramProps> = props => {
 
     const [graphState, setGraph] = useState(props.initialGraph);
 
-    function setNewGraph() {
-        setGraph(oldGraph => graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges));
-    }
-
     function onNodeClick(node: Node) {
-        node.name += " [CLICKED]";
-        setNewGraph();
+        node.selected = !node.selected;
+        setGraph(oldGraph => {
+            oldGraph.edges
+                .filter(edge => edge.from === node || edge.to === node)
+                .forEach(edge => edge.selected = !edge.selected);
+
+            return graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges)
+        });
     }
 
     return [graphState]
