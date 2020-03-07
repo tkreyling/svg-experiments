@@ -1,5 +1,5 @@
-import React from "react";
-import {allContainers, allNodes, Element, Graph, Node} from "./newGraphModel";
+import React, {useState} from "react";
+import {allContainers, allNodes, Element, graph, Graph, Node} from "./newGraphModel";
 import {NodeShape} from "./shapes/NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
@@ -80,12 +80,23 @@ function height(element: Element<OffsetElementsY &
 }
 
 type DiagramProps = {
-    graph: Graph<unknown, unknown>,
-    onNodeClick: (node: Node) => void
+    initialGraph: Graph<unknown, unknown>
 }
 
 export const Diagram: React.FC<DiagramProps> = props => {
-    return [props.graph]
+
+    const [graphState, setGraph] = useState(props.initialGraph);
+
+    function setNewGraph() {
+        setGraph(oldGraph => graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges));
+    }
+
+    function onNodeClick(node: Node) {
+        node.name += " [CLICKED]";
+        setNewGraph();
+    }
+
+    return [graphState]
         .map(addElementKeyG)
         .map(addOffsetElementsXG)
         .map(addOffsetElementsYG)
@@ -109,7 +120,7 @@ export const Diagram: React.FC<DiagramProps> = props => {
             return (
                 <svg viewBox={"0 0 " + width(graph.element) + " " + height(graph.element)}>
                     {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
-                    {allNodes(graph.element).map(node => (<NodeShape key={node.elementKey+"O"} node={node} onNodeClick={props.onNodeClick}/>))}
+                    {allNodes(graph.element).map(node => (<NodeShape key={node.elementKey+"O"} node={node} onNodeClick={onNodeClick}/>))}
                     {graph.edges.map(EdgeShape)}
                 </svg>
             );

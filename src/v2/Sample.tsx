@@ -86,6 +86,6 @@ export const Sample: React.FC = () => {
         edge(node_8_1, node_8_2)
     ];
     return (
-        <Diagram graph={graph(element, edges)} onNodeClick={() => {}}/>
+        <Diagram initialGraph={graph(element, edges)}/>
     );
 };

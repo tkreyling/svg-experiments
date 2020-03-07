@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {component, db, edge, Element, gap, graph, Node, queue} from "./newGraphModel";
+import React from "react";
+import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
@@ -226,20 +226,7 @@ function createInitialGraph() {
 }
 
 export const NewArchitecture: React.FC = () => {
-    let initialGraph = createInitialGraph();
-
-    const [graphState, setGraph] = useState(initialGraph);
-
-    function setNewGraph() {
-        setGraph(oldGraph => graph(oldGraph.element, oldGraph.edges, oldGraph.syntheticNodes, oldGraph.syntheticEdges));
-    }
-
-    function onNodeClick(node: Node) {
-        node.name += " [CLICKED]";
-        setNewGraph();
-    }
-
     return (
-        <Diagram graph={graphState} onNodeClick={onNodeClick}/>
+        <Diagram initialGraph={createInitialGraph()}/>
     );
 };
