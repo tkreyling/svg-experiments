@@ -92,7 +92,7 @@ export function renderShape(
                 "Z"
             }
                   stroke="black"
-                  strokeWidth={STROKE_WIDTH}
+                  strokeWidth={strokeWidth}
                   onClick={onClick}
                   fill={fill}
             />
@@ -102,7 +102,7 @@ export function renderShape(
                 "V " + (y + height - DEPLOYMENT_BOX_INDENT)
             }
                   stroke="black"
-                  strokeWidth={STROKE_WIDTH}
+                  strokeWidth={strokeWidth}
                   fill="none"
             />
             <path d={
@@ -110,7 +110,7 @@ export function renderShape(
                 "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y
             }
                   stroke="black"
-                  strokeWidth={STROKE_WIDTH}
+                  strokeWidth={strokeWidth}
                   fill="none"
             />
         </g>

@@ -1,5 +1,5 @@
 import React from "react";
-import {component, db, edge, Element, gap, graph, node, queue} from "./newGraphModel";
+import {component, db, edge, Element, gap, graph, node, queue, system} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
@@ -255,20 +255,15 @@ function createInitialGraph() {
         elements: [mediaData]
     };
 
-    let mediathekComponent = node("Mediathek");
-
-    let mediathek: Element<unknown> = {
-        kind: "row", name: "Mediathek", border: "deployment-box",
-        elements: [mediathekComponent]
-    };
+    let mediathek = system("Mediathek");
 
     let mediathekEdges = [
-        edge(mediathekComponent, mediaData)
+        edge(mediathek, mediaData)
     ];
 
     let mercatorStagingDB = db("Mercator Staging DB");
     let mercatorDB = db("Mercator DB");
-    let mercatorComponent = node("Mercator");
+    let mercatorComponent = system("Mercator");
 
     let mercator: Element<unknown> = {
         kind: "column",
@@ -277,10 +272,7 @@ function createInitialGraph() {
             elements: [mercatorStagingDB, mercatorDB]
         }, {
             kind: "row",
-            elements: [gap(), {
-                kind: "row", name: "Mercator", border: "deployment-box",
-                elements: [mercatorComponent]
-            }]
+            elements: [gap(), mercatorComponent]
         }]
     };
 

@@ -99,6 +99,10 @@ export function queue(name: string): Node {
     return node({name: name, shape: "queue-cylinder"});
 }
 
+export function system(name: string): Node {
+    return node({name: name, shape: "deployment-box"});
+}
+
 export function edge<N>(from: N, to: N): Edge<N, unknown> {
     return {
         from: from,
