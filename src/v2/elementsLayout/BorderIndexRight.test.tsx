@@ -23,28 +23,28 @@ test('a row without elements receives borderIndexRight 0 itself', () => {
 });
 
 test('a row with a border has borderIndexRight 1', () => {
-    let element: InputType = {kind: "row", border: "solid", elements: [{kind: "node"}]};
+    let element: InputType = {kind: "row", border: "rectangle", elements: [{kind: "node"}]};
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "row", border: "solid", borderIndexRight: 1, elements: [{kind: "node", borderIndexRight: 0}]
+        kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{kind: "node", borderIndexRight: 0}]
     };
     expect(element).toStrictEqual(expected)
 });
 
 test('a row with a border and a nested row with a border has borderIndexRight 2', () => {
     let element: InputType = {
-        kind: "row", border: "solid", elements: [{
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+        kind: "row", border: "rectangle", elements: [{
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }]
     };
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "row", border: "solid", borderIndexRight: 2, elements: [{
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "row", border: "rectangle", borderIndexRight: 2, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }]
@@ -54,22 +54,22 @@ test('a row with a border and a nested row with a border has borderIndexRight 2'
 
 test('a row with a border and two nested rows with border has borderIndexRight 2', () => {
     let element: InputType = {
-        kind: "row", border: "solid", elements: [{
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+        kind: "row", border: "rectangle", elements: [{
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }, {
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }]
     };
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "row", border: "solid", borderIndexRight: 2, elements: [{
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "row", border: "rectangle", borderIndexRight: 2, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }, {
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }]
@@ -79,8 +79,8 @@ test('a row with a border and two nested rows with border has borderIndexRight 2
 
 test('a row with a border and two nested rows, last one without border, has borderIndexRight 1', () => {
     let element: InputType = {
-        kind: "row", border: "solid", elements: [{
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+        kind: "row", border: "rectangle", elements: [{
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }, {
             kind: "row", elements: [{kind: "node"}]
         }]
@@ -89,8 +89,8 @@ test('a row with a border and two nested rows, last one without border, has bord
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "row", border: "solid", borderIndexRight: 1, elements: [{
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }, {
@@ -103,12 +103,12 @@ test('a row with a border and two nested rows, last one without border, has bord
 });
 
 test('a column with a border has borderIndexRight 1', () => {
-    let element: InputType = {kind: "column", border: "solid", elements: [{kind: "node"}]};
+    let element: InputType = {kind: "column", border: "rectangle", elements: [{kind: "node"}]};
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "column", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "column", border: "rectangle", borderIndexRight: 1, elements: [{
             kind: "node", borderIndexRight: 0
         }]
     };
@@ -117,16 +117,16 @@ test('a column with a border has borderIndexRight 1', () => {
 
 test('a column with a border and a nested row with a border has borderIndexRight 2', () => {
     let element: InputType = {
-        kind: "column", border: "solid", elements: [{
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+        kind: "column", border: "rectangle", elements: [{
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }]
     };
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "column", border: "solid", borderIndexRight: 2, elements: [{
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "column", border: "rectangle", borderIndexRight: 2, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }]
@@ -136,22 +136,22 @@ test('a column with a border and a nested row with a border has borderIndexRight
 
 test('a column with a border and two nested rows with border has borderIndexRight 2', () => {
     let element: InputType = {
-        kind: "column", border: "solid", elements: [{
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+        kind: "column", border: "rectangle", elements: [{
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }, {
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }]
     };
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "column", border: "solid", borderIndexRight: 2, elements: [{
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+        kind: "column", border: "rectangle", borderIndexRight: 2, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }, {
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }]
@@ -161,22 +161,22 @@ test('a column with a border and two nested rows with border has borderIndexRigh
 
 test('a column with a border and two nested rows, not all with border, has borderIndexRight 2', () => {
     let element: InputType = {
-        kind: "column", border: "solid", elements: [{
+        kind: "column", border: "rectangle", elements: [{
             kind: "row", elements: [{kind: "node"}]
         }, {
-            kind: "row", border: "solid", elements: [{kind: "node"}]
+            kind: "row", border: "rectangle", elements: [{kind: "node"}]
         }]
     };
 
     addBorderIndexRight(element);
 
     let expected: OutputType = {
-        kind: "column", border: "solid", borderIndexRight: 2, elements: [{
+        kind: "column", border: "rectangle", borderIndexRight: 2, elements: [{
             kind: "row", borderIndexRight: 0, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }, {
-            kind: "row", border: "solid", borderIndexRight: 1, elements: [{
+            kind: "row", border: "rectangle", borderIndexRight: 1, elements: [{
                 kind: "node", borderIndexRight: 0
             }]
         }]

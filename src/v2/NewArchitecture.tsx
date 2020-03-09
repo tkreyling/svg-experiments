@@ -232,7 +232,7 @@ function createInitialGraph() {
     ]);
 
     let coreAccount: Element<unknown> = {
-        kind: "row", border: "solid", name: "Core VPC", elements: [edutainment, core]
+        kind: "row", border: "rectangle", name: "Core VPC", elements: [edutainment, core]
     };
     let coreAccountEdges = coreEdges.concat([
         edge(contentViewComponent, factFinderAPI),
@@ -251,7 +251,7 @@ function createInitialGraph() {
     let mediaData = db("Media Data");
 
     let shopNowDB: Element<unknown> = {
-        kind: "row", name: "ShopNow DB", border: "solid",
+        kind: "row", name: "ShopNow DB", border: "rectangle",
         elements: [mediaData]
     };
 
@@ -290,7 +290,7 @@ function createInitialGraph() {
     ];
 
     let tds: Element<unknown> = {
-        kind: "row", border: "solid", name: "TDS", elements: [
+        kind: "row", border: "rectangle", name: "TDS", elements: [
             {kind: "column", elements: [shopNowDB, mediathek]},
             mercator
         ]

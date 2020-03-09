@@ -50,7 +50,7 @@ export const ContainerComponent: React.FC<Props> = container => {
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
     return (
         <g key={container.elementKey}>
-            {(container.border === "solid") &&
+            {(container.border === "rectangle") &&
             <rect
                 x={x}
                 y={y}
