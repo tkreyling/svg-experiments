@@ -1,8 +1,14 @@
-import {DB_CYLINDER_ELLIPSE_Y, QUEUE_CYLINDER_ELLIPSE_X, STROKE_WIDTH, STROKE_WIDTH_SELECTED} from "../styling";
+import {
+    DB_CYLINDER_ELLIPSE_Y, DEPLOYMENT_BOX_3D_OFFSET,
+    DEPLOYMENT_BOX_INDENT,
+    QUEUE_CYLINDER_ELLIPSE_X,
+    STROKE_WIDTH,
+    STROKE_WIDTH_SELECTED
+} from "../styling";
 import React from "react";
 
 export function renderShape(
-    shape: "rectangle" | "db-cylinder" | "queue-cylinder" | undefined,
+    shape: "rectangle" | "db-cylinder" | "queue-cylinder" | "deployment-box" | undefined,
     x: number,
     y: number,
     width: number,
@@ -70,6 +76,41 @@ export function renderShape(
             }
                   stroke="black"
                   strokeWidth={strokeWidth}
+                  fill="none"
+            />
+        </g>
+        }
+        {(shape === "deployment-box") &&
+        <g>
+            <path d={
+                "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                "L " + (x + DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
+                "H " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " +
+                "V " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
+                "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) +
+                "H " + (x + DEPLOYMENT_BOX_INDENT) + " " +
+                "Z"
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  onClick={onClick}
+                  fill={fill}
+            />
+            <path d={
+                "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                "H " + (x + width - DEPLOYMENT_BOX_INDENT) + " " +
+                "V " + (y + height - DEPLOYMENT_BOX_INDENT)
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
+            <path d={
+                "M " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
+                "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
                   fill="none"
             />
         </g>

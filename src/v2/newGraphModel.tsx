@@ -2,7 +2,7 @@ import {assertNever} from "./assertNever";
 
 type Symbols = "component"
 
-type Shapes = "rectangle" | "db-cylinder" | "queue-cylinder"
+type Shapes = "rectangle" | "db-cylinder" | "queue-cylinder" | "deployment-box"
 
 export type Node = {
     kind: "node",

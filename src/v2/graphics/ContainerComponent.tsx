@@ -3,13 +3,10 @@ import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
     BORDER_SPACING_X,
-    DEPLOYMENT_BOX_3D_OFFSET,
-    DEPLOYMENT_BOX_INDENT,
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     HORIZONTAL_SPACING,
-    STROKE_WIDTH,
     TEXT_PADDING,
     VERTICAL_SPACING
 } from "../styling";
@@ -51,42 +48,7 @@ export const ContainerComponent: React.FC<Props> = container => {
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
     return (
         <g key={container.elementKey}>
-            {(container.border === "rectangle") && renderShape("rectangle", x, y, width, height, "none")}
-
-            {(container.border === "deployment-box") &&
-            <g>
-                <path d={
-                    "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
-                    "H " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " +
-                    "V " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) +
-                    "H " + (x + DEPLOYMENT_BOX_INDENT) + " " +
-                    "Z"
-                }
-                      stroke="black"
-                      strokeWidth={STROKE_WIDTH}
-                      fill="none"
-                />
-                <path d={
-                    "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
-                    "H " + (x + width - DEPLOYMENT_BOX_INDENT) + " " +
-                    "V " + (y + height - DEPLOYMENT_BOX_INDENT)
-                }
-                      stroke="black"
-                      strokeWidth={STROKE_WIDTH}
-                      fill="none"
-                />
-                <path d={
-                    "M " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
-                    "L " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y
-                }
-                      stroke="black"
-                      strokeWidth={STROKE_WIDTH}
-                      fill="none"
-                />
-            </g>
-            }
+            {renderShape(container.border, x, y, width, height, "none")}
 
             {container.name &&
             <g transform={"translate("
