@@ -4,7 +4,8 @@ import {
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
     QUEUE_CYLINDER_ELLIPSE_X,
-    STROKE_WIDTH, STROKE_WIDTH_SELECTED,
+    STROKE_WIDTH,
+    STROKE_WIDTH_SELECTED,
     SYMBOL_SPACING,
     SYMBOL_WIDTH,
     TEXT_PADDING
@@ -20,6 +21,81 @@ type Props = {
     onNodeClick: (node: Node) => void
 };
 
+function renderShape(
+    shape: "rectangle" | "db-cylinder" | "queue-cylinder" | undefined,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    selected?: boolean,
+    onClick?: () => void
+) {
+    let strokeWidth = selected ? STROKE_WIDTH_SELECTED: STROKE_WIDTH;
+
+    return <>
+        {shape === "rectangle" &&
+        <rect
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+            onClick={onClick}
+            fill="white"
+            strokeWidth={strokeWidth}
+            stroke="black"
+        />
+        }
+        {shape === "db-cylinder" &&
+        <g>
+            <path d={
+                "M " + x + " " + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
+                "A " + (width / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,1 " + (x + width) + "," + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
+                "V " + (y + height - DB_CYLINDER_ELLIPSE_Y) + " " +
+                "A " + (width / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,1 " + x + "," + (y + height - DB_CYLINDER_ELLIPSE_Y) + " " +
+                "Z"
+            }
+                  onClick={onClick}
+                  stroke="black"
+                  strokeWidth={strokeWidth}
+                  fill="white"
+            />
+            <path d={
+                "M " + x + " " + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
+                "A " + (width / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,0 " + (x + width) + "," + (y + DB_CYLINDER_ELLIPSE_Y)
+            }
+                  stroke="black"
+                  strokeWidth={strokeWidth}
+                  fill="none"
+            />
+        </g>
+        }
+        {shape === "queue-cylinder" &&
+        <g>
+            <path d={
+                "M " + (x + QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
+                "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (height / 2) + " 0 1,0 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + height) + " " +
+                "H " + (x + width - QUEUE_CYLINDER_ELLIPSE_X) + " " +
+                "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (height / 2) + " 0 1,0 " + (x + width - QUEUE_CYLINDER_ELLIPSE_X) + "," + y + " " +
+                "Z"
+            }
+                  onClick={onClick}
+                  stroke="black"
+                  strokeWidth={strokeWidth}
+                  fill="white"
+            />
+            <path d={
+                "M " + (x + QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
+                "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (height / 2) + " 0 1,1 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + height)
+            }
+                  stroke="black"
+                  strokeWidth={strokeWidth}
+                  fill="none"
+            />
+        </g>
+        }
+    </>;
+}
+
 export const NodeComponent: React.FC<Props> = props => {
     let node = props.node;
     if (!node.visible) return null;
@@ -27,69 +103,10 @@ export const NodeComponent: React.FC<Props> = props => {
     let x = getElementLeftX(node);
     let y = getElementTopY(node);
 
-    let strokeWidth = node.selected ? STROKE_WIDTH_SELECTED: STROKE_WIDTH;
 
     return (
         <g key={node.elementKey}>
-            {node.shape === "rectangle" &&
-            <rect
-                x={x} y={y}
-                width={ELEMENT_WIDTH}
-                height={ELEMENT_HEIGHT}
-                onClick={event => props.onNodeClick(node)}
-                fill="white"
-                strokeWidth={strokeWidth}
-                stroke="black"
-            />
-            }
-            {node.shape === "db-cylinder" &&
-            <g>
-                <path d={
-                    "M " + x + " " + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
-                    "A " + (ELEMENT_WIDTH / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,1 " + (x + ELEMENT_WIDTH) + "," + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
-                    "V " + (y + ELEMENT_HEIGHT - DB_CYLINDER_ELLIPSE_Y) + " " +
-                    "A " + (ELEMENT_WIDTH / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,1 " + x + "," + (y + ELEMENT_HEIGHT - DB_CYLINDER_ELLIPSE_Y) + " " +
-                    "Z"
-                }
-                      onClick={event => props.onNodeClick(node)}
-                      stroke="black"
-                      strokeWidth={strokeWidth}
-                      fill="white"
-                />
-                <path d={
-                    "M " + x + " " + (y + DB_CYLINDER_ELLIPSE_Y) + " " +
-                    "A " + (ELEMENT_WIDTH / 2) + "," + DB_CYLINDER_ELLIPSE_Y + " 0 1,0 " + (x + ELEMENT_WIDTH) + "," + (y + DB_CYLINDER_ELLIPSE_Y)
-                }
-                      stroke="black"
-                      strokeWidth={strokeWidth}
-                      fill="none"
-                />
-            </g>
-            }
-            {node.shape === "queue-cylinder" &&
-            <g>
-                <path d={
-                    "M " + (x +  QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
-                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,0 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + ELEMENT_HEIGHT) + " " +
-                    "H " + (x + ELEMENT_WIDTH - QUEUE_CYLINDER_ELLIPSE_X) + " " +
-                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,0 " + (x + ELEMENT_WIDTH - QUEUE_CYLINDER_ELLIPSE_X) + "," + y + " " +
-                    "Z"
-                }
-                      onClick={event => props.onNodeClick(node)}
-                      stroke="black"
-                      strokeWidth={strokeWidth}
-                      fill="white"
-                />
-                <path d={
-                    "M " + (x +  QUEUE_CYLINDER_ELLIPSE_X) + " " + y + " " +
-                    "A " + QUEUE_CYLINDER_ELLIPSE_X + "," + (ELEMENT_HEIGHT / 2) + " 0 1,1 " + (x + QUEUE_CYLINDER_ELLIPSE_X) + "," + (y + ELEMENT_HEIGHT)
-                }
-                      stroke="black"
-                      strokeWidth={strokeWidth}
-                      fill="none"
-                />
-            </g>
-            }
+            {renderShape(node.shape, x, y, ELEMENT_WIDTH, ELEMENT_HEIGHT, node.selected, () => props.onNodeClick(node))}
             {node.name &&
             <g transform={"translate("
             + (x + TEXT_PADDING + (node.shape === "queue-cylinder" ? 2 * QUEUE_CYLINDER_ELLIPSE_X : 0)) + " " + y + ")"}>
