@@ -29,14 +29,14 @@ function createInitialGraph() {
         kind: "column", elements: [contentView]
     };
 
-    let searchView = component("Search View");
+    let searchViewComponent = component("Search View");
     let pdpViewComponent = component("PDP View");
 
     let pdpView: Element<unknown> = {
         kind: "row",
         elements: [gap(), gap(), {
             kind: "row", name: "PDP View", border: "deployment-box",
-            elements: [gap(), searchView, gap(), gap(), gap(), gap(), pdpViewComponent, gap(), gap(), gap()]
+            elements: [gap(), searchViewComponent, gap(), gap(), gap(), gap(), pdpViewComponent, gap(), gap(), gap()]
         }]
     };
 
@@ -218,7 +218,7 @@ function createInitialGraph() {
     let coreEdges = coreServicesEdges.concat(coreExporterEdges).concat([
         edge(pdpViewComponent, productAPI),
         edge(pdpViewComponent, stockAPI),
-        edge(searchView, factFinderAPI),
+        edge(searchViewComponent, factFinderAPI),
         edge(siteMapGenerator, factFinderFeedServiceDB),
         edge(ffProductImporter, productStream),
         edge(ffProductCampaignsImporter, productCampaignsStream),
@@ -239,13 +239,81 @@ function createInitialGraph() {
         edge(contentViewComponent, productAPI)
     ]);
 
-    let overall: Element<unknown> = {
-        kind: "column", elements: [customerBrowser, coreAccount]
+    let content = node("Site Content");
+    let catalogContent = node("Catalog specific Content");
+    let productContent = node("Product specific Content");
+
+    let contentful: Element<unknown> = {
+        kind: "row", name: "Contentful", border: "deployment-box",
+        elements: [content, catalogContent, productContent]
     };
-    let overallEdges = coreAccountEdges.concat([
+
+    let mediaData = db("Media Data");
+
+    let shopNowDB: Element<unknown> = {
+        kind: "row", name: "ShopNow DB", border: "solid",
+        elements: [mediaData]
+    };
+
+    let mediathekComponent = node("Mediathek");
+
+    let mediathek: Element<unknown> = {
+        kind: "row", name: "Mediathek", border: "deployment-box",
+        elements: [mediathekComponent]
+    };
+
+    let mediathekEdges = [
+        edge(mediathekComponent, mediaData)
+    ];
+
+    let mercatorStagingDB = db("Mercator Staging DB");
+    let mercatorDB = db("Mercator DB");
+    let mercatorComponent = node("Mercator");
+
+    let mercator: Element<unknown> = {
+        kind: "column",
+        elements: [{
+            kind: "row",
+            elements: [mercatorStagingDB, mercatorDB]
+        }, {
+            kind: "row",
+            elements: [gap(), {
+                kind: "row", name: "Mercator", border: "deployment-box",
+                elements: [mercatorComponent]
+            }]
+        }]
+    };
+
+    let mercatorEdges = [
+        edge(mercatorComponent, mercatorDB),
+        edge(mercatorDB, mercatorStagingDB)
+    ];
+
+    let tds: Element<unknown> = {
+        kind: "row", border: "solid", name: "TDS", elements: [
+            {kind: "column", elements: [shopNowDB, mediathek]},
+            mercator
+        ]
+    };
+
+    let tdsEdges = mediathekEdges.concat(mercatorEdges);
+
+    let backendSystems: Element<unknown> = {
+        kind: "row", elements: [contentful, gap(), gap(), gap(), gap(), gap(), tds]
+    };
+
+    let overall: Element<unknown> = {
+        kind: "column", elements: [customerBrowser, coreAccount, backendSystems]
+    };
+    let overallEdges = coreAccountEdges.concat(tdsEdges).concat([
         edge(contentViewComponent, browserContentViewComponent),
-        edge(searchView, browserSearchViewComponent),
-        edge(pdpViewComponent, browserPdpViewComponent)
+        edge(searchViewComponent, browserSearchViewComponent),
+        edge(pdpViewComponent, browserPdpViewComponent),
+        edge(contentViewComponent, content),
+        edge(searchViewComponent, catalogContent),
+        edge(pdpViewComponent, productContent),
+        edge(productExporter, mediaData),
+        edge(productExporter, mercatorStagingDB)
     ]);
 
     return graph(overall, overallEdges);
