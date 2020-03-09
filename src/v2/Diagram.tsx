@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {allContainers, allNodes, Element, graph, Graph, Node} from "./newGraphModel";
-import {NodeShape} from "./shapes/NodeShape";
+import {NodeShape} from "./graphics/NodeShape";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {addOffsetElementsXG, OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {addEmbeddedElementsXG} from "./elementsLayout/EmbeddedElementsX";
-import {ContainerShape} from "./shapes/ContainerShape";
+import {ContainerShape} from "./graphics/ContainerShape";
 import {addBorderIndexMaxXG, BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {addBorderIndexLeftG} from "./elementsLayout/BorderIndexLeft";
 import {addBorderIndexRightG} from "./elementsLayout/BorderIndexRight";
@@ -18,7 +18,7 @@ import {
 } from "./elementsLayout/BorderIndexMaxBottom";
 import {addBorderIndexMaxTopG, BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
-import {EdgeShape} from "./shapes/EdgeShape";
+import {EdgeShape} from "./graphics/EdgeShape";
 import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
 import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {
