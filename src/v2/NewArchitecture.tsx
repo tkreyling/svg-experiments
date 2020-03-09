@@ -1,8 +1,22 @@
 import React from "react";
-import {component, db, edge, Element, gap, graph, queue} from "./newGraphModel";
+import {component, db, edge, Element, gap, graph, node, queue} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
+    let browserContentViewComponent = component("Content View HTML");
+    let browserSearchViewComponent = component("Search View HTML");
+    let browserPdpViewComponent = component("PDP View HTML");
+
+    let customerBrowser: Element<unknown> = {
+        kind: "row", name: "Customer Browser", border: "deployment-box",
+        elements: [
+            gap(),
+            browserContentViewComponent, gap(), gap(), gap(),
+            browserSearchViewComponent, gap(), gap(), gap(), gap(),
+            browserPdpViewComponent, gap(), gap(), gap()
+        ]
+    };
+
     let contentSiteMap = component("Content Site Map");
     let contentViewComponent = component("Content View");
 
@@ -168,15 +182,18 @@ function createInitialGraph() {
 
     let categoryStream = queue("Category Stream");
     let categoryExporter = component("Category Exporter");
+    let articleS3Bucket = node("Article S3 Bucket");
 
     let categoryExporterService: Element<unknown> = {
         kind: "column", elements: [
             categoryStream,
-            {kind: "row", name: "Category Exporter Service", border: "deployment-box", elements: [categoryExporter]}
+            {kind: "row", name: "Category Exporter Service", border: "deployment-box", elements: [categoryExporter]},
+            articleS3Bucket
         ]
     };
     let categoryExporterServiceEdges = [
-        edge(categoryExporter, categoryStream)
+        edge(categoryExporter, categoryStream),
+        edge(categoryExporter, articleS3Bucket)
     ];
 
     let coreServices: Element<unknown> = {
@@ -215,14 +232,23 @@ function createInitialGraph() {
     ]);
 
     let coreAccount: Element<unknown> = {
-        kind: "row", elements: [edutainment, core]
+        kind: "row", border: "solid", name: "Core VPC", elements: [edutainment, core]
     };
     let coreAccountEdges = coreEdges.concat([
         edge(contentViewComponent, factFinderAPI),
         edge(contentViewComponent, productAPI)
     ]);
 
-    return graph(coreAccount, coreAccountEdges);
+    let overall: Element<unknown> = {
+        kind: "column", elements: [customerBrowser, coreAccount]
+    };
+    let overallEdges = coreAccountEdges.concat([
+        edge(contentViewComponent, browserContentViewComponent),
+        edge(searchView, browserSearchViewComponent),
+        edge(pdpViewComponent, browserPdpViewComponent)
+    ]);
+
+    return graph(overall, overallEdges);
 }
 
 export const NewArchitecture: React.FC = () => {
