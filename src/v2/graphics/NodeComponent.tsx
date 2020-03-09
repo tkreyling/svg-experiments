@@ -20,7 +20,7 @@ type Props = {
     onNodeClick: (node: Node) => void
 };
 
-export const NodeShape: React.FC<Props> = props => {
+export const NodeComponent: React.FC<Props> = props => {
     let node = props.node;
     if (!node.visible) return null;
 

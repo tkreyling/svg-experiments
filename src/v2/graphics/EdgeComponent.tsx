@@ -33,7 +33,7 @@ function edgeEndCoordinates<N extends RequiredNodeDataGetElementLeftX &
     };
 }
 
-export const EdgeShape: React.FC<Edge<RequiredNodeDataGetElementLeftX &
+export const EdgeComponent: React.FC<Edge<RequiredNodeDataGetElementLeftX &
     RequiredNodeDataGetElementTopY &
     BorderIndexMaxBottom &
     NumberOfEdges,

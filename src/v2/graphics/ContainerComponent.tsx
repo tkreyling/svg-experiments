@@ -35,7 +35,7 @@ type Props = Container<
     BorderIndexBottom & BorderIndexMaxBottom & EmbeddedBorderIndexMaxBottom &
     EmbeddedMidPathSegmentY>;
 
-export const ContainerShape: React.FC<Props> = container => {
+export const ContainerComponent: React.FC<Props> = container => {
     let x = getElementLeftX(container);
     let y = getElementTopY(container);
     let width = container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING

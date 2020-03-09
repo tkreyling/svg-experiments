@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {allContainers, allNodes, Element, graph, Graph, Node} from "./newGraphModel";
-import {NodeShape} from "./graphics/NodeShape";
+import {NodeComponent} from "./graphics/NodeComponent";
 import {assertNever} from "./assertNever";
 import {addOffsetElementsYG, OffsetElementsY} from "./elementsLayout/OffsetElementsY";
 import {addOffsetElementsXG, OffsetElementsX} from "./elementsLayout/OffsetElementsX";
 import {addEmbeddedElementsXG} from "./elementsLayout/EmbeddedElementsX";
-import {ContainerShape} from "./graphics/ContainerShape";
+import {ContainerComponent} from "./graphics/ContainerComponent";
 import {addBorderIndexMaxXG, BorderIndexMaxX} from "./elementsLayout/BorderIndexMaxX";
 import {addBorderIndexLeftG} from "./elementsLayout/BorderIndexLeft";
 import {addBorderIndexRightG} from "./elementsLayout/BorderIndexRight";
@@ -18,7 +18,7 @@ import {
 } from "./elementsLayout/BorderIndexMaxBottom";
 import {addBorderIndexMaxTopG, BorderIndexMaxPreviousTop, BorderIndexMaxTop} from "./elementsLayout/BorderIndexMaxTop";
 import {addEmbeddedElementsYG} from "./elementsLayout/EmbeddedElementsY";
-import {EdgeShape} from "./graphics/EdgeShape";
+import {EdgeComponent} from "./graphics/EdgeComponent";
 import {addMidPathSegmentOffsetYG} from "./edgesLayout/MidPathSegmentOffsetY";
 import {addElementKeyG} from "./elementsLayout/ElementKey";
 import {
@@ -127,9 +127,9 @@ export const Diagram: React.FC<DiagramProps> = props => {
         .map(graph => {
             return (
                 <svg viewBox={"0 0 " + width(graph.element) + " " + height(graph.element)}>
-                    {allContainers(graph.element).filter(c => c.border).map(ContainerShape)}
-                    {allNodes(graph.element).map(node => (<NodeShape key={node.elementKey+"O"} node={node} onNodeClick={onNodeClick}/>))}
-                    {graph.edges.map(EdgeShape)}
+                    {allContainers(graph.element).filter(c => c.border).map(ContainerComponent)}
+                    {allNodes(graph.element).map(node => (<NodeComponent key={node.elementKey+"O"} node={node} onNodeClick={onNodeClick}/>))}
+                    {graph.edges.map(EdgeComponent)}
                 </svg>
             );
         })[0];
