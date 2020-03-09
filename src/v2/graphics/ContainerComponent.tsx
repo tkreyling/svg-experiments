@@ -24,6 +24,7 @@ import {ElementKey} from "../elementsLayout/ElementKey";
 import {EmbeddedMidPathSegmentY} from "../edgesLayout/MidPathSegmentOffsetYAggregates";
 import {getElementLeftX, RequiredNodeDataGetElementLeftX} from "./getElementLeftX";
 import {getElementTopY, RequiredNodeDataGetElementTopY} from "./getElementTopY";
+import {renderShape} from "./renderShape";
 
 type Props = Container<
     ElementKey &
@@ -50,14 +51,7 @@ export const ContainerComponent: React.FC<Props> = container => {
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
     return (
         <g key={container.elementKey}>
-            {(container.border === "rectangle") &&
-            <rect
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                fill="none" strokeWidth={STROKE_WIDTH} stroke="grey"/>
-            }
+            {(container.border === "rectangle") && renderShape("rectangle", x, y, width, height, "none")}
 
             {(container.border === "deployment-box") &&
             <g>

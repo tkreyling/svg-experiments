@@ -29,7 +29,7 @@ export const NodeComponent: React.FC<Props> = props => {
 
     return (
         <g key={node.elementKey}>
-            {renderShape(node.shape, x, y, ELEMENT_WIDTH, ELEMENT_HEIGHT, node.selected, () => props.onNodeClick(node))}
+            {renderShape(node.shape, x, y, ELEMENT_WIDTH, ELEMENT_HEIGHT, "white", node.selected, () => props.onNodeClick(node))}
             {node.name &&
             <g transform={"translate("
             + (x + TEXT_PADDING + (node.shape === "queue-cylinder" ? 2 * QUEUE_CYLINDER_ELLIPSE_X : 0)) + " " + y + ")"}>

@@ -7,6 +7,7 @@ export function renderShape(
     y: number,
     width: number,
     height: number,
+    fill = "white",
     selected?: boolean,
     onClick?: () => void
 ) {
@@ -20,7 +21,7 @@ export function renderShape(
             width={width}
             height={height}
             onClick={onClick}
-            fill="white"
+            fill={fill}
             strokeWidth={strokeWidth}
             stroke="black"
         />
