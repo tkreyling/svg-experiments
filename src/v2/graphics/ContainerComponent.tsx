@@ -3,6 +3,7 @@ import {
     BORDER_SPACING_BOTTOM,
     BORDER_SPACING_TOP,
     BORDER_SPACING_X,
+    DB_CYLINDER_ELLIPSE_Y,
     EDGE_SPACING,
     ELEMENT_HEIGHT,
     ELEMENT_WIDTH,
@@ -36,6 +37,7 @@ type Props = Container<
 export const ContainerComponent: React.FC<Props> = container => {
     let x = getElementLeftX(container);
     let y = getElementTopY(container);
+
     let width = container.embeddedElementsX * ELEMENT_WIDTH + (container.embeddedElementsX - 1) * HORIZONTAL_SPACING
         + ((container.embeddedElementsX - 1) * container.borderIndexMaxX * 2 + container.borderIndexLeft + container.borderIndexRight) * BORDER_SPACING_X
         + (container.embeddedElementsX - 1) * container.crossLayerPathSegmentOffsetMaxX * EDGE_SPACING;
@@ -46,13 +48,17 @@ export const ContainerComponent: React.FC<Props> = container => {
         container.embeddedBorderIndexMaxBottom * BORDER_SPACING_BOTTOM +
         container.embeddedMidPathSegmentY * EDGE_SPACING +
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
+
+    let textX = x + BORDER_SPACING_X;
+    let textY = y + TEXT_PADDING
+        + (container.shape === "db-cylinder" ? DB_CYLINDER_ELLIPSE_Y : 0);
+
     return (
         <g key={container.elementKey}>
             {renderShape(container.shape, x, y, width, height, "none")}
 
             {container.name &&
-            <g transform={"translate("
-            + (x + BORDER_SPACING_X) + " " + (y + TEXT_PADDING) + ")"}>
+            <g transform={"translate(" + textX + " " + textY + ")"}>
                 <text
                     x={0}
                     y={0}

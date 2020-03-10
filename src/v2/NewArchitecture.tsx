@@ -248,10 +248,10 @@ function createInitialGraph() {
         elements: [content, catalogContent, productContent]
     };
 
-    let mediaData = db("Media Data");
+    let mediaData = node("Media Data");
 
     let shopNowDB: Element<unknown> = {
-        kind: "row", name: "ShopNow DB", shape: "rectangle",
+        kind: "row", name: "ShopNow DB", shape: "db-cylinder",
         elements: [mediaData]
     };
 
