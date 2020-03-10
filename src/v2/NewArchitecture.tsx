@@ -281,10 +281,18 @@ function createInitialGraph() {
         edge(mercatorDB, mercatorStagingDB)
     ];
 
+    let articleReport = component("Article Report");
+
+    let sapERP: Element<unknown> = {
+        kind: "column", name: "SAP ERP / Retail", shape: "deployment-box",
+        elements: [articleReport]
+    };
+
     let tds: Element<unknown> = {
         kind: "row", shape: "rectangle", name: "TDS", elements: [
             {kind: "column", elements: [shopNowDB, mediathek]},
-            mercator
+            mercator, gap(), gap(),
+            sapERP
         ]
     };
 
@@ -305,7 +313,10 @@ function createInitialGraph() {
         edge(searchViewComponent, catalogContent),
         edge(pdpViewComponent, productContent),
         edge(productExporter, mediaData),
-        edge(productExporter, mercatorStagingDB)
+        edge(productExporter, mercatorStagingDB),
+        edge(productCampaignsExporter, mercatorStagingDB),
+        edge(nightlyStockExporter, mercatorStagingDB),
+        edge(articleReport, articleS3Bucket)
     ]);
 
     return graph(overall, overallEdges);
