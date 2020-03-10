@@ -3,31 +3,37 @@ import {component, db, dbTable, edge, Element, gap, graph, node, queue, s3Bucket
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
-    let browserContentViewComponent = component("Content View HTML");
-    let browserSearchViewComponent = component("Search View HTML");
-    let browserPdpViewComponent = component("PDP View HTML");
+    let customerBrowser = new class {
+        contentViewComponent = component("Content View HTML");
+        searchViewComponent = component("Search View HTML");
+        pdpViewComponent = component("PDP View HTML");
 
-    let customerBrowser: Element<unknown> = {
-        kind: "row", name: "Customer Browser", shape: "deployment-box",
-        elements: [
-            gap(),
-            browserContentViewComponent, gap(), gap(), gap(),
-            browserSearchViewComponent, gap(), gap(), gap(), gap(),
-            browserPdpViewComponent, gap(), gap(), gap()
-        ]
-    };
+        element: Element<unknown> = {
+            kind: "row", name: "Customer Browser", shape: "deployment-box",
+            elements: [
+                gap(),
+                this.contentViewComponent, gap(), gap(), gap(),
+                this.searchViewComponent, gap(), gap(), gap(), gap(),
+                this.pdpViewComponent, gap(), gap(), gap()
+            ]
+        };
+    }();
 
-    let contentSiteMap = component("Content Site Map");
-    let contentViewComponent = component("Content View");
+    let edutainment = new class {
+        contentView = new class {
+            siteMap = component("Content Site Map");
+            component = component("Content View");
 
-    let contentView: Element<unknown> = {
-        kind: "row", name: "Content View", shape: "deployment-box",
-        elements: [contentSiteMap, contentViewComponent]
-    };
+            element: Element<unknown> = {
+                kind: "row", name: "Content View", shape: "deployment-box",
+                elements: [this.siteMap, this.component]
+            };
+        }();
 
-    let edutainment: Element<unknown> = {
-        kind: "column", elements: [contentView]
-    };
+        element: Element<unknown> = {
+            kind: "column", elements: [this.contentView.element]
+        };
+    }();
 
     let searchViewComponent = component("Search View");
     let pdpViewComponent = component("PDP View");
@@ -232,11 +238,11 @@ function createInitialGraph() {
     ]);
 
     let coreAccount: Element<unknown> = {
-        kind: "row", shape: "rectangle", name: "Core VPC", elements: [edutainment, core]
+        kind: "row", shape: "rectangle", name: "Core VPC", elements: [edutainment.element, core]
     };
     let coreAccountEdges = coreEdges.concat([
-        edge(contentViewComponent, factFinderAPI),
-        edge(contentViewComponent, productAPI)
+        edge(edutainment.contentView.component, factFinderAPI),
+        edge(edutainment.contentView.component, productAPI)
     ]);
 
     let content = node("Site Content");
@@ -303,13 +309,13 @@ function createInitialGraph() {
     };
 
     let overall: Element<unknown> = {
-        kind: "column", elements: [customerBrowser, coreAccount, backendSystems]
+        kind: "column", elements: [customerBrowser.element, coreAccount, backendSystems]
     };
     let overallEdges = coreAccountEdges.concat(tdsEdges).concat([
-        edge(contentViewComponent, browserContentViewComponent),
-        edge(searchViewComponent, browserSearchViewComponent),
-        edge(pdpViewComponent, browserPdpViewComponent),
-        edge(contentViewComponent, content),
+        edge(edutainment.contentView.component, customerBrowser.contentViewComponent),
+        edge(searchViewComponent, customerBrowser.searchViewComponent),
+        edge(pdpViewComponent, customerBrowser.pdpViewComponent),
+        edge(edutainment.contentView.component, content),
         edge(searchViewComponent, catalogContent),
         edge(pdpViewComponent, productContent),
         edge(productExporter, mediaData),
