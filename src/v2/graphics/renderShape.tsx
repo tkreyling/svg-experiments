@@ -86,8 +86,8 @@ export function renderShape(
                 "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
                 "L " + (x + DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " + y + " " +
                 "H " + (x + width - DEPLOYMENT_BOX_INDENT + DEPLOYMENT_BOX_3D_OFFSET) + " " +
-                "V " + (y + height - 2 * DEPLOYMENT_BOX_INDENT) + " " +
-                "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height - DEPLOYMENT_BOX_INDENT) +
+                "V " + (y + height - DEPLOYMENT_BOX_INDENT) + " " +
+                "L " + (x + width - DEPLOYMENT_BOX_INDENT) + " " + (y + height) +
                 "H " + (x + DEPLOYMENT_BOX_INDENT) + " " +
                 "Z"
             }
@@ -99,7 +99,7 @@ export function renderShape(
             <path d={
                 "M " + (x + DEPLOYMENT_BOX_INDENT) + " " + (y + DEPLOYMENT_BOX_INDENT) + " " +
                 "H " + (x + width - DEPLOYMENT_BOX_INDENT) + " " +
-                "V " + (y + height - DEPLOYMENT_BOX_INDENT)
+                "V " + (y + height)
             }
                   stroke="black"
                   strokeWidth={strokeWidth}
