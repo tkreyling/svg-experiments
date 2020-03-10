@@ -1,6 +1,6 @@
 import {assertNever} from "./assertNever";
 
-export type Symbols = "component" | "db-table"
+export type Symbols = "component" | "db-table" | "s3-bucket"
 
 type Shapes = "rectangle" | "db-cylinder" | "queue-cylinder" | "deployment-box"
 
@@ -91,6 +91,10 @@ export function component(name: string): Node {
 
 export function dbTable(name: string): Node {
     return node({name: name, symbol: "db-table"});
+}
+
+export function s3Bucket(name: string): Node {
+    return node({name: name, symbol: "s3-bucket"});
 }
 
 export function db(name: string): Node {

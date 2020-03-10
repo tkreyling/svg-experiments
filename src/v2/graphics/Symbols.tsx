@@ -11,18 +11,19 @@ export type Symbol = {
     symbolKey: string
 }
 
-export const ComponentSymbol: React.FC<Symbol> = symbol => {
-    switch (symbol.symbol) {
+export const ComponentSymbol: React.FC<Symbol> = ({symbol, symbolKey, width, x, y}) => {
+    let height = width * 1.2;
+    switch (symbol) {
         case "component": {
             const symbolHeightRelative = 1.1;
             const barWidthRelative = 0.4;
             const barHeightRelative = 0.15;
-            const barWidthAbsolute = symbol.width * barWidthRelative;
-            const barHeightAbsolute = symbol.width * barHeightRelative;
+            const barWidthAbsolute = width * barWidthRelative;
+            const barHeightAbsolute = width * barHeightRelative;
             return (
-                <g key={symbol.symbolKey}>
+                <g key={symbolKey}>
                     <path d={
-                        "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 4 * barHeightAbsolute) + " " +
+                        "M " + (x + barWidthAbsolute / 2) + " " + (y + 4 * barHeightAbsolute) + " " +
                         "h " + (-barWidthAbsolute / 2) + " " +
                         "v " + (-barHeightAbsolute) + " " +
                         "h " + (barWidthAbsolute / 2) + " " +
@@ -31,9 +32,9 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
                         "v " + (-barHeightAbsolute) + " " +
                         "h " + (barWidthAbsolute / 2) + " " +
                         "v " + (-barHeightAbsolute) + " " +
-                        "h " + (symbol.width * (1 - barWidthRelative / 2)) + " " +
-                        "v " + (symbol.width * symbolHeightRelative) + " " +
-                        "h " + (-symbol.width * (1 - barWidthRelative / 2)) + " " +
+                        "h " + (width * (1 - barWidthRelative / 2)) + " " +
+                        "v " + (width * symbolHeightRelative) + " " +
+                        "h " + (-width * (1 - barWidthRelative / 2)) + " " +
                         "Z"
                     }
                           stroke="black"
@@ -41,7 +42,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
                           fill="none"
                     />
                     <path d={
-                        "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 4 * barHeightAbsolute) + " " +
+                        "M " + (x + barWidthAbsolute / 2) + " " + (y + 4 * barHeightAbsolute) + " " +
                         "h " + (barWidthAbsolute / 2) + " " +
                         "v " + (-barHeightAbsolute) + " " +
                         "h " + (-barWidthAbsolute / 2)
@@ -51,7 +52,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
                           fill="none"
                     />
                     <path d={
-                        "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 2 * barHeightAbsolute) + " " +
+                        "M " + (x + barWidthAbsolute / 2) + " " + (y + 2 * barHeightAbsolute) + " " +
                         "h " + (barWidthAbsolute / 2) + " " +
                         "v " + (-barHeightAbsolute) + " " +
                         "h " + (-barWidthAbsolute / 2)
@@ -65,27 +66,54 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
         }
         case "db-table": {
             return (
-                <g key={symbol.symbolKey}>
+                <g key={symbolKey}>
                     <rect
-                        x={symbol.x}
-                        y={symbol.y}
-                        width={symbol.width}
-                        height={symbol.width}
+                        x={x}
+                        y={y}
+                        width={width}
+                        height={height}
                         fill="none"
                         strokeWidth={STROKE_WIDTH}
                         stroke="black"
                     />
                     <path d={
-                        "M " + (symbol.x) + " " + (symbol.y + 0.3 * symbol.width) + " " +
-                        "h " + symbol.width
+                        "M " + (x) + " " + (y + 0.25 * width) + " " +
+                        "h " + width
                     }
                           stroke="black"
                           strokeWidth={STROKE_WIDTH}
                           fill="none"
                     />
                     <path d={
-                        "M " + (symbol.x + 0.3 * symbol.width) + " " + (symbol.y) + " " +
-                        "v " + symbol.width
+                        "M " + (x + 0.25 * width) + " " + (y) + " " +
+                        "v " + height
+                    }
+                          stroke="black"
+                          strokeWidth={STROKE_WIDTH}
+                          fill="none"
+                    />
+                </g>
+            )
+        }
+        case "s3-bucket": {
+            let bucketEllipseY = height * 0.1;
+            let bucketIndentX = width * 0.1;
+            return (
+                <g key={symbolKey}>
+                    <path d={
+                        "M " + x + " " + (y + bucketEllipseY) + " " +
+                        "A " + (width / 2) + "," + bucketEllipseY + " 0 1,1 " + (x + width) + "," + (y + bucketEllipseY) + " " +
+                        "L " + (x + width - bucketIndentX) + " " + (y + height - bucketEllipseY) + " " +
+                        "A " + (width / 2 - bucketIndentX) + "," + bucketEllipseY + " 0 1,1 " + (x + bucketIndentX) + "," + (y + height - bucketEllipseY) + " " +
+                        "Z"
+                    }
+                          stroke="black"
+                          strokeWidth={STROKE_WIDTH}
+                          fill="white"
+                    />
+                    <path d={
+                        "M " + x + " " + (y + bucketEllipseY) + " " +
+                        "A " + (width / 2) + "," + bucketEllipseY + " 0 1,0 " + (x + width) + "," + (y + bucketEllipseY)
                     }
                           stroke="black"
                           strokeWidth={STROKE_WIDTH}
@@ -95,7 +123,7 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
             )
         }
         default: {
-            assertNever(symbol.symbol);
+            assertNever(symbol);
         }
     }
 };

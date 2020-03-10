@@ -1,5 +1,5 @@
 import React from "react";
-import {component, db, dbTable, edge, Element, gap, graph, node, queue, system} from "./newGraphModel";
+import {component, db, dbTable, edge, Element, gap, graph, node, queue, s3Bucket, system} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
@@ -182,7 +182,7 @@ function createInitialGraph() {
 
     let categoryStream = queue("Category Stream");
     let categoryExporter = component("Category Exporter");
-    let articleS3Bucket = node("Article S3 Bucket");
+    let articleS3Bucket = s3Bucket("Article S3 Bucket");
 
     let categoryExporterService: Element<unknown> = {
         kind: "column", elements: [
