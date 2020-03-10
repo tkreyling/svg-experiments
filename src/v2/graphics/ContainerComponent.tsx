@@ -48,7 +48,7 @@ export const ContainerComponent: React.FC<Props> = container => {
         container.borderIndexBottom * BORDER_SPACING_BOTTOM;
     return (
         <g key={container.elementKey}>
-            {renderShape(container.border, x, y, width, height, "none")}
+            {renderShape(container.shape, x, y, width, height, "none")}
 
             {container.name &&
             <g transform={"translate("

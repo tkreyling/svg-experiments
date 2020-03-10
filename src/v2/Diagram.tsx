@@ -127,7 +127,7 @@ export const Diagram: React.FC<DiagramProps> = props => {
         .map(graph => {
             return (
                 <svg viewBox={"0 0 " + width(graph.element) + " " + height(graph.element)}>
-                    {allContainers(graph.element).filter(c => c.border).map(ContainerComponent)}
+                    {allContainers(graph.element).filter(c => c.shape).map(ContainerComponent)}
                     {allNodes(graph.element).map(node => (<NodeComponent key={node.elementKey+"O"} node={node} onNodeClick={onNodeClick}/>))}
                     {graph.edges.map(EdgeComponent)}
                 </svg>

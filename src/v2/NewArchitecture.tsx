@@ -8,7 +8,7 @@ function createInitialGraph() {
     let browserPdpViewComponent = component("PDP View HTML");
 
     let customerBrowser: Element<unknown> = {
-        kind: "row", name: "Customer Browser", border: "deployment-box",
+        kind: "row", name: "Customer Browser", shape: "deployment-box",
         elements: [
             gap(),
             browserContentViewComponent, gap(), gap(), gap(),
@@ -21,7 +21,7 @@ function createInitialGraph() {
     let contentViewComponent = component("Content View");
 
     let contentView: Element<unknown> = {
-        kind: "row", name: "Content View", border: "deployment-box",
+        kind: "row", name: "Content View", shape: "deployment-box",
         elements: [contentSiteMap, contentViewComponent]
     };
 
@@ -35,7 +35,7 @@ function createInitialGraph() {
     let pdpView: Element<unknown> = {
         kind: "row",
         elements: [gap(), gap(), {
-            kind: "row", name: "PDP View", border: "deployment-box",
+            kind: "row", name: "PDP View", shape: "deployment-box",
             elements: [gap(), searchViewComponent, gap(), gap(), gap(), gap(), pdpViewComponent, gap(), gap(), gap()]
         }]
     };
@@ -44,7 +44,7 @@ function createInitialGraph() {
 
     let coreSiteMap: Element<unknown> = {
         kind: "column", elements: [gap(), {
-            kind: "row", name: "Site Map Generator", border: "deployment-box", elements: [siteMapGenerator]
+            kind: "row", name: "Site Map Generator", shape: "deployment-box", elements: [siteMapGenerator]
         }]
     };
 
@@ -62,12 +62,12 @@ function createInitialGraph() {
             kind: "row",
             elements: [
                 factFinderDB,
-                {kind: "row", name: "FACT Finder", border: "deployment-box", elements: [gap(), factFinderAPI, gap()]}
+                {kind: "row", name: "FACT Finder", shape: "deployment-box", elements: [gap(), factFinderAPI, gap()]}
             ]
         }, {
             kind: "row",
             elements: [factFinderFeedServiceDB, {
-                kind: "column", name: "FACT Finder Feed Service", border: "deployment-box",
+                kind: "column", name: "FACT Finder Feed Service", shape: "deployment-box",
                 elements: [
                     {kind: "row", elements: [gap(), factFinderUpdater]},
                     {kind: "row", elements: [ffProductImporter, ffProductCampaignsImporter, ffCategoryImporter]}
@@ -99,7 +99,7 @@ function createInitialGraph() {
         kind: "row", elements: [{
             kind: "column", elements: [gap(), productServiceDB]
         }, {
-            kind: "column", name: "Product Service", border: "deployment-box", elements: [
+            kind: "column", name: "Product Service", shape: "deployment-box", elements: [
                 {
                     kind: "row", elements: [
                         gap(), gap(), productAPI, stockAPI
@@ -138,7 +138,7 @@ function createInitialGraph() {
         kind: "column", elements: [{
             kind: "row", elements: [productStream, productCampaignsStream, nightlyStockStream]
         }, {
-            kind: "row", name: "Product Exporter Service", border: "deployment-box",
+            kind: "row", name: "Product Exporter Service", shape: "deployment-box",
             elements: [productExporter, productCampaignsExporter, nightlyStockExporter]
         }]
     };
@@ -155,7 +155,7 @@ function createInitialGraph() {
     let stockExporterService: Element<unknown> = {
         kind: "column", elements: [
             stockStream,
-            {kind: "row", name: "Stock Exporter Service", border: "deployment-box", elements: [stockExporter]}
+            {kind: "row", name: "Stock Exporter Service", shape: "deployment-box", elements: [stockExporter]}
         ]
     };
     let stockExporterServiceEdges = [
@@ -171,7 +171,7 @@ function createInitialGraph() {
             {
                 kind: "row",
                 name: "Delivery Time\nExporter Service",
-                border: "deployment-box",
+                shape: "deployment-box",
                 elements: [deliveryTimeExporter]
             }
         ]
@@ -187,7 +187,7 @@ function createInitialGraph() {
     let categoryExporterService: Element<unknown> = {
         kind: "column", elements: [
             categoryStream,
-            {kind: "row", name: "Category Exporter Service", border: "deployment-box", elements: [categoryExporter]},
+            {kind: "row", name: "Category Exporter Service", shape: "deployment-box", elements: [categoryExporter]},
             articleS3Bucket
         ]
     };
@@ -232,7 +232,7 @@ function createInitialGraph() {
     ]);
 
     let coreAccount: Element<unknown> = {
-        kind: "row", border: "rectangle", name: "Core VPC", elements: [edutainment, core]
+        kind: "row", shape: "rectangle", name: "Core VPC", elements: [edutainment, core]
     };
     let coreAccountEdges = coreEdges.concat([
         edge(contentViewComponent, factFinderAPI),
@@ -244,14 +244,14 @@ function createInitialGraph() {
     let productContent = node("Product specific Content");
 
     let contentful: Element<unknown> = {
-        kind: "row", name: "Contentful", border: "deployment-box",
+        kind: "row", name: "Contentful", shape: "deployment-box",
         elements: [content, catalogContent, productContent]
     };
 
     let mediaData = db("Media Data");
 
     let shopNowDB: Element<unknown> = {
-        kind: "row", name: "ShopNow DB", border: "rectangle",
+        kind: "row", name: "ShopNow DB", shape: "rectangle",
         elements: [mediaData]
     };
 
@@ -282,7 +282,7 @@ function createInitialGraph() {
     ];
 
     let tds: Element<unknown> = {
-        kind: "row", border: "rectangle", name: "TDS", elements: [
+        kind: "row", shape: "rectangle", name: "TDS", elements: [
             {kind: "column", elements: [shopNowDB, mediathek]},
             mercator
         ]

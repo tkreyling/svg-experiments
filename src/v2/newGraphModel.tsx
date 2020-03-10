@@ -24,11 +24,9 @@ export type Column<N> = {
     kind: "column"
 } & ContainerProperties<N>;
 
-type Borders = "rectangle" | "deployment-box"
-
 type ContainerProperties<N> = {
     name?: string,
-    border?: Borders,
+    shape?: Shapes,
     elements: Element<N>[]
 };
 

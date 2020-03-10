@@ -23,7 +23,7 @@ export function addBorderIndexTop(element: Element<unknown>): number {
         case "row": {
             let borderIndex =
                 Math.max(...element.elements.map(addBorderIndexTop), 0) +
-                (element.border ?  1 : 0);
+                (element.shape ?  1 : 0);
 
             Object.assign<Row<unknown>, BorderIndexTop>(element, {
                 borderIndexTop: borderIndex
@@ -32,7 +32,7 @@ export function addBorderIndexTop(element: Element<unknown>): number {
         }
         case "column": {
             let borderIndices = element.elements.length > 0 ? element.elements.map(addBorderIndexTop) :  [0];
-            let borderIndex = borderIndices[0] + (element.border ?  1 : 0);
+            let borderIndex = borderIndices[0] + (element.shape ?  1 : 0);
 
             Object.assign<Column<unknown>, BorderIndexTop>(element, {
                 borderIndexTop: borderIndex
