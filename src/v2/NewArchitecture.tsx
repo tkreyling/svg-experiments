@@ -153,27 +153,33 @@ function createInitialGraph() {
         ];
     }();
 
-    let productStream = queue("Product Stream");
-    let productExporter = component("Product Exporter");
-    let productCampaignsStream = queue("Product Campaigns\nStream");
-    let productCampaignsExporter = component("Product Campaigns\nExporter");
-    let nightlyStockStream = queue("Nightly Stock Stream");
-    let nightlyStockExporter = component("Nightly Stock Exporter");
+    let productExporterService = new class {
+        productStream = queue("Product Stream");
+        productExporter = component("Product Exporter");
+        productCampaignsStream = queue("Product Campaigns\nStream");
+        productCampaignsExporter = component("Product Campaigns\nExporter");
+        nightlyStockStream = queue("Nightly Stock Stream");
+        nightlyStockExporter = component("Nightly Stock Exporter");
 
-    let productExporterService: Element<unknown> = {
-        kind: "column", elements: [{
-            kind: "row", elements: [productStream, productCampaignsStream, nightlyStockStream]
-        }, {
-            kind: "row", name: "Product Exporter Service", shape: "deployment-box",
-            elements: [productExporter, productCampaignsExporter, nightlyStockExporter]
-        }]
-    };
+        element: Element<unknown> = {
+            kind: "column", elements: [{
+                kind: "row", elements: [
+                    this.productStream, this.productCampaignsStream, this.nightlyStockStream
+                ]
+            }, {
+                kind: "row", name: "Product Exporter Service", shape: "deployment-box",
+                elements: [
+                    this.productExporter, this.productCampaignsExporter, this.nightlyStockExporter
+                ]
+            }]
+        };
 
-    let productExporterServiceEdges = [
-        edge(productExporter, productStream),
-        edge(productCampaignsExporter, productCampaignsStream),
-        edge(nightlyStockExporter, nightlyStockStream),
-    ];
+        edges = [
+            edge(this.productExporter, this.productStream),
+            edge(this.productCampaignsExporter, this.productCampaignsStream),
+            edge(this.nightlyStockExporter, this.nightlyStockStream),
+        ];
+    }();
 
     let stockStream = queue("Stock Stream");
     let stockExporter = component("Stock Exporter");
@@ -230,10 +236,10 @@ function createInitialGraph() {
     let coreExporter: Element<unknown> = {
         kind: "row", elements: [
             gap(), gap(), gap(), gap(), gap(), gap(),
-            productExporterService, stockExporterService, deliveryTimeExporterService, categoryExporterService
+            productExporterService.element, stockExporterService, deliveryTimeExporterService, categoryExporterService
         ]
     };
-    let coreExporterEdges = productExporterServiceEdges
+    let coreExporterEdges = productExporterService.edges
         .concat(stockExporterServiceEdges)
         .concat(deliveryTimeExporterServiceEdges)
         .concat(categoryExporterServiceEdges);
@@ -246,12 +252,12 @@ function createInitialGraph() {
         edge(pdpView.pdpViewComponent, productService.stockAPI),
         edge(pdpView.searchViewComponent, search.factFinderAPI),
         edge(coreSiteMap.siteMapGenerator, search.factFinderFeedServiceDB),
-        edge(search.ffProductImporter, productStream),
-        edge(search.ffProductCampaignsImporter, productCampaignsStream),
+        edge(search.ffProductImporter, productExporterService.productStream),
+        edge(search.ffProductCampaignsImporter, productExporterService.productCampaignsStream),
         edge(search.ffCategoryImporter, categoryStream),
-        edge(productService.productImporter, productStream),
-        edge(productService.productCampaignsImporter, productCampaignsStream),
-        edge(productService.nightlyStockImporter, nightlyStockStream),
+        edge(productService.productImporter, productExporterService.productStream),
+        edge(productService.productCampaignsImporter, productExporterService.productCampaignsStream),
+        edge(productService.nightlyStockImporter, productExporterService.nightlyStockStream),
         edge(productService.nearTimeStockImporter, stockStream),
         edge(productService.deliveryTimeImporter, deliveryTimeStream),
         edge(productService.categoryImporter, categoryStream)
@@ -338,10 +344,10 @@ function createInitialGraph() {
         edge(edutainment.contentView.component, content),
         edge(pdpView.searchViewComponent, catalogContent),
         edge(pdpView.pdpViewComponent, productContent),
-        edge(productExporter, mediaData),
-        edge(productExporter, mercatorStagingDB),
-        edge(productCampaignsExporter, mercatorStagingDB),
-        edge(nightlyStockExporter, mercatorStagingDB),
+        edge(productExporterService.productExporter, mediaData),
+        edge(productExporterService.productExporter, mercatorStagingDB),
+        edge(productExporterService.productCampaignsExporter, mercatorStagingDB),
+        edge(productExporterService.nightlyStockExporter, mercatorStagingDB),
         edge(articleReport, articleS3Bucket)
     ]);
 
