@@ -1,5 +1,5 @@
 import React from "react";
-import {component, db, edge, Element, gap, graph, node, queue, system} from "./newGraphModel";
+import {component, db, dbTable, edge, Element, gap, graph, node, queue, system} from "./newGraphModel";
 import {Diagram} from "./Diagram";
 
 function createInitialGraph() {
@@ -248,7 +248,7 @@ function createInitialGraph() {
         elements: [content, catalogContent, productContent]
     };
 
-    let mediaData = node("Media Data");
+    let mediaData = dbTable("Media Data");
 
     let shopNowDB: Element<unknown> = {
         kind: "row", name: "ShopNow DB", shape: "db-cylinder",

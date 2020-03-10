@@ -1,6 +1,6 @@
 import {assertNever} from "./assertNever";
 
-type Symbols = "component"
+export type Symbols = "component" | "db-table"
 
 type Shapes = "rectangle" | "db-cylinder" | "queue-cylinder" | "deployment-box"
 
@@ -87,6 +87,10 @@ export function gap(): Node {
 
 export function component(name: string): Node {
     return node({name: name, symbol: "component"});
+}
+
+export function dbTable(name: string): Node {
+    return node({name: name, symbol: "db-table"});
 }
 
 export function db(name: string): Node {

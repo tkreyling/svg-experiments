@@ -62,6 +62,7 @@ export const NodeComponent: React.FC<Props> = props => {
             }
             {node.symbol &&
             <ComponentSymbol
+                symbol={node.symbol}
                 symbolKey={node.elementKey + "CS"}
                 x={x + ELEMENT_WIDTH - SYMBOL_WIDTH - SYMBOL_SPACING}
                 y={y + SYMBOL_SPACING}
