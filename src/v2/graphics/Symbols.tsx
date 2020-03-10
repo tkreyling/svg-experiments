@@ -16,18 +16,45 @@ export const ComponentSymbol: React.FC<Symbol> = symbol => {
     const barHeightAbsolute = symbol.width * barHeightRelative;
     return (
         <g key={symbol.symbolKey}>
-            <rect
-                x={symbol.x + barWidthAbsolute / 2} y={symbol.y}
-                width={symbol.width * (1 - barWidthRelative / 2)} height={symbol.width * symbolHeightRelative}
-                fill="none" strokeWidth={STROKE_WIDTH} stroke="black"/>
-            <rect
-                x={symbol.x} y={symbol.y + barHeightAbsolute}
-                width={barWidthAbsolute} height={barHeightAbsolute}
-                fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
-            <rect
-                x={symbol.x} y={symbol.y + barHeightAbsolute * 3}
-                width={barWidthAbsolute} height={barHeightAbsolute}
-                fill="lightgrey" strokeWidth={STROKE_WIDTH} stroke="black"/>
+            <path d={
+                "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 4 * barHeightAbsolute) + " " +
+                "h " + (-barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (-barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (symbol.width * (1 - barWidthRelative / 2)) + " " +
+                "v " + (symbol.width * symbolHeightRelative) + " " +
+                "h " + (-symbol.width * (1 - barWidthRelative / 2)) + " " +
+                "Z"
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
+            <path d={
+                "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 4 * barHeightAbsolute) + " " +
+                "h " + (barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (-barWidthAbsolute / 2)
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
+            <path d={
+                "M " + (symbol.x + barWidthAbsolute / 2) + " " + (symbol.y + 2 * barHeightAbsolute) + " " +
+                "h " + (barWidthAbsolute / 2) + " " +
+                "v " + (-barHeightAbsolute) + " " +
+                "h " + (-barWidthAbsolute / 2)
+            }
+                  stroke="black"
+                  strokeWidth={STROKE_WIDTH}
+                  fill="none"
+            />
         </g>
     );
 };
