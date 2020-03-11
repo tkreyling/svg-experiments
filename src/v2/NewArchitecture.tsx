@@ -161,124 +161,127 @@ function createInitialGraph() {
         edges = this.search.edges.concat(this.productService.edges);
     }();
 
-    let productExporterService = new class {
-        productStream = queue("Product Stream");
-        productExporter = component("Product Exporter");
-        productCampaignsStream = queue("Product Campaigns\nStream");
-        productCampaignsExporter = component("Product Campaigns\nExporter");
-        nightlyStockStream = queue("Nightly Stock Stream");
-        nightlyStockExporter = component("Nightly Stock Exporter");
+    let coreExporter = new class {
+        productExporterService = new class {
+            productStream = queue("Product Stream");
+            productExporter = component("Product Exporter");
+            productCampaignsStream = queue("Product Campaigns\nStream");
+            productCampaignsExporter = component("Product Campaigns\nExporter");
+            nightlyStockStream = queue("Nightly Stock Stream");
+            nightlyStockExporter = component("Nightly Stock Exporter");
 
-        element: Element<unknown> = {
-            kind: "column", elements: [{
-                kind: "row", elements: [
-                    this.productStream, this.productCampaignsStream, this.nightlyStockStream
-                ]
-            }, {
-                kind: "row", name: "Product Exporter Service", shape: "deployment-box",
-                elements: [
-                    this.productExporter, this.productCampaignsExporter, this.nightlyStockExporter
-                ]
-            }]
-        };
-
-        edges = [
-            edge(this.productExporter, this.productStream),
-            edge(this.productCampaignsExporter, this.productCampaignsStream),
-            edge(this.nightlyStockExporter, this.nightlyStockStream),
-        ];
-    }();
-
-    let stockExporterService = new class {
-        stockStream = queue("Stock Stream");
-        stockExporter = component("Stock Exporter");
-
-        element: Element<unknown> = {
-            kind: "column", elements: [
-                this.stockStream,
-                {kind: "row", name: "Stock Exporter Service", shape: "deployment-box", elements: [
-                    this.stockExporter
-                ]}
-            ]
-        };
-
-        edges = [
-            edge(this.stockExporter, this.stockStream)
-        ];
-    }();
-
-    let deliveryTimeExporterService = new class {
-        deliveryTimeStream = queue("Delivery Time Stream");
-        deliveryTimeExporter = component("Delivery Time Exporter");
-
-        element: Element<unknown> = {
-            kind: "column", elements: [
-                this.deliveryTimeStream,
-                {
-                    kind: "row",
-                    name: "Delivery Time\nExporter Service",
-                    shape: "deployment-box",
-                    elements: [this.deliveryTimeExporter]
-                }
-            ]
-        };
-
-        edges = [
-            edge(this.deliveryTimeExporter, this.deliveryTimeStream)
-        ];
-    }();
-
-    let categoryExporterService = new class {
-        categoryStream = queue("Category Stream");
-        categoryExporter = component("Category Exporter");
-        articleS3Bucket = s3Bucket("Article S3 Bucket");
-
-        element: Element<unknown> = {
-            kind: "column", elements: [
-                this.categoryStream,
-                {
-                    kind: "row", name: "Category Exporter Service", shape: "deployment-box", elements: [
-                        this.categoryExporter
+            element: Element<unknown> = {
+                kind: "column", elements: [{
+                    kind: "row", elements: [
+                        this.productStream, this.productCampaignsStream, this.nightlyStockStream
                     ]
-                },
-                this.articleS3Bucket
+                }, {
+                    kind: "row", name: "Product Exporter Service", shape: "deployment-box",
+                    elements: [
+                        this.productExporter, this.productCampaignsExporter, this.nightlyStockExporter
+                    ]
+                }]
+            };
+
+            edges = [
+                edge(this.productExporter, this.productStream),
+                edge(this.productCampaignsExporter, this.productCampaignsStream),
+                edge(this.nightlyStockExporter, this.nightlyStockStream),
+            ];
+        }();
+
+        stockExporterService = new class {
+            stockStream = queue("Stock Stream");
+            stockExporter = component("Stock Exporter");
+
+            element: Element<unknown> = {
+                kind: "column", elements: [
+                    this.stockStream,
+                    {kind: "row", name: "Stock Exporter Service", shape: "deployment-box", elements: [
+                            this.stockExporter
+                        ]}
+                ]
+            };
+
+            edges = [
+                edge(this.stockExporter, this.stockStream)
+            ];
+        }();
+
+        deliveryTimeExporterService = new class {
+            deliveryTimeStream = queue("Delivery Time Stream");
+            deliveryTimeExporter = component("Delivery Time Exporter");
+
+            element: Element<unknown> = {
+                kind: "column", elements: [
+                    this.deliveryTimeStream,
+                    {
+                        kind: "row",
+                        name: "Delivery Time\nExporter Service",
+                        shape: "deployment-box",
+                        elements: [this.deliveryTimeExporter]
+                    }
+                ]
+            };
+
+            edges = [
+                edge(this.deliveryTimeExporter, this.deliveryTimeStream)
+            ];
+        }();
+
+        categoryExporterService = new class {
+            categoryStream = queue("Category Stream");
+            categoryExporter = component("Category Exporter");
+            articleS3Bucket = s3Bucket("Article S3 Bucket");
+
+            element: Element<unknown> = {
+                kind: "column", elements: [
+                    this.categoryStream,
+                    {
+                        kind: "row", name: "Category Exporter Service", shape: "deployment-box", elements: [
+                            this.categoryExporter
+                        ]
+                    },
+                    this.articleS3Bucket
+                ]
+            };
+            edges = [
+                edge(this.categoryExporter, this.categoryStream),
+                edge(this.categoryExporter, this.articleS3Bucket)
+            ];
+        }();
+
+        element: Element<unknown> = {
+            kind: "row", elements: [
+                gap(), gap(), gap(), gap(), gap(), gap(),
+                this.productExporterService.element, this.stockExporterService.element,
+                this.deliveryTimeExporterService.element, this.categoryExporterService.element
             ]
         };
-        edges = [
-            edge(this.categoryExporter, this.categoryStream),
-            edge(this.categoryExporter, this.articleS3Bucket)
-        ];
-    }();
 
-    let coreExporter: Element<unknown> = {
-        kind: "row", elements: [
-            gap(), gap(), gap(), gap(), gap(), gap(),
-            productExporterService.element, stockExporterService.element,
-            deliveryTimeExporterService.element, categoryExporterService.element
-        ]
-    };
-    let coreExporterEdges = productExporterService.edges
-        .concat(stockExporterService.edges)
-        .concat(deliveryTimeExporterService.edges)
-        .concat(categoryExporterService.edges);
+        edges = this.productExporterService.edges
+            .concat(this.stockExporterService.edges)
+            .concat(this.deliveryTimeExporterService.edges)
+            .concat(this.categoryExporterService.edges);
+    }();
 
     let core: Element<unknown> = {
-        kind: "column", elements: [pdpView.element, coreServices.element, coreExporter]
+        kind: "column", elements: [pdpView.element, coreServices.element, coreExporter.element]
     };
-    let coreEdges = coreServices.edges.concat(coreExporterEdges).concat([
+    let coreEdges = coreServices.edges.concat(coreExporter.edges).concat([
         edge(pdpView.pdpViewComponent, coreServices.productService.productAPI),
         edge(pdpView.pdpViewComponent, coreServices.productService.stockAPI),
         edge(pdpView.searchViewComponent, coreServices.search.factFinderAPI),
         edge(coreServices.coreSiteMap.siteMapGenerator, coreServices.search.factFinderFeedServiceDB),
-        edge(coreServices.search.ffProductImporter, productExporterService.productStream),
-        edge(coreServices.search.ffProductCampaignsImporter, productExporterService.productCampaignsStream),
-        edge(coreServices.search.ffCategoryImporter, categoryExporterService.categoryStream),
-        edge(coreServices.productService.productImporter, productExporterService.productStream),
-        edge(coreServices.productService.productCampaignsImporter, productExporterService.productCampaignsStream),
-        edge(coreServices.productService.nightlyStockImporter, productExporterService.nightlyStockStream),
-        edge(coreServices.productService.nearTimeStockImporter, stockExporterService.stockStream),
-        edge(coreServices.productService.deliveryTimeImporter, deliveryTimeExporterService.deliveryTimeStream),
-        edge(coreServices.productService.categoryImporter, categoryExporterService.categoryStream)
+        edge(coreServices.search.ffProductImporter, coreExporter.productExporterService.productStream),
+        edge(coreServices.search.ffProductCampaignsImporter, coreExporter.productExporterService.productCampaignsStream),
+        edge(coreServices.search.ffCategoryImporter, coreExporter.categoryExporterService.categoryStream),
+        edge(coreServices.productService.productImporter, coreExporter.productExporterService.productStream),
+        edge(coreServices.productService.productCampaignsImporter, coreExporter.productExporterService.productCampaignsStream),
+        edge(coreServices.productService.nightlyStockImporter, coreExporter.productExporterService.nightlyStockStream),
+        edge(coreServices.productService.nearTimeStockImporter, coreExporter.stockExporterService.stockStream),
+        edge(coreServices.productService.deliveryTimeImporter, coreExporter.deliveryTimeExporterService.deliveryTimeStream),
+        edge(coreServices.productService.categoryImporter, coreExporter.categoryExporterService.categoryStream)
     ]);
 
     let coreAccount: Element<unknown> = {
@@ -362,11 +365,11 @@ function createInitialGraph() {
         edge(edutainment.contentView.component, content),
         edge(pdpView.searchViewComponent, catalogContent),
         edge(pdpView.pdpViewComponent, productContent),
-        edge(productExporterService.productExporter, mediaData),
-        edge(productExporterService.productExporter, mercatorStagingDB),
-        edge(productExporterService.productCampaignsExporter, mercatorStagingDB),
-        edge(productExporterService.nightlyStockExporter, mercatorStagingDB),
-        edge(articleReport, categoryExporterService.articleS3Bucket)
+        edge(coreExporter.productExporterService.productExporter, mediaData),
+        edge(coreExporter.productExporterService.productExporter, mercatorStagingDB),
+        edge(coreExporter.productExporterService.productCampaignsExporter, mercatorStagingDB),
+        edge(coreExporter.productExporterService.nightlyStockExporter, mercatorStagingDB),
+        edge(articleReport, coreExporter.categoryExporterService.articleS3Bucket)
     ]);
 
     return graph(overall, overallEdges);
