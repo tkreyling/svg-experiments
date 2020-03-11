@@ -181,52 +181,66 @@ function createInitialGraph() {
         ];
     }();
 
-    let stockStream = queue("Stock Stream");
-    let stockExporter = component("Stock Exporter");
+    let stockExporterService = new class {
+        stockStream = queue("Stock Stream");
+        stockExporter = component("Stock Exporter");
 
-    let stockExporterService: Element<unknown> = {
-        kind: "column", elements: [
-            stockStream,
-            {kind: "row", name: "Stock Exporter Service", shape: "deployment-box", elements: [stockExporter]}
-        ]
-    };
-    let stockExporterServiceEdges = [
-        edge(stockExporter, stockStream)
-    ];
+        element: Element<unknown> = {
+            kind: "column", elements: [
+                this.stockStream,
+                {kind: "row", name: "Stock Exporter Service", shape: "deployment-box", elements: [
+                    this.stockExporter
+                ]}
+            ]
+        };
 
-    let deliveryTimeStream = queue("Delivery Time Stream");
-    let deliveryTimeExporter = component("Delivery Time Exporter");
+        edges = [
+            edge(this.stockExporter, this.stockStream)
+        ];
+    }();
 
-    let deliveryTimeExporterService: Element<unknown> = {
-        kind: "column", elements: [
-            deliveryTimeStream,
-            {
-                kind: "row",
-                name: "Delivery Time\nExporter Service",
-                shape: "deployment-box",
-                elements: [deliveryTimeExporter]
-            }
-        ]
-    };
-    let deliveryTimeExporterServiceEdges = [
-        edge(deliveryTimeExporter, deliveryTimeStream)
-    ];
+    let deliveryTimeExporterService = new class {
+        deliveryTimeStream = queue("Delivery Time Stream");
+        deliveryTimeExporter = component("Delivery Time Exporter");
 
-    let categoryStream = queue("Category Stream");
-    let categoryExporter = component("Category Exporter");
-    let articleS3Bucket = s3Bucket("Article S3 Bucket");
+        element: Element<unknown> = {
+            kind: "column", elements: [
+                this.deliveryTimeStream,
+                {
+                    kind: "row",
+                    name: "Delivery Time\nExporter Service",
+                    shape: "deployment-box",
+                    elements: [this.deliveryTimeExporter]
+                }
+            ]
+        };
 
-    let categoryExporterService: Element<unknown> = {
-        kind: "column", elements: [
-            categoryStream,
-            {kind: "row", name: "Category Exporter Service", shape: "deployment-box", elements: [categoryExporter]},
-            articleS3Bucket
-        ]
-    };
-    let categoryExporterServiceEdges = [
-        edge(categoryExporter, categoryStream),
-        edge(categoryExporter, articleS3Bucket)
-    ];
+        edges = [
+            edge(this.deliveryTimeExporter, this.deliveryTimeStream)
+        ];
+    }();
+
+    let categoryExporterService = new class {
+        categoryStream = queue("Category Stream");
+        categoryExporter = component("Category Exporter");
+        articleS3Bucket = s3Bucket("Article S3 Bucket");
+
+        element: Element<unknown> = {
+            kind: "column", elements: [
+                this.categoryStream,
+                {
+                    kind: "row", name: "Category Exporter Service", shape: "deployment-box", elements: [
+                        this.categoryExporter
+                    ]
+                },
+                this.articleS3Bucket
+            ]
+        };
+        edges = [
+            edge(this.categoryExporter, this.categoryStream),
+            edge(this.categoryExporter, this.articleS3Bucket)
+        ];
+    }();
 
     let coreServices: Element<unknown> = {
         kind: "row", elements: [coreSiteMap.element, search.element, productService.element]
@@ -236,13 +250,14 @@ function createInitialGraph() {
     let coreExporter: Element<unknown> = {
         kind: "row", elements: [
             gap(), gap(), gap(), gap(), gap(), gap(),
-            productExporterService.element, stockExporterService, deliveryTimeExporterService, categoryExporterService
+            productExporterService.element, stockExporterService.element,
+            deliveryTimeExporterService.element, categoryExporterService.element
         ]
     };
     let coreExporterEdges = productExporterService.edges
-        .concat(stockExporterServiceEdges)
-        .concat(deliveryTimeExporterServiceEdges)
-        .concat(categoryExporterServiceEdges);
+        .concat(stockExporterService.edges)
+        .concat(deliveryTimeExporterService.edges)
+        .concat(categoryExporterService.edges);
 
     let core: Element<unknown> = {
         kind: "column", elements: [pdpView.element, coreServices, coreExporter]
@@ -254,13 +269,13 @@ function createInitialGraph() {
         edge(coreSiteMap.siteMapGenerator, search.factFinderFeedServiceDB),
         edge(search.ffProductImporter, productExporterService.productStream),
         edge(search.ffProductCampaignsImporter, productExporterService.productCampaignsStream),
-        edge(search.ffCategoryImporter, categoryStream),
+        edge(search.ffCategoryImporter, categoryExporterService.categoryStream),
         edge(productService.productImporter, productExporterService.productStream),
         edge(productService.productCampaignsImporter, productExporterService.productCampaignsStream),
         edge(productService.nightlyStockImporter, productExporterService.nightlyStockStream),
-        edge(productService.nearTimeStockImporter, stockStream),
-        edge(productService.deliveryTimeImporter, deliveryTimeStream),
-        edge(productService.categoryImporter, categoryStream)
+        edge(productService.nearTimeStockImporter, stockExporterService.stockStream),
+        edge(productService.deliveryTimeImporter, deliveryTimeExporterService.deliveryTimeStream),
+        edge(productService.categoryImporter, categoryExporterService.categoryStream)
     ]);
 
     let coreAccount: Element<unknown> = {
@@ -348,7 +363,7 @@ function createInitialGraph() {
         edge(productExporterService.productExporter, mercatorStagingDB),
         edge(productExporterService.productCampaignsExporter, mercatorStagingDB),
         edge(productExporterService.nightlyStockExporter, mercatorStagingDB),
-        edge(articleReport, articleS3Bucket)
+        edge(articleReport, categoryExporterService.articleS3Bucket)
     ]);
 
     return graph(overall, overallEdges);
