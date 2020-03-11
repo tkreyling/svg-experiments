@@ -54,103 +54,111 @@ function createInitialGraph() {
         };
     }();
 
-    let coreSiteMap = new class {
-        siteMapGenerator = component("Site Map Generator");
+    let coreServices = new class {
+        coreSiteMap = new class {
+            siteMapGenerator = component("Site Map Generator");
 
-        element: Element<unknown> = {
-            kind: "column", elements: [gap(), {
-                kind: "row", name: "Site Map Generator", shape: "deployment-box", elements: [
-                    this.siteMapGenerator
-                ]
-            }]
-        };
-    }();
-
-    let search = new class {
-        factFinderDB = db("FACTFinder DB");
-        factFinderAPI = component("FACTFinder API");
-
-        factFinderFeedServiceDB = db("FACTFinder Feed\nService DB");
-        factFinderUpdater = component("FACTFinder Updater");
-        ffProductImporter = component("Product Importer");
-        ffProductCampaignsImporter = component("Product Campaigns\nImporter");
-        ffCategoryImporter = component("Category Importer");
-
-        element: Element<unknown> = {
-            kind: "column", elements: [{
-                kind: "row",
-                elements: [
-                    this.factFinderDB,
-                    {
-                        kind: "row", name: "FACT Finder", shape: "deployment-box", elements: [
-                            gap(), this.factFinderAPI, gap()
-                        ]
-                    }
-                ]
-            }, {
-                kind: "row",
-                elements: [this.factFinderFeedServiceDB, {
-                    kind: "column", name: "FACT Finder Feed Service", shape: "deployment-box",
-                    elements: [
-                        {kind: "row", elements: [gap(), this.factFinderUpdater]},
-                        {kind: "row", elements: [this.ffProductImporter, this.ffProductCampaignsImporter, this.ffCategoryImporter]}
+            element: Element<unknown> = {
+                kind: "column", elements: [gap(), {
+                    kind: "row", name: "Site Map Generator", shape: "deployment-box", elements: [
+                        this.siteMapGenerator
                     ]
                 }]
-            }]
-        };
+            };
+        }();
 
-        edges = [
-            edge(this.factFinderAPI, this.factFinderDB),
-            edge(this.factFinderUpdater, this.factFinderAPI),
-            edge(this.factFinderUpdater, this.factFinderFeedServiceDB),
-            edge(this.ffProductImporter, this.factFinderFeedServiceDB),
-            edge(this.ffProductCampaignsImporter, this.factFinderFeedServiceDB),
-            edge(this.ffCategoryImporter, this.factFinderFeedServiceDB)
-        ];
-    }();
+        search = new class {
+            factFinderDB = db("FACTFinder DB");
+            factFinderAPI = component("FACTFinder API");
 
-    let productService = new class {
-        productServiceDB = db("Product Service DB");
-        productAPI = component("Product API");
-        stockAPI = component("Stock API");
-        productImporter = component("Product Importer");
-        productCampaignsImporter = component("Product Campaigns\nImporter");
-        nightlyStockImporter = component("Nightly Stock Importer");
-        nearTimeStockImporter = component("Near Time Stock\nImporter");
-        deliveryTimeImporter = component("Delivery Time Importer");
-        categoryImporter = component("Category Importer");
+            factFinderFeedServiceDB = db("FACTFinder Feed\nService DB");
+            factFinderUpdater = component("FACTFinder Updater");
+            ffProductImporter = component("Product Importer");
+            ffProductCampaignsImporter = component("Product Campaigns\nImporter");
+            ffCategoryImporter = component("Category Importer");
+
+            element: Element<unknown> = {
+                kind: "column", elements: [{
+                    kind: "row",
+                    elements: [
+                        this.factFinderDB,
+                        {
+                            kind: "row", name: "FACT Finder", shape: "deployment-box", elements: [
+                                gap(), this.factFinderAPI, gap()
+                            ]
+                        }
+                    ]
+                }, {
+                    kind: "row",
+                    elements: [this.factFinderFeedServiceDB, {
+                        kind: "column", name: "FACT Finder Feed Service", shape: "deployment-box",
+                        elements: [
+                            {kind: "row", elements: [gap(), this.factFinderUpdater]},
+                            {kind: "row", elements: [this.ffProductImporter, this.ffProductCampaignsImporter, this.ffCategoryImporter]}
+                        ]
+                    }]
+                }]
+            };
+
+            edges = [
+                edge(this.factFinderAPI, this.factFinderDB),
+                edge(this.factFinderUpdater, this.factFinderAPI),
+                edge(this.factFinderUpdater, this.factFinderFeedServiceDB),
+                edge(this.ffProductImporter, this.factFinderFeedServiceDB),
+                edge(this.ffProductCampaignsImporter, this.factFinderFeedServiceDB),
+                edge(this.ffCategoryImporter, this.factFinderFeedServiceDB)
+            ];
+        }();
+
+        productService = new class {
+            productServiceDB = db("Product Service DB");
+            productAPI = component("Product API");
+            stockAPI = component("Stock API");
+            productImporter = component("Product Importer");
+            productCampaignsImporter = component("Product Campaigns\nImporter");
+            nightlyStockImporter = component("Nightly Stock Importer");
+            nearTimeStockImporter = component("Near Time Stock\nImporter");
+            deliveryTimeImporter = component("Delivery Time Importer");
+            categoryImporter = component("Category Importer");
+
+            element: Element<unknown> = {
+                kind: "row", elements: [{
+                    kind: "column", elements: [gap(), this.productServiceDB]
+                }, {
+                    kind: "column", name: "Product Service", shape: "deployment-box", elements: [
+                        {
+                            kind: "row", elements: [
+                                gap(), gap(), this.productAPI, this.stockAPI
+                            ]
+                        },
+                        gap(),
+                        {
+                            kind: "row", elements: [
+                                this.productImporter, this.productCampaignsImporter, this.nightlyStockImporter,
+                                this.nearTimeStockImporter, this.deliveryTimeImporter, this.categoryImporter
+                            ]
+                        }
+                    ]
+                }]
+            };
+
+            edges = [
+                edge(this.productAPI, this.productServiceDB),
+                edge(this.stockAPI, this.productServiceDB),
+                edge(this.productImporter, this.productServiceDB),
+                edge(this.productCampaignsImporter, this.productServiceDB),
+                edge(this.nightlyStockImporter, this.productServiceDB),
+                edge(this.nearTimeStockImporter, this.productServiceDB),
+                edge(this.deliveryTimeImporter, this.productServiceDB),
+                edge(this.categoryImporter, this.productServiceDB),
+            ];
+        }();
 
         element: Element<unknown> = {
-            kind: "row", elements: [{
-                kind: "column", elements: [gap(), this.productServiceDB]
-            }, {
-                kind: "column", name: "Product Service", shape: "deployment-box", elements: [
-                    {
-                        kind: "row", elements: [
-                            gap(), gap(), this.productAPI, this.stockAPI
-                        ]
-                    },
-                    gap(),
-                    {
-                        kind: "row", elements: [
-                            this.productImporter, this.productCampaignsImporter, this.nightlyStockImporter,
-                            this.nearTimeStockImporter, this.deliveryTimeImporter, this.categoryImporter
-                        ]
-                    }
-                ]
-            }]
+            kind: "row", elements: [this.coreSiteMap.element, this.search.element, this.productService.element]
         };
 
-        edges = [
-            edge(this.productAPI, this.productServiceDB),
-            edge(this.stockAPI, this.productServiceDB),
-            edge(this.productImporter, this.productServiceDB),
-            edge(this.productCampaignsImporter, this.productServiceDB),
-            edge(this.nightlyStockImporter, this.productServiceDB),
-            edge(this.nearTimeStockImporter, this.productServiceDB),
-            edge(this.deliveryTimeImporter, this.productServiceDB),
-            edge(this.categoryImporter, this.productServiceDB),
-        ];
+        edges = this.search.edges.concat(this.productService.edges);
     }();
 
     let productExporterService = new class {
@@ -242,11 +250,6 @@ function createInitialGraph() {
         ];
     }();
 
-    let coreServices: Element<unknown> = {
-        kind: "row", elements: [coreSiteMap.element, search.element, productService.element]
-    };
-    let coreServicesEdges = search.edges.concat(productService.edges);
-
     let coreExporter: Element<unknown> = {
         kind: "row", elements: [
             gap(), gap(), gap(), gap(), gap(), gap(),
@@ -260,30 +263,30 @@ function createInitialGraph() {
         .concat(categoryExporterService.edges);
 
     let core: Element<unknown> = {
-        kind: "column", elements: [pdpView.element, coreServices, coreExporter]
+        kind: "column", elements: [pdpView.element, coreServices.element, coreExporter]
     };
-    let coreEdges = coreServicesEdges.concat(coreExporterEdges).concat([
-        edge(pdpView.pdpViewComponent, productService.productAPI),
-        edge(pdpView.pdpViewComponent, productService.stockAPI),
-        edge(pdpView.searchViewComponent, search.factFinderAPI),
-        edge(coreSiteMap.siteMapGenerator, search.factFinderFeedServiceDB),
-        edge(search.ffProductImporter, productExporterService.productStream),
-        edge(search.ffProductCampaignsImporter, productExporterService.productCampaignsStream),
-        edge(search.ffCategoryImporter, categoryExporterService.categoryStream),
-        edge(productService.productImporter, productExporterService.productStream),
-        edge(productService.productCampaignsImporter, productExporterService.productCampaignsStream),
-        edge(productService.nightlyStockImporter, productExporterService.nightlyStockStream),
-        edge(productService.nearTimeStockImporter, stockExporterService.stockStream),
-        edge(productService.deliveryTimeImporter, deliveryTimeExporterService.deliveryTimeStream),
-        edge(productService.categoryImporter, categoryExporterService.categoryStream)
+    let coreEdges = coreServices.edges.concat(coreExporterEdges).concat([
+        edge(pdpView.pdpViewComponent, coreServices.productService.productAPI),
+        edge(pdpView.pdpViewComponent, coreServices.productService.stockAPI),
+        edge(pdpView.searchViewComponent, coreServices.search.factFinderAPI),
+        edge(coreServices.coreSiteMap.siteMapGenerator, coreServices.search.factFinderFeedServiceDB),
+        edge(coreServices.search.ffProductImporter, productExporterService.productStream),
+        edge(coreServices.search.ffProductCampaignsImporter, productExporterService.productCampaignsStream),
+        edge(coreServices.search.ffCategoryImporter, categoryExporterService.categoryStream),
+        edge(coreServices.productService.productImporter, productExporterService.productStream),
+        edge(coreServices.productService.productCampaignsImporter, productExporterService.productCampaignsStream),
+        edge(coreServices.productService.nightlyStockImporter, productExporterService.nightlyStockStream),
+        edge(coreServices.productService.nearTimeStockImporter, stockExporterService.stockStream),
+        edge(coreServices.productService.deliveryTimeImporter, deliveryTimeExporterService.deliveryTimeStream),
+        edge(coreServices.productService.categoryImporter, categoryExporterService.categoryStream)
     ]);
 
     let coreAccount: Element<unknown> = {
         kind: "row", shape: "rectangle", name: "Core VPC", elements: [edutainment.element, core]
     };
     let coreAccountEdges = coreEdges.concat([
-        edge(edutainment.contentView.component, search.factFinderAPI),
-        edge(edutainment.contentView.component, productService.productAPI)
+        edge(edutainment.contentView.component, coreServices.search.factFinderAPI),
+        edge(edutainment.contentView.component, coreServices.productService.productAPI)
     ]);
 
     let content = node("Site Content");
