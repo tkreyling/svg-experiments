@@ -366,6 +366,15 @@ function createInitialGraph() {
                     };
                 }();
 
+                sapCRM = new class {
+                    sellAPI = component("SELL API");
+
+                    element: Element<unknown> = {
+                        kind: "column", name: "SAP CRM", shape: "deployment-box",
+                        elements: [this.sellAPI]
+                    };
+                }();
+
                 element: Element<unknown> = {
                     kind: "row", shape: "rectangle", name: "TDS", elements: [
                         {
@@ -375,7 +384,8 @@ function createInitialGraph() {
                             ]
                         },
                         this.mercator.element, gap(), gap(),
-                        this.sapERP.element
+                        this.sapERP.element,
+                        this.sapCRM.element
                     ]
                 };
 
@@ -408,7 +418,9 @@ function createInitialGraph() {
             edge(this.coreAccount.core.exporter.productExporterService.productExporter, this.backendSystems.tds.mercator.mercatorStagingDB),
             edge(this.coreAccount.core.exporter.productExporterService.productCampaignsExporter, this.backendSystems.tds.mercator.mercatorStagingDB),
             edge(this.coreAccount.core.exporter.productExporterService.nightlyStockExporter, this.backendSystems.tds.mercator.mercatorStagingDB),
-            edge(this.backendSystems.tds.sapERP.articleReport, this.coreAccount.core.exporter.categoryExporterService.articleS3Bucket)
+            edge(this.backendSystems.tds.sapERP.articleReport, this.coreAccount.core.exporter.categoryExporterService.articleS3Bucket),
+            edge(this.coreAccount.core.exporter.stockExporterService.stockExporter, this.backendSystems.tds.sapCRM.sellAPI),
+            edge(this.coreAccount.core.exporter.deliveryTimeExporterService.deliveryTimeExporter, this.backendSystems.tds.sapCRM.sellAPI)
         ]);
     }();
 
