@@ -319,79 +319,88 @@ function createInitialGraph() {
         };
     }();
 
-    let shopNowDB = new class {
-        mediaData = dbTable("Media Data");
+    let tds = new class {
+        shopNowDB = new class {
+            mediaData = dbTable("Media Data");
+
+            element: Element<unknown> = {
+                kind: "row", name: "ShopNow DB", shape: "db-cylinder",
+                elements: [this.mediaData]
+            };
+        }();
+
+        mediathek = new class {
+            element = system("Mediathek");
+        }();
+
+        mercator = new class {
+            mercatorStagingDB = db("Mercator Staging DB");
+            mercatorDB = db("Mercator DB");
+            mercatorComponent = system("Mercator");
+
+            element: Element<unknown> = {
+                kind: "column",
+                elements: [{
+                    kind: "row",
+                    elements: [this.mercatorStagingDB, this.mercatorDB]
+                }, {
+                    kind: "row",
+                    elements: [gap(), this.mercatorComponent]
+                }]
+            };
+
+            edges = [
+                edge(this.mercatorComponent, this.mercatorDB),
+                edge(this.mercatorDB, this.mercatorStagingDB)
+            ];
+        }();
+
+        sapERP = new class {
+            articleReport = component("Article Report");
+
+            element: Element<unknown> = {
+                kind: "column", name: "SAP ERP / Retail", shape: "deployment-box",
+                elements: [this.articleReport]
+            };
+        }();
 
         element: Element<unknown> = {
-            kind: "row", name: "ShopNow DB", shape: "db-cylinder",
-            elements: [this.mediaData]
+            kind: "row", shape: "rectangle", name: "TDS", elements: [
+                {
+                    kind: "column", elements: [
+                        this.shopNowDB.element,
+                        this.mediathek.element
+                    ]
+                },
+                this.mercator.element, gap(), gap(),
+                this.sapERP.element
+            ]
         };
+
+        edges = this.mercator.edges.concat([
+            edge(this.mediathek.element, this.shopNowDB.mediaData)
+        ]);
     }();
-
-    let mediathek = new class {
-        mediathek = system("Mediathek");
-
-        edges = [
-            edge(this.mediathek, shopNowDB.mediaData)
-        ];
-    }();
-
-    let mercatorStagingDB = db("Mercator Staging DB");
-    let mercatorDB = db("Mercator DB");
-    let mercatorComponent = system("Mercator");
-
-    let mercator: Element<unknown> = {
-        kind: "column",
-        elements: [{
-            kind: "row",
-            elements: [mercatorStagingDB, mercatorDB]
-        }, {
-            kind: "row",
-            elements: [gap(), mercatorComponent]
-        }]
-    };
-
-    let mercatorEdges = [
-        edge(mercatorComponent, mercatorDB),
-        edge(mercatorDB, mercatorStagingDB)
-    ];
-
-    let articleReport = component("Article Report");
-
-    let sapERP: Element<unknown> = {
-        kind: "column", name: "SAP ERP / Retail", shape: "deployment-box",
-        elements: [articleReport]
-    };
-
-    let tds: Element<unknown> = {
-        kind: "row", shape: "rectangle", name: "TDS", elements: [
-            {kind: "column", elements: [shopNowDB.element, mediathek.mediathek]},
-            mercator, gap(), gap(),
-            sapERP
-        ]
-    };
-
-    let tdsEdges = mediathek.edges.concat(mercatorEdges);
 
     let backendSystems: Element<unknown> = {
-        kind: "row", elements: [contentful.element, gap(), gap(), gap(), gap(), gap(), tds]
+        kind: "row", elements: [contentful.element, gap(), gap(), gap(), gap(), gap(), tds.element]
     };
 
     let overall: Element<unknown> = {
         kind: "column", elements: [customerBrowser.element, coreAccount.element, backendSystems]
     };
-    let overallEdges = coreAccount.edges.concat(tdsEdges).concat([
+    let overallEdges = coreAccount.edges.concat(tds.edges).concat([
         edge(coreAccount.edutainment.contentView.component, customerBrowser.contentViewComponent),
         edge(coreAccount.core.pdpView.searchViewComponent, customerBrowser.searchViewComponent),
         edge(coreAccount.core.pdpView.pdpViewComponent, customerBrowser.pdpViewComponent),
         edge(coreAccount.edutainment.contentView.component, contentful.content),
         edge(coreAccount.core.pdpView.searchViewComponent, contentful.catalogContent),
         edge(coreAccount.core.pdpView.pdpViewComponent, contentful.productContent),
-        edge(coreAccount.core.exporter.productExporterService.productExporter, shopNowDB.mediaData),
-        edge(coreAccount.core.exporter.productExporterService.productExporter, mercatorStagingDB),
-        edge(coreAccount.core.exporter.productExporterService.productCampaignsExporter, mercatorStagingDB),
-        edge(coreAccount.core.exporter.productExporterService.nightlyStockExporter, mercatorStagingDB),
-        edge(articleReport, coreAccount.core.exporter.categoryExporterService.articleS3Bucket)
+        edge(coreAccount.core.exporter.productExporterService.productExporter, tds.shopNowDB.mediaData),
+        edge(coreAccount.core.exporter.productExporterService.productExporter, tds.mercator.mercatorStagingDB),
+        edge(coreAccount.core.exporter.productExporterService.productCampaignsExporter, tds.mercator.mercatorStagingDB),
+        edge(coreAccount.core.exporter.productExporterService.nightlyStockExporter, tds.mercator.mercatorStagingDB),
+        edge(tds.sapERP.articleReport, coreAccount.core.exporter.categoryExporterService.articleS3Bucket)
     ]);
 
     return graph(overall, overallEdges);
